@@ -96,27 +96,31 @@ models:
     notes: "Anthropic small-tier. Tests whether efficient models retain prompt-engineering benefits."
 
   # ====================== OPENAI ======================
-  openai-gpt-5-2:
+  # NOTE: model IDs depend on what your codex CLI knows about.
+  # Check ~/.codex/config.toml or run `codex --help` for the active default.
+  # As of 2026-04, codex CLI uses gpt-5.4 as default; older gpt-5.x ids may
+  # not be available. Edit here to match what your CLI actually accepts.
+  openai-gpt-5-4:
     provider: openai
-    model_id: gpt-5.2
-    display_name: "GPT-5.2"
+    model_id: gpt-5.4
+    display_name: "GPT-5.4"
     tier: flagship
     context_window: 400000
     max_output: 100000
     input_cost_per_1m: 1.75
     output_cost_per_1m: 14.00
-    notes: "OpenAI frontier. Cross-family validation per R1 O1 / R3 O1."
+    notes: "OpenAI frontier (current codex default). Cross-family validation per R1 O1 / R3 O1."
 
-  openai-gpt-5:
+  openai-gpt-5-codex:
     provider: openai
-    model_id: gpt-5
-    display_name: "GPT-5"
+    model_id: gpt-5-codex
+    display_name: "GPT-5 Codex"
     tier: mid
     context_window: 400000
     max_output: 100000
     input_cost_per_1m: 1.25
     output_cost_per_1m: 10.00
-    notes: "OpenAI prior-generation flagship. Tests within-family generation robustness on OpenAI side."
+    notes: "OpenAI codex-tuned variant. Tests within-family generation robustness."
 
   openai-gpt-5-mini:
     provider: openai
@@ -169,11 +173,11 @@ models:
 tiers:
   flagship:
     - anthropic-opus-4-7
-    - openai-gpt-5-2
+    - openai-gpt-5-4
     - google-gemini-2-5-pro
   mid:
     - anthropic-sonnet-4-6
-    - openai-gpt-5
+    - openai-gpt-5-codex
     - google-gemini-2-5-flash
   small:
     - anthropic-haiku-4-5

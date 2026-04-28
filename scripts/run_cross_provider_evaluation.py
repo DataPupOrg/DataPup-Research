@@ -196,7 +196,12 @@ def parse_args() -> argparse.Namespace:
 # ---------------------------------------------------------------------------
 
 def load_queries(benchmark_dir: Path, dataset: str, max_queries: Optional[int]) -> list[dict]:
-    """Load all queries for a dataset, deduplicate by id, optionally cap count."""
+    """Load all queries for a dataset, deduplicate by id, optionally cap count.
+
+    Accepts both shapes commonly used in this repo:
+      - top-level JSON list of query dicts (custom_analytics files)
+      - top-level JSON object with a "queries" key (clickbench, ssb)
+    """
     files = DATASETS.get(dataset)
     if files is None:
         raise SystemExit(f"Unknown dataset '{dataset}'. Known: {list(DATASETS.keys())}")
@@ -208,12 +213,20 @@ def load_queries(benchmark_dir: Path, dataset: str, max_queries: Optional[int]) 
             logger.warning("Query file missing: %s", path)
             continue
         with path.open("r", encoding="utf-8") as f:
-            for q in json.load(f):
-                qid = q.get("id")
-                if not qid or qid in seen_ids:
-                    continue
-                seen_ids.add(qid)
-                queries.append(q)
+            payload = json.load(f)
+        if isinstance(payload, dict):
+            payload = payload.get("queries") or payload.get("data") or []
+        if not isinstance(payload, list):
+            logger.warning("Unexpected query file shape: %s", path)
+            continue
+        for q in payload:
+            if not isinstance(q, dict):
+                continue
+            qid = q.get("id")
+            if not qid or qid in seen_ids:
+                continue
+            seen_ids.add(qid)
+            queries.append(q)
     if max_queries is not None:
         queries = queries[:max_queries]
     return queries
