@@ -11,27 +11,38 @@
 #       x
 #   Google    (Gemini 2.5 Pro, Flash, Flash-Lite)
 #
+# DEFAULT TRANSPORT: `cli` — invoke via the public Claude / Codex / Gemini
+# CLIs under the user's personal subscription. No API keys required by the
+# evaluation framework itself; auth is handled inside each CLI's own login
+# flow (`claude login`, `codex login`, `gemini auth login`).
+#
+# Override per-model with `transport: sdk` to fall back to the SDK + API
+# key path (e.g., for higher-throughput batch runs on a server without
+# interactive CLI auth).
+#
 # Per memory feedback_datapup_no_budget.md: there is no cost cap.
-# Per memory feedback_no_meta_cli_for_datapup.md: never use Meta CLI.
-# All inference under personal API keys.
+# Per memory feedback_no_meta_cli_for_datapup.md: never invoke the
+# Meta-launcher variants of `claude` / `gemini`. The CLI caller refuses
+# any binary whose --version output identifies it as a Meta launcher.
 # =============================================================================
-
-# ---------------------------------------------------------------------------
-# Provider environment variables (REQUIRED)
-# ---------------------------------------------------------------------------
-required_env:
-  anthropic: ANTHROPIC_API_KEY
-  openai:    OPENAI_API_KEY
-  google:    GOOGLE_API_KEY
 
 # ---------------------------------------------------------------------------
 # Default per-call settings
 # ---------------------------------------------------------------------------
 defaults:
+  transport: cli            # cli | sdk
   max_tokens: 2048
   temperature: 0.0
   max_retries: 4
   retry_base_delay: 1.5
+
+# ---------------------------------------------------------------------------
+# SDK-only — environment variables consulted if transport=sdk
+# ---------------------------------------------------------------------------
+required_env_for_sdk:
+  anthropic: ANTHROPIC_API_KEY
+  openai:    OPENAI_API_KEY
+  google:    GOOGLE_API_KEY
 
 # ---------------------------------------------------------------------------
 # Model matrix
@@ -39,6 +50,7 @@ defaults:
 # Each entry has:
 #   provider:           anthropic | openai | google
 #   model_id:           Provider's canonical model id (pinned)
+#   transport:          (optional) cli | sdk — overrides defaults.transport
 #   display_name:       Short label for tables/figures
 #   tier:               flagship | mid | small
 #   context_window:     Total context (input + output)
@@ -46,6 +58,11 @@ defaults:
 #   input_cost_per_1m:  USD/1M input tokens
 #   output_cost_per_1m: USD/1M output tokens
 #   notes:              Paper-relevant notes
+#
+# IMPORTANT: model_id values below are the canonical names accepted by
+# each provider's public CLI as of 2026-04. If your CLI rejects a model
+# ("Model not found"), edit the entry to match what `claude --models`,
+# `codex models`, or `gemini models list` reports on your host.
 # ---------------------------------------------------------------------------
 models:
 

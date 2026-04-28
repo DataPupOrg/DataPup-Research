@@ -7,6 +7,10 @@ Loads `config/cross_provider_models.yaml` once and exposes:
     list_tiers()                         -> {tier: [model_key, ...]}
     load_model_config()                  -> raw config dict
 
+Each model entry has a `transport` field:
+    cli   — invoke via the public CLI binary (default for the paper)
+    sdk   — invoke via the provider's Python SDK with personal API key
+
 `model_key` is the top-level key in the yaml `models:` block (e.g.,
 "anthropic-opus-4-7"), NOT the provider's canonical model id.
 """
@@ -22,24 +26,19 @@ import yaml
 
 from .anthropic_caller import AnthropicCaller
 from .base import LLMCallerBase
+from .cli_caller import ClaudeCLICaller, CodexCLICaller, GeminiCLICaller
 from .google_caller import GoogleCaller
 from .openai_caller import OpenAICaller
 
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# Config loading
-# ---------------------------------------------------------------------------
-
-# Locate config relative to this file so the package is portable.
 _THIS_FILE = Path(__file__).resolve()
 _CONFIG_PATH = _THIS_FILE.parent.parent.parent / "config" / "cross_provider_models.yaml"
 
 
 @functools.lru_cache(maxsize=1)
 def load_model_config(path: Optional[Path] = None) -> dict[str, Any]:
-    """Load and cache the cross-provider model config."""
     cfg_path = Path(path) if path else _CONFIG_PATH
     if not cfg_path.exists():
         raise FileNotFoundError(
@@ -51,33 +50,27 @@ def load_model_config(path: Optional[Path] = None) -> dict[str, Any]:
 
 
 def list_models() -> list[str]:
-    """Return all configured model keys, sorted."""
     return sorted(load_model_config().get("models", {}).keys())
 
 
 def list_tiers() -> dict[str, list[str]]:
-    """Return the tier-to-model-keys mapping."""
     return load_model_config().get("tiers", {})
 
 
-# ---------------------------------------------------------------------------
-# Provider dispatch
-# ---------------------------------------------------------------------------
-
-_PROVIDER_CLASSES: dict[str, type[LLMCallerBase]] = {
-    "anthropic": AnthropicCaller,
-    "openai": OpenAICaller,
-    "google": GoogleCaller,
+# Dispatch matrix: (provider, transport) -> Caller class
+_DISPATCH: dict[tuple[str, str], type[LLMCallerBase]] = {
+    # CLI (paper default)
+    ("anthropic", "cli"): ClaudeCLICaller,
+    ("openai", "cli"):    CodexCLICaller,
+    ("google", "cli"):    GeminiCLICaller,
+    # SDK fallback (for environments where the CLI is unavailable)
+    ("anthropic", "sdk"): AnthropicCaller,
+    ("openai", "sdk"):    OpenAICaller,
+    ("google", "sdk"):    GoogleCaller,
 }
 
 
 def get_caller(model_key: str, **overrides: Any) -> LLMCallerBase:
-    """Return a concrete LLMCallerBase instance for `model_key`.
-
-    `model_key` must be a top-level key in `cross_provider_models.yaml`
-    (e.g., "anthropic-opus-4-7"). Per-call overrides may include
-    `max_tokens`, `temperature`, `max_retries`, `retry_base_delay`.
-    """
     cfg = load_model_config()
     models = cfg.get("models", {})
     if model_key not in models:
@@ -87,9 +80,14 @@ def get_caller(model_key: str, **overrides: Any) -> LLMCallerBase:
     entry = models[model_key]
     provider = entry["provider"]
     model_id = entry["model_id"]
+    transport = entry.get("transport") or cfg.get("defaults", {}).get("transport", "cli")
 
-    if provider not in _PROVIDER_CLASSES:
-        raise ValueError(f"Unknown provider '{provider}' for model {model_key}")
+    key = (provider, transport)
+    if key not in _DISPATCH:
+        raise ValueError(
+            f"No caller registered for provider={provider}, transport={transport}. "
+            f"Known: {sorted(_DISPATCH.keys())}"
+        )
 
     defaults = cfg.get("defaults", {}) or {}
     kwargs = {
@@ -100,6 +98,9 @@ def get_caller(model_key: str, **overrides: Any) -> LLMCallerBase:
     }
     kwargs.update(overrides)
 
-    cls = _PROVIDER_CLASSES[provider]
-    logger.info("get_caller: model_key=%s provider=%s model_id=%s", model_key, provider, model_id)
+    cls = _DISPATCH[key]
+    logger.info(
+        "get_caller: model_key=%s provider=%s transport=%s model_id=%s class=%s",
+        model_key, provider, transport, model_id, cls.__name__,
+    )
     return cls(model=model_id, **kwargs)

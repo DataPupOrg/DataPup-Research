@@ -1,6 +1,6 @@
 # Cross-Provider Evaluation — Quick Start
 
-This directory contains scripts for the **9-model cross-provider evaluation matrix** added to address VLDB 2026 reviewer concerns R1 O1 / R3 O1 (single-model-family limitation).
+This directory contains scripts for the **9-model cross-provider evaluation matrix** added to address VLDB 2026 reviewer concerns R1 O1 / R3 O1 (evaluation limited to two Claude models).
 
 The matrix is **3 providers × 3 tiers**:
 
@@ -10,53 +10,77 @@ The matrix is **3 providers × 3 tiers**:
 | Mid | Sonnet 4.6 | GPT-5 | Gemini 2.5 Flash |
 | Small | Haiku 4.5 | GPT-5 mini | Gemini 2.5 Flash-Lite |
 
-## 1. Install dependencies
+## Default transport: public CLI (no API keys)
+
+The framework invokes inference via each provider's **public CLI** under your personal subscription:
+
+| Provider | Binary | Auth |
+|---|---|---|
+| Anthropic | `claude` (Claude Code) | `claude login` (Pro/Max subscription or API key, handled by CLI) |
+| OpenAI | `codex` (Codex CLI) | `codex login` (ChatGPT Plus/Pro account or API key, handled by CLI) |
+| Google | `gemini` (Gemini CLI) | `gemini auth login` (personal Google account or API key, handled by CLI) |
+
+The eval scripts never see an API key. Auth is entirely the CLI's responsibility.
+
+**Refusal of Meta launchers:** If any of these binaries on your `PATH` are the Meta-internal variants (their `--version` output mentions "at Meta" or "Meta Launcher"), the framework refuses to invoke them. Per `.claude/local/research/A3-meta-cli-policy.md`, the paper bylines us as Independent Researcher and using Meta-paid inference creates IP and EB-1A risk.
+
+## 1. Install the public CLIs
+
+On your target machine (NOT this dev box, which has Meta launchers):
 
 ```bash
-bash scripts/setup_cross_provider.sh
+# Anthropic Claude Code
+npm install -g @anthropic-ai/claude-code
+# OR: curl -fsSL https://claude.ai/install.sh | bash
+claude login
+
+# OpenAI Codex CLI
+brew install --cask codex
+# OR: npm install -g @openai/codex
+codex login
+
+# Google Gemini CLI
+npm install -g @google/gemini-cli
+# OR: brew install gemini-cli
+gemini auth login
 ```
 
-This:
-- Creates / activates `.venv` (or reuses parent DataPup `.venv`)
-- Installs `anthropic`, `openai`, `google-genai`, `pyyaml`, `clickhouse-driver`
-- Verifies API key environment variables are set
-- Refuses to run if Meta-CLI environment variables (`ANTHROPIC_BASE_URL`, etc.) are detected
+Each CLI handles its own auth. If you have Claude Pro/Max, ChatGPT Plus/Pro, and a personal Google account, you can run the full matrix at zero marginal cost.
 
-## 2. Set personal API keys
+## 2. Diagnose CLI setup
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...        # console.anthropic.com/settings/keys
-export OPENAI_API_KEY=sk-...               # platform.openai.com/api-keys
-export GOOGLE_API_KEY=AIza...              # aistudio.google.com/apikey
+python scripts/doctor_cli.py
 ```
 
-**Use personal keys, NOT Meta-issued keys.** The paper bylines us as Independent Researchers; using employer-funded inference creates IP and EB-1A risk (see `.claude/local/research/A3-meta-cli-policy.md`).
+This probes each binary, refuses Meta launchers, reports auth state. Add `--probe-call` to actually round-trip a 1-token prompt through each CLI to verify auth works.
+
+If a CLI is found at `/usr/local/bin/<binary>` and `--version` says "at Meta," install the public variant somewhere earlier on `PATH` (e.g., `/opt/homebrew/bin/`).
 
 ## 3. Smoke-test all 9 models
 
 ```bash
-.venv/bin/python scripts/smoke_test_cross_provider.py
+python scripts/smoke_test_cross_provider.py
 ```
 
-Calls each model with a trivial `SELECT 1` prompt and prints a pass/fail table. Models with missing API keys are skipped (not failed). Output: `results/smoke/smoke_{timestamp}.jsonl`.
+Calls each model with a trivial `SELECT 1` prompt and prints a pass/fail table. Models whose CLI is unavailable on the host are skipped (not failed). Output: `results/smoke/smoke_{timestamp}.jsonl`.
 
 Filter to a tier or specific models:
 
 ```bash
-.venv/bin/python scripts/smoke_test_cross_provider.py --tier flagship
-.venv/bin/python scripts/smoke_test_cross_provider.py --models anthropic-opus-4-7,openai-gpt-5-2
+python scripts/smoke_test_cross_provider.py --tier flagship
+python scripts/smoke_test_cross_provider.py --models anthropic-opus-4-7,openai-gpt-5-2
 ```
 
 ## 4. Run the full cross-provider matrix
 
 Prerequisites:
 - ClickHouse running locally (`localhost:9000`) with `analytics`, `clickbench`, `ssb` databases loaded
-  - Re-load via `bash load_clickbench.sh` and `bash load_ssb.sh` if needed (these scripts live in the parent DataPup repo)
 
 Then:
 
 ```bash
-.venv/bin/python scripts/run_cross_provider_evaluation.py
+python scripts/run_cross_provider_evaluation.py
 ```
 
 The runner uses the **optimal config from the VLDB 2026 paper** (Table 8):
@@ -72,53 +96,71 @@ It runs every (model × dataset) pair. Output JSONL: `results/cross_provider/{mo
 
 ```bash
 # Smoke run (5 queries per dataset, all 9 models)
-.venv/bin/python scripts/run_cross_provider_evaluation.py --max-queries 5
+python scripts/run_cross_provider_evaluation.py --max-queries 5
 
 # One tier only
-.venv/bin/python scripts/run_cross_provider_evaluation.py --tier flagship
+python scripts/run_cross_provider_evaluation.py --tier flagship
 
 # One model
-.venv/bin/python scripts/run_cross_provider_evaluation.py --models anthropic-opus-4-7
+python scripts/run_cross_provider_evaluation.py --models anthropic-opus-4-7
 
 # One dataset
-.venv/bin/python scripts/run_cross_provider_evaluation.py --datasets custom_analytics
+python scripts/run_cross_provider_evaluation.py --datasets custom_analytics
 
-# Higher concurrency (per-model, watch rate limits)
-.venv/bin/python scripts/run_cross_provider_evaluation.py --concurrency 8
+# Higher concurrency (per-model — watch CLI subscription rate limits)
+python scripts/run_cross_provider_evaluation.py --concurrency 4
 
-# Skip ClickHouse execution (just generate SQL — useful when CH is unavailable)
-.venv/bin/python scripts/run_cross_provider_evaluation.py --no-execute
+# Skip ClickHouse execution (just generate SQL)
+python scripts/run_cross_provider_evaluation.py --no-execute
 
 # Compose the prompt pipeline without calling any model
-.venv/bin/python scripts/run_cross_provider_evaluation.py --dry-run
+python scripts/run_cross_provider_evaluation.py --dry-run
 
 # Re-run even queries already in checkpoint JSONL
-.venv/bin/python scripts/run_cross_provider_evaluation.py --force
+python scripts/run_cross_provider_evaluation.py --force
 ```
 
 ### Resumability
 
 The runner is resumable. If you interrupt it, re-running with the same args will skip queries already present in the per-model JSONL files. Use `--force` to override.
 
-### Estimated cost
+### Subscription rate limits
 
-Full 9-model matrix on all 206 queries: **~$224** at frontier-tier pricing (Opus 4.7 is the dominant cost contributor). With Tier 1+2 baselines layered on (DIN-SQL + MAC-SQL + CHESS), ~$675. Per `feedback_datapup_no_budget.md`, no budget cap applies.
+CLI mode uses your interactive-tier subscription quotas:
+- Claude Pro / Max — message-based hourly limits
+- ChatGPT Plus / Pro — message-based hourly limits
+- Gemini personal — request-per-day caps on AI Studio
 
-## 5. Adding a model
+For a 2,000-call evaluation matrix, expect to spread the run over multiple sessions. Lower `--concurrency` to 2-4 to avoid throttling.
+
+If you have API keys and prefer batch throughput, switch any model to `transport: sdk` in `config/cross_provider_models.yaml` — the framework will fall through to the SDK adapter using the appropriate `*_API_KEY` env var.
+
+## 5. Falling back to SDK transport
+
+Set `transport: sdk` on a model entry to use the Python SDK + API key path. Required env vars:
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+export OPENAI_API_KEY=sk-...
+export GOOGLE_API_KEY=AIza...
+```
+
+Or set `defaults.transport: sdk` to switch all models at once.
+
+## 6. Adding a model
 
 Edit `config/cross_provider_models.yaml`. Each entry needs:
 - `provider`: `anthropic` | `openai` | `google`
-- `model_id`: provider's canonical model id (pinned)
+- `model_id`: the exact id the provider's CLI accepts (`claude --models`, `codex models`, `gemini models list`)
 - `display_name`, `tier`, context/output limits, costs
 
-The factory in `framework/llm/factory.py` auto-routes new entries to the right provider class.
+The factory in `framework/llm/factory.py` auto-routes new entries.
 
-## 6. Adding a provider
+## 7. Adding a provider
 
-1. Create `framework/llm/<provider>_caller.py` subclassing `LLMCallerBase`. Implement `call()` with retry + token capture.
-2. Set `PROVIDER = "<name>"` on the class.
-3. Register in `framework/llm/factory.py` under `_PROVIDER_CLASSES`.
-4. Add models for that provider in the yaml.
+1. Create `framework/llm/<provider>_cli_caller.py` subclassing `CLICallerBase` from `cli_caller.py`. Set `BINARY`, `ALLOWED_PATHS`, `PROVIDER`. Implement `_build_invocation` and `_parse_output`.
+2. Register in `framework/llm/factory.py` under `_DISPATCH`.
+3. Add models for that provider in the yaml.
 
 ## File map
 
@@ -127,12 +169,14 @@ The factory in `framework/llm/factory.py` auto-routes new entries to the right p
 | `config/cross_provider_models.yaml` | 9-model matrix definition |
 | `framework/llm/__init__.py` | Package exports |
 | `framework/llm/base.py` | `LLMResponse`, `LLMCallerBase`, `extract_sql` |
-| `framework/llm/anthropic_caller.py` | Anthropic SDK wrapper |
-| `framework/llm/openai_caller.py` | OpenAI SDK wrapper |
-| `framework/llm/google_caller.py` | google-genai SDK wrapper |
-| `framework/llm/factory.py` | Config loading + provider dispatch |
+| `framework/llm/cli_caller.py` | CLI base + Claude/Codex/Gemini wrappers (default transport) |
+| `framework/llm/anthropic_caller.py` | SDK fallback for Anthropic |
+| `framework/llm/openai_caller.py` | SDK fallback for OpenAI |
+| `framework/llm/google_caller.py` | SDK fallback for Google |
+| `framework/llm/factory.py` | Config loading + transport dispatch |
 | `framework/llm_caller.py` | Original Anthropic-only caller (kept for backwards compat) |
-| `scripts/setup_cross_provider.sh` | One-shot setup + dep install + key check |
+| `scripts/doctor_cli.py` | CLI installation + Meta-launcher diagnostic |
+| `scripts/setup_cross_provider.sh` | One-shot venv + Python dep install |
 | `scripts/smoke_test_cross_provider.py` | Per-model connectivity test |
 | `scripts/run_cross_provider_evaluation.py` | Full cross-provider matrix runner |
 

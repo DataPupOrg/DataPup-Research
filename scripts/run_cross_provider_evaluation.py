@@ -239,6 +239,26 @@ def provider_key_present(provider: str) -> bool:
     return False
 
 
+def model_runnable(cfg: dict, model_key: str) -> tuple[bool, str]:
+    """Return (is_runnable, reason). For CLI transport, instantiating
+    the caller probes the binary; we surface the resulting EnvironmentError
+    as the reason. For SDK transport, we check the env var presence.
+    """
+    entry = cfg["models"][model_key]
+    transport = entry.get("transport") or cfg.get("defaults", {}).get("transport", "cli")
+    provider = entry["provider"]
+    if transport == "sdk":
+        return (True, "ok") if provider_key_present(provider) \
+            else (False, f"missing {provider} API key in environment")
+    # CLI transport: try to construct the caller (it probes the binary)
+    try:
+        from framework.llm import get_caller
+        get_caller(model_key)
+        return True, "ok"
+    except Exception as e:  # noqa: BLE001
+        return False, f"CLI unavailable: {type(e).__name__}: {str(e)[:200]}"
+
+
 def load_checkpoint(out_path: Path) -> set[str]:
     """Return the set of query_ids already completed in `out_path` JSONL."""
     if not out_path.exists():
@@ -534,17 +554,20 @@ def main() -> int:
     model_keys = select_models(args)
     datasets = [d.strip() for d in args.datasets.split(",") if d.strip()]
 
-    # Filter to providers whose key is set (skip with warning)
-    # In --dry-run we don't need keys at all.
+    # Filter to runnable models (CLI binary present, or SDK key set).
+    # In --dry-run we skip the runnability check.
     runnable: list[str] = []
     for mk in model_keys:
-        provider = cfg["models"][mk]["provider"]
-        if args.dry_run or provider_key_present(provider):
+        if args.dry_run:
+            runnable.append(mk)
+            continue
+        ok, reason = model_runnable(cfg, mk)
+        if ok:
             runnable.append(mk)
         else:
-            print(f"  SKIP {mk}: missing {provider} API key in environment")
+            print(f"  SKIP {mk}: {reason}")
     if not runnable and not args.dry_run:
-        print("No models runnable — set API keys and retry.")
+        print("No models runnable. Run scripts/doctor_cli.py to diagnose.")
         return 1
 
     print(f"Running {len(runnable)} model(s) on {len(datasets)} dataset(s)")

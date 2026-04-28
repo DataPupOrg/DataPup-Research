@@ -112,14 +112,33 @@ def select_models(args: argparse.Namespace) -> list[str]:
 # Provider key presence check (per-provider, so missing keys skip cleanly)
 # ---------------------------------------------------------------------------
 
-def provider_key_present(provider: str) -> bool:
-    if provider == "anthropic":
-        return bool(os.environ.get("ANTHROPIC_API_KEY"))
-    if provider == "openai":
-        return bool(os.environ.get("OPENAI_API_KEY"))
-    if provider == "google":
-        return bool(os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY"))
-    return False
+def provider_runnable(model_key: str) -> tuple[bool, str]:
+    """For CLI transport, try to construct the caller (probes the binary).
+    For SDK transport, check the env var. Return (ok, reason)."""
+    cfg = load_model_config()
+    entry = cfg["models"][model_key]
+    transport = entry.get("transport") or cfg.get("defaults", {}).get("transport", "cli")
+    provider = entry["provider"]
+    if transport == "sdk":
+        if provider == "anthropic" and os.environ.get("ANTHROPIC_API_KEY"):
+            return True, "ok"
+        if provider == "openai" and os.environ.get("OPENAI_API_KEY"):
+            return True, "ok"
+        if provider == "google" and (os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")):
+            return True, "ok"
+        return False, f"missing {provider} API key"
+    # CLI transport
+    try:
+        get_caller(model_key)
+        return True, "ok"
+    except Exception as e:  # noqa: BLE001
+        return False, f"CLI unavailable: {str(e)[:200]}"
+
+
+def provider_key_present_or_cli_ok(provider: str, model_key: str) -> bool:
+    """Backwards-compat shim used by smoke_one()."""
+    ok, _ = provider_runnable(model_key)
+    return ok
 
 
 # ---------------------------------------------------------------------------
@@ -145,9 +164,9 @@ def smoke_one(model_key: str, model_entry: dict) -> dict:
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
     }
 
-    if not provider_key_present(provider):
+    if not provider_key_present_or_cli_ok(provider, model_key):
         record["skipped"] = True
-        record["error"] = f"Missing {provider} API key"
+        record["error"] = f"Provider {provider} not runnable on this host"
         return record
 
     try:
