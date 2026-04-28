@@ -48,7 +48,7 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -68,8 +68,11 @@ from framework.prompt_builder import (  # noqa: E402
     SchemaFormat,
     SchemaScope,
 )
-from framework.sql_executor import SQLExecutor  # noqa: E402
-from framework.result_comparator import compare_results  # noqa: E402
+# `framework.sql_executor` and `framework.result_comparator` are imported
+# lazily inside main() so that --no-execute / --dry-run do not require
+# clickhouse-driver to be installed.
+if TYPE_CHECKING:
+    from framework.sql_executor import SQLExecutor
 
 logging.basicConfig(
     level=logging.WARNING,
@@ -289,7 +292,7 @@ def evaluate_one(
     query: dict,
     dataset: str,
     prompt_builder: PromptBuilder,
-    executor: Optional[SQLExecutor],
+    executor: "Optional[SQLExecutor]",
     no_execute: bool,
     dry_run: bool,
 ) -> dict:
@@ -361,6 +364,7 @@ def evaluate_one(
 
     # Execute predicted vs gold against ClickHouse
     try:
+        from framework.result_comparator import compare_results  # lazy
         pred_result = executor.execute(response.sql, database=database)
         gold_result = executor.execute(gold_sql, database=database)
         record["predicted_execution_success"] = pred_result.success
@@ -400,7 +404,7 @@ def run_model_dataset(
     dataset: str,
     queries: list[dict],
     prompt_builder: PromptBuilder,
-    executor: Optional[SQLExecutor],
+    executor: "Optional[SQLExecutor]",
     out_dir: Path,
     args: argparse.Namespace,
 ) -> dict:
@@ -461,8 +465,9 @@ def run_model_dataset(
     return _summarize(model_key, dataset, out_path)
 
 
-def _execute_into(record: dict, query: dict, dataset: str, executor: SQLExecutor) -> None:
+def _execute_into(record: dict, query: dict, dataset: str, executor: "SQLExecutor") -> None:
     """Run predicted + gold SQL and merge results into `record` in-place."""
+    from framework.result_comparator import compare_results  # lazy
     database = DATASET_DATABASE.get(dataset, "default")
     pred_sql = record.get("predicted_sql") or ""
     gold_sql = query["sql"]
@@ -582,14 +587,21 @@ def main() -> int:
 
     prompt_builder = PromptBuilder(benchmark_dir=str(args.benchmark_dir))
 
-    executor: Optional[SQLExecutor] = None
+    executor: "Optional[SQLExecutor]" = None
     if not args.no_execute and not args.dry_run:
-        executor = SQLExecutor(host=args.clickhouse_host, port=args.clickhouse_port)
-        if not executor.test_connection():
-            print(f"  WARNING: cannot connect to ClickHouse at "
-                  f"{args.clickhouse_host}:{args.clickhouse_port}. "
-                  f"Continuing in --no-execute mode.")
+        try:
+            from framework.sql_executor import SQLExecutor  # lazy
+        except ImportError as e:
+            print(f"  WARNING: clickhouse-driver not installed ({e}). "
+                  f"Install with `pip install clickhouse-driver` or pass --no-execute.")
             executor = None
+        else:
+            executor = SQLExecutor(host=args.clickhouse_host, port=args.clickhouse_port)
+            if not executor.test_connection():
+                print(f"  WARNING: cannot connect to ClickHouse at "
+                      f"{args.clickhouse_host}:{args.clickhouse_port}. "
+                      f"Continuing in --no-execute mode.")
+                executor = None
 
     summaries: list[dict] = []
     t0 = time.perf_counter()

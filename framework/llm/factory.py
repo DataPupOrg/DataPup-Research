@@ -11,6 +11,10 @@ Each model entry has a `transport` field:
     cli   — invoke via the public CLI binary (default for the paper)
     sdk   — invoke via the provider's Python SDK with personal API key
 
+CLI callers are imported eagerly. SDK callers are imported lazily — only
+loaded when transport=sdk dispatch actually triggers them. This means a
+CLI-only user does not need to install anthropic/openai/google-genai.
+
 `model_key` is the top-level key in the yaml `models:` block (e.g.,
 "anthropic-opus-4-7"), NOT the provider's canonical model id.
 """
@@ -24,11 +28,8 @@ from typing import Any, Optional
 
 import yaml
 
-from .anthropic_caller import AnthropicCaller
 from .base import LLMCallerBase
 from .cli_caller import ClaudeCLICaller, CodexCLICaller, GeminiCLICaller
-from .google_caller import GoogleCaller
-from .openai_caller import OpenAICaller
 
 logger = logging.getLogger(__name__)
 
@@ -57,17 +58,38 @@ def list_tiers() -> dict[str, list[str]]:
     return load_model_config().get("tiers", {})
 
 
-# Dispatch matrix: (provider, transport) -> Caller class
-_DISPATCH: dict[tuple[str, str], type[LLMCallerBase]] = {
-    # CLI (paper default)
-    ("anthropic", "cli"): ClaudeCLICaller,
-    ("openai", "cli"):    CodexCLICaller,
-    ("google", "cli"):    GeminiCLICaller,
-    # SDK fallback (for environments where the CLI is unavailable)
-    ("anthropic", "sdk"): AnthropicCaller,
-    ("openai", "sdk"):    OpenAICaller,
-    ("google", "sdk"):    GoogleCaller,
+# CLI dispatch — always available, no extra deps.
+_CLI_DISPATCH: dict[str, type[LLMCallerBase]] = {
+    "anthropic": ClaudeCLICaller,
+    "openai":    CodexCLICaller,
+    "google":    GeminiCLICaller,
 }
+
+
+def _load_sdk_caller(provider: str) -> type[LLMCallerBase]:
+    """Import the SDK caller for `provider` lazily, raising a friendly
+    error if the underlying SDK is not installed."""
+    try:
+        if provider == "anthropic":
+            from .anthropic_caller import AnthropicCaller
+            return AnthropicCaller
+        if provider == "openai":
+            from .openai_caller import OpenAICaller
+            return OpenAICaller
+        if provider == "google":
+            from .google_caller import GoogleCaller
+            return GoogleCaller
+    except ImportError as e:
+        sdk_pkg = {
+            "anthropic": "anthropic",
+            "openai":    "openai",
+            "google":    "google-genai",
+        }.get(provider, "<unknown>")
+        raise ImportError(
+            f"transport=sdk for provider '{provider}' requires the {sdk_pkg} "
+            f"Python package. Install with: pip install {sdk_pkg}"
+        ) from e
+    raise ValueError(f"Unknown provider for SDK dispatch: {provider}")
 
 
 def get_caller(model_key: str, **overrides: Any) -> LLMCallerBase:
@@ -82,11 +104,19 @@ def get_caller(model_key: str, **overrides: Any) -> LLMCallerBase:
     model_id = entry["model_id"]
     transport = entry.get("transport") or cfg.get("defaults", {}).get("transport", "cli")
 
-    key = (provider, transport)
-    if key not in _DISPATCH:
+    if transport == "cli":
+        if provider not in _CLI_DISPATCH:
+            raise ValueError(
+                f"No CLI caller registered for provider={provider}. "
+                f"Known: {sorted(_CLI_DISPATCH.keys())}"
+            )
+        cls = _CLI_DISPATCH[provider]
+    elif transport == "sdk":
+        cls = _load_sdk_caller(provider)
+    else:
         raise ValueError(
-            f"No caller registered for provider={provider}, transport={transport}. "
-            f"Known: {sorted(_DISPATCH.keys())}"
+            f"Unknown transport '{transport}' for model {model_key}. "
+            f"Use 'cli' or 'sdk'."
         )
 
     defaults = cfg.get("defaults", {}) or {}
@@ -98,7 +128,6 @@ def get_caller(model_key: str, **overrides: Any) -> LLMCallerBase:
     }
     kwargs.update(overrides)
 
-    cls = _DISPATCH[key]
     logger.info(
         "get_caller: model_key=%s provider=%s transport=%s model_id=%s class=%s",
         model_key, provider, transport, model_id, cls.__name__,
