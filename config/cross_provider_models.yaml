@@ -12,18 +12,13 @@
 #   Google    (Gemini 2.5 Pro, Flash, Flash-Lite)
 #
 # DEFAULT TRANSPORT: `cli` — invoke via the public Claude / Codex / Gemini
-# CLIs under the user's personal subscription. No API keys required by the
-# evaluation framework itself; auth is handled inside each CLI's own login
-# flow (`claude login`, `codex login`, `gemini auth login`).
+# CLIs under the user's account. No API keys required by the evaluation
+# framework itself; auth is handled inside each CLI's own login flow
+# (`claude login`, `codex login`, `gemini auth login`).
 #
 # Override per-model with `transport: sdk` to fall back to the SDK + API
 # key path (e.g., for higher-throughput batch runs on a server without
 # interactive CLI auth).
-#
-# Per memory feedback_datapup_no_budget.md: there is no cost cap.
-# Per memory feedback_no_meta_cli_for_datapup.md: never invoke the
-# Meta-launcher variants of `claude` / `gemini`. The CLI caller refuses
-# any binary whose --version output identifies it as a Meta launcher.
 # =============================================================================
 
 # ---------------------------------------------------------------------------

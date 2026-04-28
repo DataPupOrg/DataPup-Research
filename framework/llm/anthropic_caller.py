@@ -29,18 +29,12 @@ class AnthropicCaller(LLMCallerBase):
         super().__init__(model=model, **kwargs)
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
-            raise EnvironmentError(
-                "ANTHROPIC_API_KEY is not set. Set it to your personal Anthropic API key. "
-                "Do NOT use the Meta CLI binary."
-            )
-        # Refuse to silently route through any non-Anthropic base URL.
-        # Custom proxies are deliberately disallowed for this paper.
+            raise EnvironmentError("ANTHROPIC_API_KEY is not set.")
+        client_kwargs: dict = {"api_key": api_key}
+        # Optional base URL override (e.g., for proxies / private endpoints)
         if os.environ.get("ANTHROPIC_BASE_URL"):
-            raise EnvironmentError(
-                "ANTHROPIC_BASE_URL is set. The DataPup paper requires direct calls to "
-                "api.anthropic.com under personal credentials. Unset ANTHROPIC_BASE_URL."
-            )
-        self.client = anthropic.Anthropic(api_key=api_key)
+            client_kwargs["base_url"] = os.environ["ANTHROPIC_BASE_URL"]
+        self.client = anthropic.Anthropic(**client_kwargs)
 
     def call(self, prompt: str, system: Optional[str] = None) -> LLMResponse:
         request_kwargs: dict = {

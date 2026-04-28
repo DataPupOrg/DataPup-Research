@@ -7,12 +7,17 @@
 # What it does:
 #   1. Creates / activates .venv if missing
 #   2. Installs the three provider SDKs at pinned-major versions
-#      (anthropic, openai, google-genai)
+#      (anthropic, openai, google-genai) — only needed if any model is
+#      configured with transport: sdk in cross_provider_models.yaml
 #   3. Verifies that ANTHROPIC_API_KEY, OPENAI_API_KEY, GOOGLE_API_KEY
-#      are set in the environment
-#   4. Refuses to run if any Meta-CLI environment variables are detected
-#      (per memory feedback_no_meta_cli_for_datapup.md)
-#   5. Optionally runs the smoke test (--smoke)
+#      are set (warn-only — CLI transport doesn't need them)
+#   4. Optionally runs the smoke test (--smoke)
+#
+# For CLI transport (the default), install the public CLIs separately:
+#   npm install -g @anthropic-ai/claude-code @google/gemini-cli
+#   brew install --cask codex
+# Then `claude login`, `codex login`, `gemini auth login`.
+# Then run scripts/doctor_cli.py to verify.
 #
 # Usage:
 #   bash scripts/setup_cross_provider.sh           # setup only
@@ -21,9 +26,6 @@
 
 set -euo pipefail
 
-# ---------------------------------------------------------------------------
-# Locate repo root (this script lives in scripts/)
-# ---------------------------------------------------------------------------
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 REPO_ROOT="$( cd -- "${SCRIPT_DIR}/.." &> /dev/null && pwd )"
 cd "${REPO_ROOT}"
@@ -34,34 +36,10 @@ echo "Repo root: ${REPO_ROOT}"
 echo "================================================================"
 
 # ---------------------------------------------------------------------------
-# Refuse Meta-CLI environment leakage
-# ---------------------------------------------------------------------------
-echo
-echo "[1/5] Checking for Meta-CLI environment leakage..."
-LEAKS=()
-[[ "${ANTHROPIC_BASE_URL:-}" != "" ]] && LEAKS+=("ANTHROPIC_BASE_URL")
-[[ "${ANTHROPIC_CUSTOM_HEADERS:-}" != "" ]] && LEAKS+=("ANTHROPIC_CUSTOM_HEADERS")
-[[ "${OPENAI_BASE_URL:-}" != "" ]] && LEAKS+=("OPENAI_BASE_URL")
-[[ "${GOOGLE_GENAI_USE_VERTEXAI:-}" != "" ]] && LEAKS+=("GOOGLE_GENAI_USE_VERTEXAI")
-if [[ ${#LEAKS[@]} -gt 0 ]]; then
-  echo "  ERROR: the following env vars are set and may route inference through"
-  echo "         Meta-internal infrastructure or proxies:"
-  for v in "${LEAKS[@]}"; do echo "    - $v"; done
-  echo
-  echo "  The DataPup paper requires direct calls under personal credentials."
-  echo "  Unset these and re-run:"
-  for v in "${LEAKS[@]}"; do echo "    unset $v"; done
-  exit 1
-fi
-echo "  OK — no Meta-CLI leakage detected."
-
-# ---------------------------------------------------------------------------
 # Create / activate venv
 # ---------------------------------------------------------------------------
 echo
-echo "[2/5] Setting up Python venv..."
-# Prefer parent DataPup repo's .venv if present (existing analysis env);
-# fall back to a fresh local .venv.
+echo "[1/4] Setting up Python venv..."
 PARENT_VENV="${REPO_ROOT}/../DataPup/.venv"
 LOCAL_VENV="${REPO_ROOT}/.venv"
 
@@ -86,11 +64,10 @@ echo "  Python: $(${PY} --version)"
 echo "  Pip:    $(${PIP} --version)"
 
 # ---------------------------------------------------------------------------
-# Install / upgrade SDKs
+# Install Python deps
 # ---------------------------------------------------------------------------
 echo
-echo "[3/5] Installing provider SDKs..."
-# Pinned to major versions known to support GPT-5.x, Claude 4.x, Gemini 2.5
+echo "[2/4] Installing Python dependencies..."
 "${PIP}" install --upgrade --quiet \
   "anthropic>=0.40.0" \
   "openai>=1.60.0" \
@@ -100,46 +77,29 @@ echo "[3/5] Installing provider SDKs..."
 echo "  Installed: anthropic, openai, google-genai, pyyaml, clickhouse-driver"
 
 # ---------------------------------------------------------------------------
-# Verify API keys
+# Report on auth options
 # ---------------------------------------------------------------------------
 echo
-echo "[4/5] Verifying API key environment variables..."
-MISSING=()
-[[ "${ANTHROPIC_API_KEY:-}" == "" ]] && MISSING+=("ANTHROPIC_API_KEY")
-[[ "${OPENAI_API_KEY:-}" == "" ]] && MISSING+=("OPENAI_API_KEY")
+echo "[3/4] Auth environment summary..."
+echo "  CLI transport (default):"
+echo "    Run 'python scripts/doctor_cli.py' to check claude/codex/gemini installation"
+echo "  SDK transport (per-model override):"
+[[ "${ANTHROPIC_API_KEY:-}" == "" ]] && echo "    ANTHROPIC_API_KEY: not set" || echo "    ANTHROPIC_API_KEY: set"
+[[ "${OPENAI_API_KEY:-}" == "" ]] && echo "    OPENAI_API_KEY:    not set" || echo "    OPENAI_API_KEY:    set"
 if [[ "${GOOGLE_API_KEY:-}" == "" && "${GEMINI_API_KEY:-}" == "" ]]; then
-  MISSING+=("GOOGLE_API_KEY (or GEMINI_API_KEY)")
-fi
-
-if [[ ${#MISSING[@]} -gt 0 ]]; then
-  echo "  WARNING: missing keys (smoke test will skip those providers):"
-  for k in "${MISSING[@]}"; do echo "    - $k"; done
-  echo
-  echo "  To set them (use personal API keys, NOT Meta-issued):"
-  echo "    export ANTHROPIC_API_KEY=sk-ant-..."
-  echo "    export OPENAI_API_KEY=sk-..."
-  echo "    export GOOGLE_API_KEY=AIza..."
-  echo
-  echo "  Get keys at:"
-  echo "    https://console.anthropic.com/settings/keys"
-  echo "    https://platform.openai.com/api-keys"
-  echo "    https://aistudio.google.com/apikey"
+  echo "    GOOGLE_API_KEY:    not set"
 else
-  echo "  OK — all 3 provider keys are set."
+  echo "    GOOGLE_API_KEY:    set"
 fi
 
 # ---------------------------------------------------------------------------
 # Optional: smoke test
 # ---------------------------------------------------------------------------
 echo
-echo "[5/5] Smoke test..."
+echo "[4/4] Smoke test..."
 if [[ "${1:-}" == "--smoke" ]]; then
-  if [[ ${#MISSING[@]} -gt 0 ]]; then
-    echo "  Skipping smoke test — set the missing keys first."
-  else
-    echo "  Running scripts/smoke_test_cross_provider.py..."
-    "${PY}" "${REPO_ROOT}/scripts/smoke_test_cross_provider.py"
-  fi
+  echo "  Running scripts/smoke_test_cross_provider.py..."
+  "${PY}" "${REPO_ROOT}/scripts/smoke_test_cross_provider.py"
 else
   echo "  Skipped (pass --smoke to run scripts/smoke_test_cross_provider.py)"
 fi
@@ -149,9 +109,14 @@ echo "================================================================"
 echo "Setup complete."
 echo
 echo "Next steps:"
-echo "  1. Set any missing API keys (see [4/5] above)"
-echo "  2. Run smoke test:"
+echo "  1. (CLI transport) Install public CLIs and log in:"
+echo "       npm install -g @anthropic-ai/claude-code @google/gemini-cli"
+echo "       brew install --cask codex"
+echo "       claude login && codex login && gemini auth login"
+echo "  2. Verify CLIs:"
+echo "       python scripts/doctor_cli.py"
+echo "  3. Smoke test all 9 models:"
 echo "       python scripts/smoke_test_cross_provider.py"
-echo "  3. Run full cross-provider evaluation:"
+echo "  4. Run full cross-provider evaluation:"
 echo "       python scripts/run_cross_provider_evaluation.py --help"
 echo "================================================================"

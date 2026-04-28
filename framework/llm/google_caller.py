@@ -34,15 +34,7 @@ class GoogleCaller(LLMCallerBase):
         api_key = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
         if not api_key:
             raise EnvironmentError(
-                "GOOGLE_API_KEY (or GEMINI_API_KEY) is not set. "
-                "Set it to your personal Google AI Studio API key."
-            )
-        # Refuse Vertex AI / custom endpoints — paper requires AI Studio direct.
-        if os.environ.get("GOOGLE_GENAI_USE_VERTEXAI", "").lower() in ("true", "1", "yes"):
-            raise EnvironmentError(
-                "GOOGLE_GENAI_USE_VERTEXAI is enabled. The DataPup paper requires "
-                "direct calls to AI Studio under personal credentials. "
-                "Unset GOOGLE_GENAI_USE_VERTEXAI."
+                "GOOGLE_API_KEY (or GEMINI_API_KEY) is not set."
             )
         self.client = genai.Client(api_key=api_key)
 

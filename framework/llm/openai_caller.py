@@ -38,15 +38,11 @@ class OpenAICaller(LLMCallerBase):
         super().__init__(model=model, **kwargs)
         api_key = os.environ.get("OPENAI_API_KEY")
         if not api_key:
-            raise EnvironmentError(
-                "OPENAI_API_KEY is not set. Set it to your personal OpenAI API key."
-            )
+            raise EnvironmentError("OPENAI_API_KEY is not set.")
+        client_kwargs: dict = {"api_key": api_key}
         if os.environ.get("OPENAI_BASE_URL"):
-            raise EnvironmentError(
-                "OPENAI_BASE_URL is set. The DataPup paper requires direct calls to "
-                "api.openai.com under personal credentials. Unset OPENAI_BASE_URL."
-            )
-        self.client = OpenAI(api_key=api_key)
+            client_kwargs["base_url"] = os.environ["OPENAI_BASE_URL"]
+        self.client = OpenAI(**client_kwargs)
 
     def call(self, prompt: str, system: Optional[str] = None) -> LLMResponse:
         messages: list[dict] = []

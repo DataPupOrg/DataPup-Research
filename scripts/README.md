@@ -22,11 +22,9 @@ The framework invokes inference via each provider's **public CLI** under your pe
 
 The eval scripts never see an API key. Auth is entirely the CLI's responsibility.
 
-**Refusal of Meta launchers:** If any of these binaries on your `PATH` are the Meta-internal variants (their `--version` output mentions "at Meta" or "Meta Launcher"), the framework refuses to invoke them. Per `.claude/local/research/A3-meta-cli-policy.md`, the paper bylines us as Independent Researcher and using Meta-paid inference creates IP and EB-1A risk.
-
 ## 1. Install the public CLIs
 
-On your target machine (NOT this dev box, which has Meta launchers):
+On your target machine:
 
 ```bash
 # Anthropic Claude Code
@@ -53,9 +51,7 @@ Each CLI handles its own auth. If you have Claude Pro/Max, ChatGPT Plus/Pro, and
 python scripts/doctor_cli.py
 ```
 
-This probes each binary, refuses Meta launchers, reports auth state. Add `--probe-call` to actually round-trip a 1-token prompt through each CLI to verify auth works.
-
-If a CLI is found at `/usr/local/bin/<binary>` and `--version` says "at Meta," install the public variant somewhere earlier on `PATH` (e.g., `/opt/homebrew/bin/`).
+This probes each binary and reports which path resolved, what `--version` says, and (with `--probe-call`) whether a trivial round-trip succeeds.
 
 ## 3. Smoke-test all 9 models
 

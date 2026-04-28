@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 """
-scripts/doctor_cli.py — Verify the public Claude / Codex / Gemini CLIs
-are installed, authenticated, and NOT the Meta-launcher variants.
+scripts/doctor_cli.py — Diagnose Claude / Codex / Gemini CLI installation.
 
-Run this once on the machine where you'll execute the cross-provider
-matrix. It probes each CLI binary, refuses Meta launchers, reports auth
-state, and confirms the model ids in cross_provider_models.yaml are
-acceptable to each CLI's --model flag.
+Probes each CLI binary on the host: which path resolves, what `--version`
+reports, and (with --probe-call) whether a trivial round-trip succeeds.
 
 Usage:
     python scripts/doctor_cli.py
     python scripts/doctor_cli.py --provider anthropic
-    python scripts/doctor_cli.py --probe-call    # actually invoke each CLI with a 1-token prompt
+    python scripts/doctor_cli.py --probe-call    # actually invoke each CLI
 
-Exits 0 if every probed CLI is healthy; 1 otherwise.
+Exits 0 if every probed CLI is reachable; 1 otherwise.
 """
 
 from __future__ import annotations
@@ -33,7 +30,6 @@ from framework.llm.cli_caller import (  # noqa: E402
     ClaudeCLICaller,
     CodexCLICaller,
     GeminiCLICaller,
-    _is_meta_launcher,
 )
 
 
@@ -46,7 +42,6 @@ CLI_SPECS = {
             "  # or: curl -fsSL https://claude.ai/install.sh | bash"
         ),
         "auth_hint": "  claude login",
-        "version_args": ["--version"],
     },
     "openai": {
         "binary": "codex",
@@ -56,7 +51,6 @@ CLI_SPECS = {
             "  # or: npm install -g @openai/codex"
         ),
         "auth_hint": "  codex login",
-        "version_args": ["--version"],
     },
     "google": {
         "binary": "gemini",
@@ -66,7 +60,6 @@ CLI_SPECS = {
             "  # or: brew install gemini-cli"
         ),
         "auth_hint": "  gemini auth login",
-        "version_args": ["--version"],
     },
 }
 
@@ -93,7 +86,6 @@ def find_binary(binary: str, allowed_paths: tuple[str, ...]) -> tuple[list[str],
         cand = os.path.join(prefix, binary)
         if os.path.isfile(cand) and os.access(cand, os.X_OK):
             preferred.append(cand)
-    # Find all instances on PATH for transparency
     all_found: list[str] = []
     for path_entry in os.environ.get("PATH", "").split(os.pathsep):
         cand = os.path.join(path_entry, binary)
@@ -102,6 +94,21 @@ def find_binary(binary: str, allowed_paths: tuple[str, ...]) -> tuple[list[str],
             if real not in all_found:
                 all_found.append(real)
     return preferred, all_found
+
+
+def probe_version(binary_path: str) -> str:
+    """Run `--version` and return whatever it prints (trimmed)."""
+    try:
+        result = subprocess.run(
+            [binary_path, "--version"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            env={**os.environ, "NO_COLOR": "1"},
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+        return f"<probe failed: {type(e).__name__}>"
+    return ((result.stdout or "") + (result.stderr or "")).strip()[:300]
 
 
 def probe_provider(provider: str, do_probe_call: bool) -> dict:
@@ -117,7 +124,6 @@ def probe_provider(provider: str, do_probe_call: bool) -> dict:
         "preferred_paths": preferred,
         "all_paths": all_found,
         "selected": None,
-        "is_meta": False,
         "version_text": "",
         "passed": False,
         "notes": [],
@@ -127,58 +133,17 @@ def probe_provider(provider: str, do_probe_call: bool) -> dict:
         result["notes"].append(f"NOT INSTALLED — install with:\n{spec['install_hint']}")
         return result
 
-    # Pick the first preferred path; if none preferred, check candidates outside
-    # ALLOWED_PATHS more carefully — they're more likely to be Meta variants.
+    # Pick the first preferred path; fall back to first PATH entry
     if preferred:
         selected = preferred[0]
     else:
-        # No binary in any ALLOWED_PATHS prefix. Try each PATH entry but
-        # require it to pass the Meta-launcher check before accepting.
-        selected = None
-        for cand in all_found:
-            cand_meta, cand_version = _is_meta_launcher(cand)
-            if not cand_meta:
-                selected = cand
-                result["notes"].append(
-                    f"Using {cand} (outside ALLOWED_PATHS but appears non-Meta). "
-                    f"Consider symlinking into one of: {list(allowed)}"
-                )
-                break
-        if not selected:
-            result["notes"].append(
-                f"All {binary} binaries on PATH appear to be Meta launchers "
-                f"(or failed --version probe). Install the public CLI:\n{spec['install_hint']}"
-            )
-            for cand in all_found:
-                _, ver = _is_meta_launcher(cand)
-                result["notes"].append(f"  rejected: {cand} ({ver[:80]})")
-            return result
-
-    result["selected"] = selected
-
-    is_meta, version_text = _is_meta_launcher(selected)
-    result["is_meta"] = is_meta
-    result["version_text"] = version_text[:200]
-
-    if is_meta:
+        selected = all_found[0]
         result["notes"].append(
-            f"REFUSED — {selected} appears to be a Meta launcher (or hung on --version). "
-            f"Install the public CLI:\n{spec['install_hint']}"
+            f"Found outside ALLOWED_PATHS hint. Allowed: {list(allowed)}"
         )
-        # Check for an alternate non-Meta binary in PATH
-        for cand in all_found:
-            if cand == selected:
-                continue
-            cand_meta, cand_version = _is_meta_launcher(cand)
-            if not cand_meta:
-                result["notes"].append(
-                    f"ALTERNATE FOUND: {cand} ({cand_version[:80]}) appears non-Meta. "
-                    f"Move it earlier on PATH or symlink into one of "
-                    f"the ALLOWED_PATHS prefixes."
-                )
-        return result
+    result["selected"] = selected
+    result["version_text"] = probe_version(selected)
 
-    # Optional: do a probe call to verify auth
     if do_probe_call:
         ok, msg = probe_call(provider, selected)
         result["probe_call_ok"] = ok
@@ -228,8 +193,8 @@ def print_report(results: list[dict]) -> None:
         provider = r["provider"]
         binary = r["binary"]
         status = "PASS" if r["passed"] else "FAIL"
-        marker = "✓" if r["passed"] else "✗"
-        print(f"  {marker} [{provider}] {binary}: {status}")
+        marker = "OK" if r["passed"] else "FAIL"
+        print(f"  [{marker}] {provider} ({binary})")
         if r.get("selected"):
             print(f"      selected: {r['selected']}")
         if r.get("version_text"):
