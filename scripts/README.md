@@ -171,7 +171,7 @@ The factory in `framework/llm/factory.py` auto-routes new entries.
 | `framework/llm/google_caller.py` | SDK fallback for Google |
 | `framework/llm/factory.py` | Config loading + transport dispatch |
 | `framework/llm_caller.py` | Original Anthropic-only caller (kept for backwards compat) |
-| `scripts/doctor_cli.py` | CLI installation + Meta-launcher diagnostic |
+| `scripts/doctor_cli.py` | CLI installation diagnostic |
 | `scripts/setup_cross_provider.sh` | One-shot venv + Python dep install |
 | `scripts/smoke_test_cross_provider.py` | Per-model connectivity test |
 | `scripts/run_cross_provider_evaluation.py` | Full cross-provider matrix runner |

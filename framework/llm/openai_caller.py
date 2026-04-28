@@ -1,12 +1,8 @@
 """
 framework/llm/openai_caller.py — OpenAI SDK wrapper.
 
-Reads OPENAI_API_KEY from the environment. Uses the Responses API for
-GPT-5.x models which support reasoning effort and structured output.
-Falls back to chat.completions if the Responses API is unavailable for
-the chosen model.
-
-Per memory feedback_no_meta_cli_for_datapup.md: no Meta CLI invocation.
+Reads OPENAI_API_KEY from the environment. Uses the chat.completions API
+for GPT-5.x models with reasoning-effort defaults.
 """
 
 from __future__ import annotations

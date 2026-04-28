@@ -1,9 +1,7 @@
 """
 framework/llm/anthropic_caller.py — Anthropic SDK wrapper.
 
-Reads ANTHROPIC_API_KEY from the environment. Refuses to use the Meta CLI
-binary at /usr/local/bin/claude per memory feedback_no_meta_cli_for_datapup.md
-— this caller talks directly to api.anthropic.com under personal credentials.
+Reads ANTHROPIC_API_KEY from the environment.
 """
 
 from __future__ import annotations

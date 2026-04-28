@@ -4,8 +4,6 @@ framework/llm/google_caller.py — Google Gemini SDK wrapper.
 Reads GOOGLE_API_KEY (or GEMINI_API_KEY as fallback) from the environment.
 Uses the modern google-genai SDK (`from google import genai`) — NOT the
 legacy `google.generativeai` package.
-
-Per memory feedback_no_meta_cli_for_datapup.md: no Meta CLI invocation.
 """
 
 from __future__ import annotations
