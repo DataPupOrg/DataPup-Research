@@ -1,0 +1,7 @@
+model_name,config,dataset,total_queries,model_success_rate,execution_accuracy,gold_execution_accuracy,result_correctness,repair_successes,repair_attempts,avg_prompt_tokens_estimate,avg_model_latency_ms,avg_sql_latency_ms,avg_trace_steps,summary_path
+claude_cli,baseline,custom_analytics,150,1.0,0.0,0.0,0.0,0,0,2577.9333333333334,17622.90886666667,0.0,2.0,evaluation/results/cli_runs_full_generation/claude_cli/baseline/summary.json
+claude_cli,best,custom_analytics,150,1.0,0.0,0.0,0.0,0,0,3347.4333333333334,17134.377399999998,0.0,2.0,evaluation/results/cli_runs_full_generation/claude_cli/best/summary.json
+codex_cli,baseline,custom_analytics,150,1.0,0.0,0.0,0.0,0,0,2577.9333333333334,12913.735133333334,0.0,2.0,evaluation/results/cli_runs_full_generation/codex_cli/baseline/summary.json
+codex_cli,best,custom_analytics,150,1.0,0.0,0.0,0.0,0,0,3347.4333333333334,12427.384866666667,0.0,2.0,evaluation/results/cli_runs_full_generation/codex_cli/best/summary.json
+gemini_cli,baseline,custom_analytics,150,0.8866666666666667,0.0,0.0,0.0,0,0,2577.9333333333334,108975.0346,0.0,2.0,evaluation/results/cli_runs_full_generation/gemini_cli/baseline/summary.json
+gemini_cli,best,custom_analytics,150,0.94,0.0,0.0,0.0,0,0,3347.4333333333334,59996.5162,0.0,2.0,evaluation/results/cli_runs_full_generation/gemini_cli/best/summary.json

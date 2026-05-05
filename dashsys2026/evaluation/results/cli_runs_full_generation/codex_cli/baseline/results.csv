@@ -1,0 +1,1745 @@
+query_id,category,difficulty,model_success,pred_executed,result_match,repaired,repair_attempts,token_estimate,model_latency_ms,sql_latency_ms,pred_row_count,gold_row_count,pred_error,natural_language,predicted_sql,gold_sql
+AG-001,Aggregation,easy,True,False,False,False,0,2558,10122.77,0.0,0,0,,How many total events are in the events table?,"SELECT count() AS total_events
+FROM analytics.events",SELECT count() FROM analytics.events
+AG-002,Aggregation,easy,True,False,False,False,0,2560,10777.81,0.0,0,0,,How many distinct users are there in the events table?,"SELECT uniqExactIf(user_id, isNotNull(user_id)) AS distinct_users
+FROM analytics.events",SELECT uniqExact(user_id) AS distinct_users FROM analytics.events
+AG-003,Aggregation,easy,True,False,False,False,0,2560,10657.55,0.0,0,0,,What is the average event duration in milliseconds?,"SELECT round(avg(duration_ms), 2) AS average_event_duration_ms
+FROM analytics.events",SELECT avg(duration_ms) AS avg_duration FROM analytics.events
+AG-004,Aggregation,easy,True,False,False,False,0,2556,13524.11,0.0,0,0,,How many events of each type are there?,"SELECT
+    event_type,
+    count() AS event_count
+FROM analytics.events
+GROUP BY event_type
+ORDER BY event_type","SELECT event_type, count() AS event_count FROM analytics.events GROUP BY event_type ORDER BY event_count DESC"
+AG-005,Aggregation,easy,True,False,False,False,0,2558,10995.36,0.0,0,0,,What percentage of events are bounce events?,"SELECT round(countIf(is_bounce = 1) * 100.0 / count(), 2) AS bounce_event_percentage
+FROM analytics.events",SELECT countIf(is_bounce = 1) * 100.0 / count() AS bounce_percentage FROM analytics.events
+AG-006,Aggregation,easy,True,False,False,False,0,2561,8832.29,0.0,0,0,,How many events came from each country? Show the top 20.,"SELECT
+    country,
+    count() AS event_count
+FROM analytics.events
+GROUP BY country
+ORDER BY event_count DESC
+LIMIT 20","SELECT country, count() AS event_count FROM analytics.events GROUP BY country ORDER BY event_count DESC LIMIT 20"
+AG-007,Aggregation,easy,True,False,False,False,0,2558,8091.1,0.0,0,0,,What is the total lifetime value of all users?,"SELECT sum(lifetime_value) AS total_lifetime_value
+FROM analytics.users",SELECT sum(lifetime_value) AS total_ltv FROM analytics.users
+AG-008,Aggregation,easy,True,False,False,False,0,2558,14246.56,0.0,0,0,,How many users are on each subscription plan?,"SELECT
+    plan,
+    count() AS user_count
+FROM analytics.users
+GROUP BY plan
+ORDER BY plan","SELECT plan, count() AS user_count FROM analytics.users GROUP BY plan ORDER BY user_count DESC"
+AG-009,Aggregation,easy,True,False,False,False,0,2530,8507.2,0.0,0,0,,"What is the minimum, maximum, and average product price?","SELECT
+    min(price) AS minimum_price,
+    max(price) AS maximum_price,
+    round(avg(price), 2) AS average_price
+FROM analytics.products","SELECT min(price) AS min_price, max(price) AS max_price, avg(price) AS avg_price FROM analytics.products"
+AG-010,Aggregation,easy,True,False,False,False,0,2558,15577.53,0.0,0,0,,How many sessions are there per device type?,"SELECT
+    mapFromArrays(groupArray(device_type), groupArray(session_count)) AS sessions_per_device_type
+FROM
+(
+    SELECT
+        device_type,
+        count() AS session_count
+    FROM analytics.sessions
+    GROUP BY device_type
+)","SELECT device_type, count() AS session_count FROM analytics.sessions GROUP BY device_type ORDER BY session_count DESC"
+AG-011,Aggregation,medium,True,False,False,False,0,2568,10225.36,0.0,0,0,,What is the average session duration for converted versus non-converted sessions?,"SELECT
+    round(avgIf(duration_seconds, is_converted = 1), 2) AS avg_converted_session_duration_seconds,
+    round(avgIf(duration_seconds, is_converted = 0), 2) AS avg_non_converted_session_duration_seconds
+FROM analytics.sessions","SELECT is_converted, avg(duration_seconds) AS avg_duration, count() AS session_count FROM analytics.sessions GROUP BY is_converted ORDER BY is_converted"
+AG-012,Aggregation,medium,True,False,False,False,0,2563,14068.02,0.0,0,0,,What is the total lifetime value of users broken down by plan?,"SELECT
+    plan,
+    sum(lifetime_value) AS total_lifetime_value
+FROM analytics.users
+GROUP BY plan
+ORDER BY plan","SELECT plan, sum(lifetime_value) AS total_lifetime_value FROM analytics.users GROUP BY plan ORDER BY total_lifetime_value DESC"
+AG-013,Aggregation,medium,True,False,False,False,0,2568,11438.61,0.0,0,0,,What are the top 10 browsers by unique user count in the events table?,"SELECT
+    browser,
+    uniqExact(user_id) AS unique_user_count
+FROM analytics.events
+WHERE user_id IS NOT NULL
+GROUP BY browser
+ORDER BY unique_user_count DESC
+LIMIT 10","SELECT browser, uniqExact(user_id) AS unique_users FROM analytics.events GROUP BY browser ORDER BY unique_users DESC LIMIT 10"
+AG-014,Aggregation,medium,True,False,False,False,0,2532,7503.09,0.0,0,0,,What is the 95th percentile of event duration in milliseconds?,"SELECT quantile(0.95)(duration_ms) AS p95_duration_ms
+FROM analytics.events",SELECT quantile(0.95)(duration_ms) AS p95_duration FROM analytics.events WHERE duration_ms > 0
+AG-015,Aggregation,medium,True,False,False,False,0,2538,9801.12,0.0,0,0,,Which product categories have more than 50 products and what is their average rating?,"SELECT
+    category,
+    round(avg(rating), 2) AS average_rating
+FROM analytics.products
+GROUP BY category
+HAVING count() > 50","SELECT category, count() AS product_count, avg(rating) AS avg_rating FROM analytics.products GROUP BY category HAVING count() > 50 ORDER BY product_count DESC"
+AG-016,Aggregation,medium,True,False,False,False,0,2574,13148.18,0.0,0,0,,"For each operating system, what is the average event duration and how many unique sessions are there?","SELECT
+    os,
+    round(avg(duration_ms), 2) AS average_event_duration_ms,
+    uniqExact(session_id) AS unique_sessions
+FROM analytics.events
+GROUP BY os
+ORDER BY os","SELECT os, avg(duration_ms) AS avg_duration, uniq(session_id) AS unique_sessions FROM analytics.events GROUP BY os ORDER BY unique_sessions DESC"
+AG-017,Aggregation,medium,True,False,False,False,0,2574,12739.27,0.0,0,0,,What is the conversion rate (percentage of converted sessions) by UTM source?,"SELECT
+    ifNull(utm_source, 'unknown') AS utm_source,
+    round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate
+FROM analytics.sessions
+GROUP BY ifNull(utm_source, 'unknown')
+ORDER BY conversion_rate DESC","SELECT utm_source, count() AS total_sessions, countIf(is_converted = 1) AS converted, countIf(is_converted = 1) * 100.0 / count() AS conversion_rate FROM analytics.sessions WHERE utm_source IS NOT NULL GROUP BY utm_source ORDER BY conversion_rate DESC"
+AG-018,Aggregation,medium,True,False,False,False,0,2569,12746.56,0.0,0,0,,"What is the average number of pages viewed per session, broken down by device type?","SELECT
+    mapFromArrays(groupArray(device_type), groupArray(avg_pages_per_session)) AS avg_pages_per_session_by_device_type
+FROM
+(
+    SELECT
+        device_type,
+        round(avg(page_count), 2) AS avg_pages_per_session
+    FROM analytics.sessions
+    GROUP BY device_type
+)","SELECT device_type, avg(page_count) AS avg_pages, count() AS session_count FROM analytics.sessions GROUP BY device_type ORDER BY avg_pages DESC"
+AG-019,Aggregation,medium,True,False,False,False,0,2562,8666.24,0.0,0,0,,How many events happened on each date? Show the daily count.,"SELECT
+    toDate(timestamp) AS event_date,
+    count() AS daily_count
+FROM analytics.events
+GROUP BY event_date
+ORDER BY event_date","SELECT toDate(timestamp) AS event_date, count() AS daily_events FROM analytics.events GROUP BY event_date ORDER BY event_date"
+AG-020,Aggregation,medium,True,False,False,False,0,2534,8817.18,0.0,0,0,,What is the median and 95th percentile of session duration in seconds?,"SELECT
+    quantile(0.5)(duration_seconds) AS median_duration_seconds,
+    quantile(0.95)(duration_seconds) AS p95_duration_seconds
+FROM analytics.sessions","SELECT quantile(0.5)(duration_seconds) AS median_duration, quantile(0.95)(duration_seconds) AS p95_duration FROM analytics.sessions"
+AG-021,Aggregation,hard,True,False,False,False,0,2594,12810.13,0.0,0,0,,"For each country, compute the number of purchases, the total revenue from purchases, and the percentage of bounce events, all from the events table.","SELECT
+    country,
+    countIf(event_type = 'purchase') AS purchases,
+    sumIf(toDecimal64OrZero(properties['revenue'], 2), event_type = 'purchase') AS total_revenue,
+    round(countIf(is_bounce = 1) * 100.0 / count(), 2) AS bounce_event_percentage
+FROM analytics.events
+GROUP BY country","SELECT country, countIf(event_type = 'purchase') AS purchase_count, sumIf(toFloat64OrZero(properties['revenue']), event_type = 'purchase') AS total_revenue, countIf(is_bounce = 1) * 100.0 / count() AS bounce_rate FROM analytics.events GROUP BY country ORDER BY purchase_count DESC LIMIT 20"
+AG-022,Aggregation,hard,True,False,False,False,0,2576,15834.12,0.0,0,0,,"For each date, find the page URL that received the most page view events.","SELECT
+    event_date,
+    page_url,
+    page_view_events
+FROM
+(
+    SELECT
+        toDate(timestamp) AS event_date,
+        page_url,
+        count() AS page_view_events,
+        row_number() OVER (PARTITION BY toDate(timestamp) ORDER BY count() DESC, page_url ASC) AS rn
+    FROM analytics.events
+    WHERE event_type = 'page_view'
+    GROUP BY
+        event_date,
+        page_url
+)
+WHERE rn = 1
+ORDER BY event_date ASC","SELECT event_date, argMax(page_url, cnt) AS top_url, max(cnt) AS max_views FROM (SELECT toDate(timestamp) AS event_date, page_url, count() AS cnt FROM analytics.events WHERE event_type = 'page_view' GROUP BY event_date, page_url) GROUP BY event_date ORDER BY event_date"
+AG-023,Aggregation,hard,True,False,False,False,0,2572,14471.55,0.0,0,0,,"What is the bounce rate by device type, and how many total non-bounce events are there for each?","SELECT
+    groupArray((device_type, bounce_rate, total_non_bounce_events)) AS bounce_rate_by_device_type
+FROM
+(
+    SELECT
+        device_type,
+        round(countIf(is_bounce = 1) * 100.0 / count(), 2) AS bounce_rate,
+        countIf(is_bounce = 0) AS total_non_bounce_events
+    FROM analytics.events
+    GROUP BY device_type
+    ORDER BY device_type
+)","SELECT device_type, countIf(is_bounce = 1) * 100.0 / count() AS bounce_rate, countIf(is_bounce = 0) AS non_bounce_events FROM analytics.events GROUP BY device_type ORDER BY device_type"
+AG-024,Aggregation,hard,True,False,False,False,0,2585,13800.07,0.0,0,0,,"For each product category, what is the average rating weighted by review count, and collect the top 3 product names by rating into an array?","SELECT
+    category,
+    round(sum(toFloat64(rating) * review_count) / nullIf(sum(review_count), 0), 2) AS weighted_avg_rating,
+    arraySlice(arrayMap(x -> x.2, arrayReverseSort(groupArray((rating, name)))), 1, 3) AS top_3_product_names_by_rating
+FROM analytics.products
+GROUP BY category
+ORDER BY category","SELECT category, sum(rating * review_count) / sum(review_count) AS weighted_avg_rating, count() AS product_count, groupArray(3)(name_by_rating) AS top_3_products FROM (SELECT category, name AS name_by_rating, rating, review_count FROM analytics.products ORDER BY rating DESC) GROUP BY category ORDER BY weighted_avg_rating DESC"
+AG-025,Aggregation,hard,True,False,False,False,0,2590,14582.5,0.0,0,0,,"For each country, what fraction of events were purchases versus page views? Only show countries with at least 500 events.","SELECT
+    country,
+    round(countIf(event_type = 'purchase') * 100.0 / count(), 2) AS purchase_event_pct,
+    round(countIf(event_type = 'page_view') * 100.0 / count(), 2) AS page_view_event_pct
+FROM analytics.events
+GROUP BY country
+HAVING count() >= 500
+ORDER BY purchase_event_pct DESC","SELECT country, count() AS total_events, countIf(event_type = 'purchase') * 100.0 / count() AS purchase_pct, countIf(event_type = 'page_view') * 100.0 / count() AS page_view_pct FROM analytics.events GROUP BY country HAVING count() >= 500 ORDER BY total_events DESC"
+AG-026,Aggregation,hard,True,False,False,False,0,2591,15061.28,0.0,0,0,,"Collect all distinct UTM campaigns per UTM source into an array, but only for sources that have at least 3 distinct campaigns.","SELECT
+    utm_source,
+    groupUniqArray(utm_campaign) AS utm_campaigns
+FROM analytics.sessions
+WHERE utm_source IS NOT NULL
+  AND utm_campaign IS NOT NULL
+GROUP BY utm_source
+HAVING uniqExact(utm_campaign) >= 3","SELECT utm_source, groupArray(DISTINCT utm_campaign) AS campaigns FROM analytics.sessions WHERE utm_source IS NOT NULL AND utm_campaign IS NOT NULL GROUP BY utm_source HAVING length(groupArray(DISTINCT utm_campaign)) >= 3 ORDER BY length(campaigns) DESC LIMIT 20"
+AG-027,Aggregation,hard,True,False,False,False,0,2571,16305.27,0.0,0,0,,"For each user plan, find the country with the most users.","SELECT
+    plan,
+    country,
+    user_count
+FROM
+(
+    SELECT
+        plan,
+        country,
+        user_count,
+        row_number() OVER (PARTITION BY plan ORDER BY user_count DESC, country ASC) AS rn
+    FROM
+    (
+        SELECT
+            plan,
+            country,
+            count() AS user_count
+        FROM analytics.users
+        GROUP BY
+            plan,
+            country
+    )
+)
+WHERE rn = 1
+ORDER BY plan","SELECT plan, argMax(country, cnt) AS top_country, max(cnt) AS user_count FROM (SELECT plan, country, count() AS cnt FROM analytics.users GROUP BY plan, country) GROUP BY plan ORDER BY user_count DESC"
+AG-028,Aggregation,hard,True,False,False,False,0,2588,10829.97,0.0,0,0,,"Which product subcategory-country combinations have the highest total purchase revenue? Show the top 10, using the events and products tables.","SELECT
+    p.subcategory,
+    e.country,
+    round(sum(toFloat64(p.price)), 2) AS total_purchase_revenue
+FROM analytics.events AS e
+INNER JOIN analytics.products AS p
+    ON toUInt64OrZero(e.properties['product_id']) = p.product_id
+WHERE e.event_type = 'purchase'
+GROUP BY
+    p.subcategory,
+    e.country
+ORDER BY total_purchase_revenue DESC
+LIMIT 10","SELECT p.subcategory, e.country, sum(toFloat64OrZero(e.properties['revenue'])) AS total_revenue FROM analytics.events AS e INNER JOIN analytics.products AS p ON toUInt64OrZero(e.properties['product_id']) = p.product_id WHERE e.event_type = 'purchase' AND e.properties['product_id'] != '' GROUP BY p.subcategory, e.country ORDER BY total_revenue DESC LIMIT 10"
+AG-029,Aggregation,hard,True,False,False,False,0,2591,12854.11,0.0,0,0,,"For each hour of the day, compute the average number of events and the average session duration, using both the events and sessions tables.","SELECT
+    toHour(s.start_time) AS hour_of_day,
+    round(avg(e.event_count), 2) AS avg_events,
+    round(avg(s.duration_seconds), 2) AS avg_session_duration_seconds
+FROM analytics.sessions AS s
+INNER JOIN (
+    SELECT
+        session_id,
+        count() AS event_count
+    FROM analytics.events
+    GROUP BY session_id
+) AS e ON s.session_id = e.session_id
+GROUP BY hour_of_day
+ORDER BY hour_of_day ASC","SELECT hour_of_day, avg_events, avg_session_duration FROM (SELECT toHour(timestamp) AS hour_of_day, count() AS avg_events FROM analytics.events GROUP BY hour_of_day) AS e INNER JOIN (SELECT toHour(start_time) AS hour_of_day, avg(duration_seconds) AS avg_session_duration FROM analytics.sessions GROUP BY hour_of_day) AS s USING (hour_of_day) ORDER BY hour_of_day"
+AG-030,Aggregation,hard,True,False,False,False,0,2606,15182.6,0.0,0,0,,"Calculate the total lifetime value and average lifetime value per user plan and country, but only show combinations where total LTV exceeds 10000 and there are at least 5 users.","SELECT
+    plan,
+    country,
+    sum(lifetime_value) AS total_ltv,
+    round(avg(toFloat64(lifetime_value)), 2) AS avg_ltv
+FROM analytics.users
+GROUP BY
+    plan,
+    country
+HAVING
+    total_ltv > 10000
+    AND count() >= 5
+ORDER BY total_ltv DESC","SELECT plan, country, count() AS user_count, sum(lifetime_value) AS total_ltv, avg(lifetime_value) AS avg_ltv FROM analytics.users GROUP BY plan, country HAVING sum(lifetime_value) > 10000 AND count() >= 5 ORDER BY total_ltv DESC"
+CS-001,ClickHouse_Specific,easy,True,False,False,False,0,2536,8610.62,0.0,0,0,,Access the 'campaign' key from the event properties map for purchase events.,"SELECT properties['campaign'] AS campaign
+FROM analytics.events
+WHERE event_type = 'purchase'","SELECT event_id, properties['campaign'] AS campaign, properties['revenue'] AS revenue FROM analytics.events WHERE event_type = 'purchase' AND mapContains(properties, 'campaign') ORDER BY event_id LIMIT 50"
+CS-002,ClickHouse_Specific,easy,True,False,False,False,0,2585,15019.79,0.0,0,0,,Find users who have the tag 'power_user' in their tags array.,"SELECT
+    name,
+    email
+FROM analytics.users
+WHERE has(tags, 'power_user')","SELECT user_id, name, email, tags FROM analytics.users WHERE has(tags, 'power_user') ORDER BY user_id"
+CS-003,ClickHouse_Specific,easy,True,False,False,False,0,2584,15516.47,0.0,0,0,,Show the numeric value of each plan tier for all users.,"SELECT
+    plan,
+    CAST(plan AS Int8) AS plan_tier_value
+FROM analytics.users
+GROUP BY plan
+ORDER BY plan_tier_value","SELECT user_id, name, plan, toInt8(plan) AS plan_numeric FROM analytics.users ORDER BY plan_numeric LIMIT 20"
+CS-004,ClickHouse_Specific,easy,True,False,False,False,0,2579,15099.08,0.0,0,0,,"For each event type, show the event count along with a grand total row at the bottom.","SELECT event_type, event_count
+FROM
+(
+    SELECT
+        toString(event_type) AS event_type,
+        count() AS event_count,
+        0 AS sort_order
+    FROM analytics.events
+    GROUP BY event_type
+
+    UNION ALL
+
+    SELECT
+        'TOTAL' AS event_type,
+        count() AS event_count,
+        1 AS sort_order
+    FROM analytics.events
+)
+ORDER BY sort_order, event_type","SELECT event_type, count() AS event_count FROM analytics.events GROUP BY event_type WITH TOTALS ORDER BY event_count DESC"
+CS-005,ClickHouse_Specific,medium,True,False,False,False,0,2600,20827.95,0.0,0,0,,"Expand the user tags array so each tag gets its own row, and count how often each tag appears across all users.","SELECT
+    arrayJoin(tags) AS tag,
+    count() AS tag_count
+FROM analytics.users
+GROUP BY tag
+ORDER BY tag_count DESC, tag ASC","SELECT tag, count() AS usage_count FROM analytics.users ARRAY JOIN tags AS tag GROUP BY tag ORDER BY usage_count DESC"
+CS-006,ClickHouse_Specific,medium,True,False,False,False,0,2575,8752.67,0.0,0,0,,"For each product category, collect the list of unique product names into an array.","SELECT
+    category,
+    groupUniqArray(name) AS product_names
+FROM analytics.products
+GROUP BY category","SELECT category, groupUniqArray(name) AS product_names FROM analytics.products GROUP BY category ORDER BY category"
+CS-007,ClickHouse_Specific,medium,True,False,False,False,0,2599,8448.61,0.0,0,0,,Extract all keys from the user preferences map and count how often each preference key appears across users.,"SELECT
+    arrayJoin(mapKeys(preferences)) AS preference_key,
+    count() AS user_count
+FROM analytics.users
+GROUP BY preference_key
+ORDER BY user_count DESC","SELECT key, count() AS usage_count FROM analytics.users ARRAY JOIN mapKeys(preferences) AS key GROUP BY key ORDER BY usage_count DESC"
+CS-008,ClickHouse_Specific,medium,True,False,False,False,0,2597,10829.82,0.0,0,0,,"What is the 95th percentile of event duration, and show the 25th, 50th, and 75th percentiles as well?","SELECT
+    quantile(0.25)(duration_ms) AS p25_duration_ms,
+    quantile(0.50)(duration_ms) AS p50_duration_ms,
+    quantile(0.75)(duration_ms) AS p75_duration_ms,
+    quantile(0.95)(duration_ms) AS p95_duration_ms
+FROM analytics.events","SELECT quantile(0.95)(duration_ms) AS p95, quantiles(0.25, 0.50, 0.75)(duration_ms) AS quartiles FROM analytics.events WHERE duration_ms > 0"
+CS-009,ClickHouse_Specific,medium,True,False,False,False,0,2578,13338.89,0.0,0,0,,Filter product tags to only keep those starting with 'premium' and count them per category.,"SELECT
+    category,
+    count() AS premium_tag_count
+FROM analytics.products
+ARRAY JOIN arrayFilter(tag -> startsWith(tag, 'premium'), tags) AS premium_tag
+GROUP BY category","SELECT category, arrayFilter(x -> x LIKE 'premium%', tags) AS premium_tags, length(arrayFilter(x -> x LIKE 'premium%', tags)) AS premium_tag_count FROM analytics.products WHERE length(arrayFilter(x -> x LIKE 'premium%', tags)) > 0 ORDER BY premium_tag_count DESC"
+CS-010,ClickHouse_Specific,medium,True,False,False,False,0,2600,13909.9,0.0,0,0,,"Categorize users into engagement tiers: 'inactive' if last active more than 90 days ago, 'regular' if 30-90 days ago, 'active' if within 30 days. Show the count per tier.","SELECT
+    multiIf(
+        last_active < now() - INTERVAL 90 DAY, 'inactive',
+        last_active < now() - INTERVAL 30 DAY, 'regular',
+        'active'
+    ) AS engagement_tier,
+    count() AS user_count
+FROM analytics.users
+GROUP BY engagement_tier","SELECT multiIf(dateDiff('day', last_active, now()) > 90, 'inactive', dateDiff('day', last_active, now()) > 30, 'regular', 'active') AS engagement_tier, count() AS user_count FROM analytics.users GROUP BY engagement_tier ORDER BY user_count DESC"
+CS-011,ClickHouse_Specific,medium,True,False,False,False,0,2588,13445.09,0.0,0,0,,"For each country, find the event type that has the highest total duration, and when the latest such event occurred.","SELECT
+    country,
+    event_type,
+    total_duration_ms,
+    latest_event_time
+FROM
+(
+    SELECT
+        country,
+        event_type,
+        sum(duration_ms) AS total_duration_ms,
+        max(timestamp) AS latest_event_time,
+        row_number() OVER (PARTITION BY country ORDER BY sum(duration_ms) DESC) AS rn
+    FROM analytics.events
+    GROUP BY
+        country,
+        event_type
+)
+WHERE rn = 1
+ORDER BY country","SELECT country, argMax(event_type, total_duration) AS top_event_type, max(total_duration) AS max_total_duration FROM (SELECT country, event_type, sum(duration_ms) AS total_duration FROM analytics.events GROUP BY country, event_type) GROUP BY country ORDER BY max_total_duration DESC LIMIT 20"
+CS-012,ClickHouse_Specific,medium,True,False,False,False,0,2576,9066.17,0.0,0,0,,Find the earliest signed-up user for each country and show their name and signup date.,"SELECT
+    country,
+    argMin(name, signup_date) AS name,
+    min(signup_date) AS signup_date
+FROM analytics.users
+GROUP BY country
+ORDER BY country","SELECT country, argMin(name, signup_date) AS earliest_user, min(signup_date) AS earliest_signup FROM analytics.users GROUP BY country ORDER BY earliest_signup"
+CS-013,ClickHouse_Specific,hard,True,False,False,False,0,2618,14423.38,0.0,0,0,,"Classify sessions by engagement level based on page count and duration: 'high' if page count > 10 and duration > 300s, 'medium' if page count > 3 or duration > 120s, 'low' otherwise. Show distribution and conversion rate per level.","SELECT
+    multiIf(
+        page_count > 10 AND duration_seconds > 300, 'high',
+        page_count > 3 OR duration_seconds > 120, 'medium',
+        'low'
+    ) AS engagement_level,
+    count() AS session_count,
+    round(count() * 100.0 / sum(count()) OVER (), 2) AS distribution_pct,
+    round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate_pct
+FROM analytics.sessions
+GROUP BY engagement_level
+ORDER BY multiIf(engagement_level = 'high', 1, engagement_level = 'medium', 2, 3)","SELECT multiIf(page_count > 10 AND duration_seconds > 300, 'high', page_count > 3 OR duration_seconds > 120, 'medium', 'low') AS engagement_level, count() AS session_count, countIf(is_converted = 1) AS conversions, round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM analytics.sessions GROUP BY engagement_level ORDER BY session_count DESC"
+CS-014,ClickHouse_Specific,hard,True,False,False,False,0,2572,15049.47,0.0,0,0,,"For each session, build an ordered sequence of event types as an array.","SELECT
+    session_id,
+    arrayMap(x -> x.2, arraySort(x -> x.1, groupArray((timestamp, event_type)))) AS event_type_sequence
+FROM analytics.events
+GROUP BY session_id","SELECT session_id, groupArray(event_type) AS event_sequence, length(groupArray(event_type)) AS event_count FROM (SELECT session_id, event_type, timestamp FROM analytics.events ORDER BY session_id, timestamp) GROUP BY session_id ORDER BY event_count DESC"
+CS-015,ClickHouse_Specific,hard,True,False,False,False,0,2602,15390.19,0.0,0,0,,"For each product category, find the product whose tags array has the most overlap with the array ['sale', 'featured', 'new']. Show the overlap count and shared tags.","WITH ['sale', 'featured', 'new'] AS target_tags
+SELECT
+    category,
+    name,
+    overlap_count,
+    shared_tags
+FROM
+(
+    SELECT
+        category,
+        name,
+        overlap_count,
+        shared_tags,
+        row_number() OVER (PARTITION BY category ORDER BY overlap_count DESC, name ASC) AS rn
+    FROM
+    (
+        SELECT
+            category,
+            name,
+            length(arrayIntersect(tags, target_tags)) AS overlap_count,
+            arrayIntersect(tags, target_tags) AS shared_tags
+        FROM analytics.products
+    )
+)
+WHERE rn = 1
+ORDER BY category","SELECT category, name, tags, arrayIntersect(tags, ['sale', 'featured', 'new']) AS shared_tags, length(arrayIntersect(tags, ['sale', 'featured', 'new'])) AS overlap_count FROM analytics.products WHERE length(arrayIntersect(tags, ['sale', 'featured', 'new'])) > 0 ORDER BY overlap_count DESC, category LIMIT 30"
+CS-016,ClickHouse_Specific,hard,True,False,False,False,0,2548,14276.35,0.0,0,0,,Flatten the user tags array and calculate the conversion rate (purchase events / total events) for users with each tag.,"SELECT
+    tag,
+    round(countIf(e.event_type = 'purchase') * 100.0 / count(), 2) AS conversion_rate
+FROM analytics.events AS e
+INNER JOIN analytics.users AS u ON e.user_id = u.user_id
+ARRAY JOIN u.tags AS tag
+GROUP BY tag
+ORDER BY conversion_rate DESC","WITH user_tags AS (SELECT user_id, arrayJoin(tags) AS tag FROM analytics.users) SELECT ut.tag, count() AS total_events, countIf(e.event_type = 'purchase') AS purchases, round(countIf(e.event_type = 'purchase') * 100.0 / count(), 2) AS conversion_rate FROM analytics.events e INNER JOIN user_tags ut ON e.user_id = ut.user_id GROUP BY ut.tag HAVING count() >= 100 ORDER BY conversion_rate DESC"
+CS-017,ClickHouse_Specific,hard,True,False,False,False,0,2591,14537.56,0.0,0,0,,"Transform each user's preference map into rows showing key-value pairs, and find the most common preference value for each key.","WITH preference_counts AS (
+    SELECT
+        preference_key,
+        preferences[preference_key] AS preference_value,
+        count() AS user_count
+    FROM analytics.users
+    ARRAY JOIN mapKeys(preferences) AS preference_key
+    GROUP BY
+        preference_key,
+        preference_value
+),
+ranked_preferences AS (
+    SELECT
+        preference_key,
+        preference_value,
+        user_count,
+        row_number() OVER (
+            PARTITION BY preference_key
+            ORDER BY user_count DESC, preference_value ASC
+        ) AS rn
+    FROM preference_counts
+)
+SELECT
+    preference_key,
+    preference_value AS most_common_preference_value,
+    user_count
+FROM ranked_preferences
+WHERE rn = 1
+ORDER BY preference_key","SELECT key, argMax(value, cnt) AS most_common_value, max(cnt) AS occurrence_count FROM (SELECT key, value, count() AS cnt FROM analytics.users ARRAY JOIN mapKeys(preferences) AS key, mapValues(preferences) AS value GROUP BY key, value) GROUP BY key ORDER BY key"
+CS-018,ClickHouse_Specific,hard,True,False,False,False,0,2602,15118.83,0.0,0,0,,"Find products where the tags array contains at least one tag that also appears in the tags array of products priced above 100, and list which shared tags they have.","WITH (
+    SELECT groupUniqArray(tag)
+    FROM analytics.products
+    ARRAY JOIN tags AS tag
+    WHERE price > 100
+) AS expensive_product_tags
+SELECT
+    name,
+    arrayIntersect(tags, expensive_product_tags) AS shared_tags
+FROM analytics.products
+WHERE length(arrayIntersect(tags, expensive_product_tags)) > 0
+ORDER BY name","WITH expensive_tags AS (SELECT groupUniqArray(arrayJoin(tags)) AS all_tags FROM analytics.products WHERE price > 100) SELECT p.product_id, p.name, p.price, p.tags, arrayIntersect(p.tags, (SELECT all_tags FROM expensive_tags)) AS shared_tags FROM analytics.products p WHERE p.price <= 100 AND length(arrayIntersect(p.tags, (SELECT all_tags FROM expensive_tags))) > 0 ORDER BY length(shared_tags) DESC"
+CS-019,ClickHouse_Specific,hard,True,False,False,False,0,2583,20699.34,0.0,0,0,,Create a histogram of session durations in 60-second buckets and show the count and percentage for each bucket.,"SELECT
+    intDiv(duration_seconds, 60) * 60 AS duration_bucket_start_seconds,
+    count() AS session_count,
+    round(count() * 100.0 / sum(count()) OVER (), 2) AS percentage
+FROM analytics.sessions
+GROUP BY duration_bucket_start_seconds
+ORDER BY duration_bucket_start_seconds","SELECT toUInt32(intDiv(duration_seconds, 60)) * 60 AS bucket_start, toUInt32(intDiv(duration_seconds, 60)) * 60 + 59 AS bucket_end, count() AS session_count, round(count() * 100.0 / (SELECT count() FROM analytics.sessions), 2) AS pct FROM analytics.sessions GROUP BY bucket_start, bucket_end ORDER BY bucket_start"
+CS-020,ClickHouse_Specific,hard,True,False,False,False,0,2590,16837.49,0.0,0,0,,"Use arrayMap to transform each user's tags by appending '_v2' suffix, and then find users whose transformed tags contain 'premium_v2'.","WITH arrayMap(tag -> concat(tag, '_v2'), tags) AS transformed_tags
+SELECT
+    name,
+    email,
+    transformed_tags
+FROM analytics.users
+WHERE has(transformed_tags, 'premium_v2')","SELECT user_id, name, tags, arrayMap(x -> concat(x, '_v2'), tags) AS transformed_tags FROM analytics.users WHERE has(arrayMap(x -> concat(x, '_v2'), tags), 'premium_v2') ORDER BY user_id"
+CJ-001,Complex_JOINs,easy,True,False,False,False,0,2588,13538.89,0.0,0,0,,"Show each user's name, plan, and the total number of sessions they have.","SELECT
+    u.name,
+    u.plan,
+    count(s.user_id) AS total_sessions
+FROM analytics.users AS u
+LEFT JOIN analytics.sessions AS s ON s.user_id = u.user_id
+GROUP BY
+    u.user_id,
+    u.name,
+    u.plan","SELECT u.user_id, u.name, u.plan, count(s.session_id) AS session_count FROM analytics.users u LEFT JOIN analytics.sessions s ON u.user_id = s.user_id GROUP BY u.user_id, u.name, u.plan ORDER BY session_count DESC"
+CJ-002,Complex_JOINs,easy,True,False,False,False,0,2589,13545.29,0.0,0,0,,Show purchase events with the name and category of the product purchased.,"SELECT
+    p.name,
+    p.category
+FROM analytics.events AS e
+INNER JOIN analytics.products AS p
+    ON toUInt64OrNull(e.properties['product_id']) = p.product_id
+WHERE e.event_type = 'purchase'","SELECT e.event_id, e.timestamp, e.page_url, p.name AS product_name, p.category, p.price FROM analytics.events e INNER JOIN analytics.products p ON toUInt64OrZero(e.properties['product_id']) = p.product_id WHERE e.event_type = 'purchase' AND e.properties['product_id'] != '' ORDER BY e.timestamp DESC"
+CJ-003,Complex_JOINs,easy,True,False,False,False,0,2590,12409.31,0.0,0,0,,List all sessions with the user's name and plan for users who have converted.,"SELECT
+    s.session_id,
+    u.name,
+    u.plan
+FROM analytics.sessions AS s
+INNER JOIN analytics.users AS u
+    ON s.user_id = u.user_id
+WHERE s.is_converted = 1","SELECT s.session_id, s.start_time, s.duration_seconds, u.name, u.plan FROM analytics.sessions s INNER JOIN analytics.users u ON s.user_id = u.user_id WHERE s.is_converted = 1 ORDER BY s.start_time DESC LIMIT 50"
+CJ-004,Complex_JOINs,easy,True,False,False,False,0,2587,11649.2,0.0,0,0,,Show events with the session's UTM source and campaign information.,"SELECT
+    e.event_type,
+    e.page_url,
+    e.timestamp,
+    s.utm_source,
+    s.utm_campaign
+FROM analytics.events AS e
+INNER JOIN analytics.sessions AS s ON e.session_id = s.session_id","SELECT e.event_id, e.event_type, e.page_url, e.timestamp, s.utm_source, s.utm_medium, s.utm_campaign FROM analytics.events e INNER JOIN analytics.sessions s ON e.session_id = s.session_id WHERE s.utm_source IS NOT NULL ORDER BY e.timestamp DESC"
+CJ-005,Complex_JOINs,medium,True,False,False,False,0,2574,12011.7,0.0,0,0,,"For each user plan tier, what is the average number of sessions and the average total session duration?","SELECT
+    plan,
+    round(avg(ifNull(session_count, 0)), 2) AS average_sessions,
+    round(avg(ifNull(total_duration_seconds, 0)), 2) AS average_total_session_duration_seconds
+FROM analytics.users AS u
+LEFT JOIN
+(
+    SELECT
+        user_id,
+        count() AS session_count,
+        sum(duration_seconds) AS total_duration_seconds
+    FROM analytics.sessions
+    WHERE user_id IS NOT NULL
+    GROUP BY user_id
+) AS s ON u.user_id = s.user_id
+GROUP BY plan
+ORDER BY plan","SELECT u.plan, round(count(s.session_id) * 1.0 / count(DISTINCT u.user_id), 2) AS avg_sessions_per_user, round(avg(s.duration_seconds), 2) AS avg_session_duration FROM analytics.users u LEFT JOIN analytics.sessions s ON u.user_id = s.user_id GROUP BY u.plan ORDER BY u.plan"
+CJ-006,Complex_JOINs,medium,True,False,False,False,0,2578,12314.94,0.0,0,0,,"Show the total revenue from purchase events by user plan, joining events to sessions to users.","SELECT
+    u.plan,
+    sum(toDecimal64OrZero(e.properties['revenue'], 2)) AS total_revenue
+FROM analytics.events AS e
+INNER JOIN analytics.sessions AS s ON e.session_id = s.session_id
+INNER JOIN analytics.users AS u ON s.user_id = u.user_id
+WHERE e.event_type = 'purchase'
+GROUP BY u.plan","SELECT u.plan, count() AS purchase_count, sum(toFloat64OrZero(e.properties['revenue'])) AS total_revenue FROM analytics.events e INNER JOIN analytics.sessions s ON e.session_id = s.session_id INNER JOIN analytics.users u ON s.user_id = u.user_id WHERE e.event_type = 'purchase' GROUP BY u.plan ORDER BY total_revenue DESC"
+CJ-007,Complex_JOINs,medium,True,False,False,False,0,2597,13286.1,0.0,0,0,,"Find users who have sessions but have never made a purchase. Show their name, plan, and session count.","SELECT
+    u.name,
+    u.plan,
+    count() AS session_count
+FROM analytics.users AS u
+INNER JOIN analytics.sessions AS s
+    ON s.user_id = u.user_id
+GROUP BY
+    u.user_id,
+    u.name,
+    u.plan
+HAVING sum(s.is_converted) = 0","SELECT u.user_id, u.name, u.plan, count(s.session_id) AS session_count FROM analytics.users u INNER JOIN analytics.sessions s ON u.user_id = s.user_id WHERE u.user_id NOT IN (SELECT DISTINCT user_id FROM analytics.events WHERE event_type = 'purchase' AND user_id IS NOT NULL) GROUP BY u.user_id, u.name, u.plan ORDER BY session_count DESC"
+CJ-008,Complex_JOINs,medium,True,False,False,False,0,2584,13617.04,0.0,0,0,,"For each country, what is the average session duration for users on the pro or enterprise plan versus users on the free or starter plan?","SELECT
+    u.country,
+    round(avgIf(s.duration_seconds, u.plan IN ('pro', 'enterprise')), 2) AS avg_duration_pro_enterprise,
+    round(avgIf(s.duration_seconds, u.plan IN ('free', 'starter')), 2) AS avg_duration_free_starter
+FROM analytics.sessions AS s
+INNER JOIN analytics.users AS u ON s.user_id = u.user_id
+GROUP BY u.country
+ORDER BY u.country","SELECT s.country, avgIf(s.duration_seconds, u.plan IN ('pro', 'enterprise')) AS avg_duration_premium, avgIf(s.duration_seconds, u.plan IN ('free', 'starter')) AS avg_duration_basic FROM analytics.sessions s INNER JOIN analytics.users u ON s.user_id = u.user_id GROUP BY s.country ORDER BY s.country LIMIT 20"
+CJ-009,Complex_JOINs,medium,True,False,False,False,0,2576,13322.57,0.0,0,0,,"Show the top 10 products by number of purchase events, along with their category and average rating.","SELECT
+    p.name,
+    p.category,
+    p.rating AS average_rating,
+    count() AS purchase_events
+FROM analytics.events AS e
+INNER JOIN analytics.products AS p
+    ON toUInt64OrNull(e.properties['product_id']) = p.product_id
+WHERE e.event_type = 'purchase'
+GROUP BY
+    p.product_id,
+    p.name,
+    p.category,
+    p.rating
+ORDER BY purchase_events DESC
+LIMIT 10","SELECT p.product_id, p.name, p.category, p.rating, purchase_counts.purchase_count FROM analytics.products p INNER JOIN (SELECT toUInt64OrZero(properties['product_id']) AS pid, count() AS purchase_count FROM analytics.events WHERE event_type = 'purchase' AND properties['product_id'] != '' GROUP BY pid) AS purchase_counts ON p.product_id = purchase_counts.pid ORDER BY purchase_counts.purchase_count DESC LIMIT 10"
+CJ-010,Complex_JOINs,medium,True,False,False,False,0,2583,12407.47,0.0,0,0,,"For each browser, show the number of unique users, the average page count per session, and the conversion rate.","SELECT
+    browser,
+    uniqExactIf(user_id, isNotNull(user_id)) AS unique_users,
+    round(avg(page_count), 2) AS avg_page_count_per_session,
+    round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate
+FROM analytics.sessions
+GROUP BY browser
+ORDER BY browser","SELECT s.browser, count(DISTINCT s.user_id) AS unique_users, round(avg(s.page_count), 2) AS avg_page_count, countIf(s.is_converted = 1) * 100.0 / count() AS conversion_rate FROM analytics.sessions s GROUP BY s.browser ORDER BY unique_users DESC"
+CJ-011,Complex_JOINs,medium,True,False,False,False,0,2595,11445.21,0.0,0,0,,Show users whose lifetime value exceeds the average lifetime value of users in the same country.,"SELECT
+    name,
+    email,
+    country,
+    lifetime_value,
+    round(country_avg_lifetime_value, 2) AS country_avg_lifetime_value
+FROM
+(
+    SELECT
+        name,
+        email,
+        country,
+        lifetime_value,
+        avg(lifetime_value) OVER (PARTITION BY country) AS country_avg_lifetime_value
+    FROM analytics.users
+)
+WHERE lifetime_value > country_avg_lifetime_value","SELECT u.user_id, u.name, u.country, u.lifetime_value, country_avg.avg_ltv FROM analytics.users u INNER JOIN (SELECT country, avg(lifetime_value) AS avg_ltv FROM analytics.users GROUP BY country) AS country_avg ON u.country = country_avg.country WHERE u.lifetime_value > country_avg.avg_ltv ORDER BY u.lifetime_value DESC"
+CJ-012,Complex_JOINs,medium,True,False,False,False,0,2573,11926.32,0.0,0,0,,What is the conversion rate by device type and operating system combination?,"SELECT
+    device_type,
+    os,
+    round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate
+FROM analytics.sessions
+GROUP BY
+    device_type,
+    os","SELECT s.device_type, s.os, count() AS total_sessions, countIf(s.is_converted = 1) AS conversions, round(countIf(s.is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM analytics.sessions s GROUP BY s.device_type, s.os HAVING count() >= 50 ORDER BY conversion_rate DESC"
+CJ-013,Complex_JOINs,medium,True,False,False,False,0,2586,14595.51,0.0,0,0,,"For each product category, show the total purchase count and the most common device type used for purchases.","SELECT
+    category,
+    sum(purchase_count) AS total_purchase_count,
+    argMax(device_type, purchase_count) AS most_common_device_type
+FROM
+(
+    SELECT
+        p.category AS category,
+        e.device_type AS device_type,
+        count() AS purchase_count
+    FROM analytics.events AS e
+    INNER JOIN analytics.products AS p
+        ON toUInt64OrNull(e.properties['product_id']) = p.product_id
+    WHERE e.event_type = 'purchase'
+    GROUP BY
+        p.category,
+        e.device_type
+)
+GROUP BY category
+ORDER BY category","SELECT p.category, count() AS purchase_count, argMax(e.device_type, device_cnt) AS most_common_device FROM (SELECT e.device_type, toUInt64OrZero(e.properties['product_id']) AS pid, count() OVER (PARTITION BY e.device_type, toUInt64OrZero(e.properties['product_id'])) AS device_cnt FROM analytics.events e WHERE e.event_type = 'purchase' AND e.properties['product_id'] != '') e INNER JOIN analytics.products p ON e.pid = p.product_id GROUP BY p.category ORDER BY purchase_count DESC"
+CJ-014,Complex_JOINs,medium,True,False,False,False,0,2574,13351.92,0.0,0,0,,"Show event counts by user plan, including events from anonymous users (no plan).","SELECT
+    if(isNull(e.user_id), 'no plan', toString(u.plan)) AS plan,
+    count() AS event_count
+FROM analytics.events AS e
+LEFT JOIN analytics.users AS u ON e.user_id = u.user_id
+GROUP BY plan
+ORDER BY event_count DESC","SELECT COALESCE(u.plan, 'anonymous') AS user_plan, count() AS event_count, countIf(e.event_type = 'purchase') AS purchase_count FROM analytics.events e LEFT JOIN analytics.sessions s ON e.session_id = s.session_id LEFT JOIN analytics.users u ON s.user_id = u.user_id GROUP BY user_plan ORDER BY event_count DESC"
+CJ-015,Complex_JOINs,hard,True,False,False,False,0,2593,13843.15,0.0,0,0,,Find users whose total session count exceeds the average session count across all users.,"WITH user_session_counts AS
+(
+    SELECT
+        u.name,
+        u.email,
+        count(s.session_id) AS session_count
+    FROM analytics.users AS u
+    LEFT JOIN analytics.sessions AS s ON u.user_id = s.user_id
+    GROUP BY
+        u.user_id,
+        u.name,
+        u.email
+)
+SELECT
+    name,
+    email,
+    session_count
+FROM user_session_counts
+WHERE session_count > (SELECT avg(session_count) FROM user_session_counts)
+ORDER BY session_count DESC","SELECT u.user_id, u.name, u.plan, user_sessions.session_count FROM analytics.users u INNER JOIN (SELECT user_id, count() AS session_count FROM analytics.sessions WHERE user_id IS NOT NULL GROUP BY user_id) AS user_sessions ON u.user_id = user_sessions.user_id WHERE user_sessions.session_count > (SELECT avg(session_count) FROM (SELECT count() AS session_count FROM analytics.sessions WHERE user_id IS NOT NULL GROUP BY user_id)) ORDER BY user_sessions.session_count DESC"
+CJ-016,Complex_JOINs,hard,True,False,False,False,0,2595,14279.8,0.0,0,0,,"For each product category, find the user who purchased the most items in that category. Show the user name, purchase count, and total spend.","SELECT
+    category,
+    name,
+    purchase_count,
+    total_spend
+FROM
+(
+    SELECT
+        category,
+        name,
+        purchase_count,
+        total_spend,
+        row_number() OVER (PARTITION BY category ORDER BY purchase_count DESC, total_spend DESC, name ASC) AS rn
+    FROM
+    (
+        SELECT
+            p.category AS category,
+            u.name AS name,
+            count() AS purchase_count,
+            sum(p.price) AS total_spend
+        FROM analytics.events AS e
+        INNER JOIN analytics.products AS p
+            ON toUInt64OrZero(e.properties['product_id']) = p.product_id
+        INNER JOIN analytics.users AS u
+            ON e.user_id = u.user_id
+        WHERE e.event_type = 'purchase'
+        GROUP BY
+            p.category,
+            u.user_id,
+            u.name
+    )
+)
+WHERE rn = 1
+ORDER BY category ASC","WITH purchase_data AS (SELECT toUInt64OrZero(e.properties['product_id']) AS pid, e.user_id, toFloat64OrZero(e.properties['revenue']) AS revenue FROM analytics.events e WHERE e.event_type = 'purchase' AND e.user_id IS NOT NULL AND e.properties['product_id'] != ''), category_purchases AS (SELECT p.category, pd.user_id, count() AS pcount, sum(pd.revenue) AS total_spend FROM purchase_data pd INNER JOIN analytics.products p ON pd.pid = p.product_id GROUP BY p.category, pd.user_id) SELECT cp.category, u.name, cp.purchase_count, cp.total_spend FROM (SELECT category, argMax(user_id, pcount) AS top_user_id, max(pcount) AS purchase_count, argMax(total_spend, pcount) AS total_spend FROM category_purchases GROUP BY category) cp INNER JOIN analytics.users u ON cp.top_user_id = u.user_id ORDER BY cp.purchase_count DESC"
+CJ-017,Complex_JOINs,hard,True,False,False,False,0,2591,13607.05,0.0,0,0,,"Compare user engagement metrics (avg session duration, avg page count, conversion rate) between users who came from organic search versus paid campaigns.","SELECT
+    multiIf(
+        lower(ifNull(utm_medium, '')) IN ('organic', 'organic_search'), 'organic_search',
+        lower(ifNull(utm_medium, '')) IN ('cpc', 'ppc', 'paid', 'paid_search'), 'paid_campaign',
+        'other'
+    ) AS acquisition_group,
+    round(avg(duration_seconds), 2) AS avg_session_duration_seconds,
+    round(avg(page_count), 2) AS avg_page_count,
+    round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate_percent
+FROM analytics.sessions
+WHERE lower(ifNull(utm_medium, '')) IN ('organic', 'organic_search', 'cpc', 'ppc', 'paid', 'paid_search')
+GROUP BY acquisition_group
+ORDER BY acquisition_group","WITH user_channels AS (SELECT s.user_id, if(s.utm_medium IS NULL OR s.utm_medium = '', 'organic', 'paid') AS channel, s.duration_seconds, s.page_count, s.is_converted FROM analytics.sessions s WHERE s.user_id IS NOT NULL) SELECT channel, count(DISTINCT user_id) AS unique_users, count() AS total_sessions, round(avg(duration_seconds), 2) AS avg_session_duration, round(avg(page_count), 2) AS avg_page_count, round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM user_channels GROUP BY channel ORDER BY channel"
+CJ-018,Complex_JOINs,hard,True,False,False,False,0,2613,20057.42,0.0,0,0,,Find product categories where the average product rating is above 4.0 but the purchase conversion rate (purchases / page views on those products) is below 5%.,"WITH
+    product_ratings AS
+    (
+        SELECT
+            category,
+            round(avg(rating), 2) AS average_product_rating
+        FROM analytics.products
+        GROUP BY category
+    ),
+    category_conversions AS
+    (
+        SELECT
+            p.category AS category,
+            countIf(e.event_type = 'purchase') AS purchases,
+            countIf(e.event_type = 'page_view') AS page_views,
+            round(countIf(e.event_type = 'purchase') * 100.0 / countIf(e.event_type = 'page_view'), 2) AS purchase_conversion_rate
+        FROM analytics.events AS e
+        INNER JOIN analytics.products AS p
+            ON toUInt64OrNull(e.properties['product_id']) = p.product_id
+        WHERE e.event_type IN ('purchase', 'page_view')
+        GROUP BY p.category
+        HAVING page_views > 0
+    )
+SELECT
+    pr.category,
+    pr.average_product_rating,
+    cc.purchase_conversion_rate
+FROM product_ratings AS pr
+INNER JOIN category_conversions AS cc
+    ON pr.category = cc.category
+WHERE pr.average_product_rating > 4.0
+  AND cc.purchase_conversion_rate < 5.0","WITH category_ratings AS (SELECT category, avg(rating) AS avg_rating FROM analytics.products GROUP BY category HAVING avg_rating > 4.0), category_events AS (SELECT p.category, countIf(e.event_type = 'purchase') AS purchases, countIf(e.event_type = 'page_view') AS page_views FROM analytics.events e INNER JOIN analytics.products p ON toUInt64OrZero(e.properties['product_id']) = p.product_id WHERE e.properties['product_id'] != '' GROUP BY p.category) SELECT cr.category, cr.avg_rating, ce.purchases, ce.page_views, round(ce.purchases * 100.0 / ce.page_views, 2) AS conversion_rate FROM category_ratings cr INNER JOIN category_events ce ON cr.category = ce.category WHERE ce.page_views > 0 AND ce.purchases * 100.0 / ce.page_views < 5.0 ORDER BY cr.avg_rating DESC"
+CJ-019,Complex_JOINs,hard,True,False,False,False,0,2595,15152.28,0.0,0,0,,"For each user, show their signup date, plan, total events, total sessions, and whether they have ever made a purchase. Include users with zero activity.","SELECT
+    u.user_id,
+    u.signup_date,
+    u.plan,
+    ifNull(e.total_events, 0) AS total_events,
+    ifNull(s.total_sessions, 0) AS total_sessions,
+    if(ifNull(e.purchase_events, 0) > 0, 1, 0) AS has_ever_made_purchase
+FROM analytics.users AS u
+LEFT JOIN
+(
+    SELECT
+        user_id,
+        count() AS total_events,
+        countIf(event_type = 'purchase') AS purchase_events
+    FROM analytics.events
+    WHERE user_id IS NOT NULL
+    GROUP BY user_id
+) AS e ON u.user_id = e.user_id
+LEFT JOIN
+(
+    SELECT
+        user_id,
+        count() AS total_sessions
+    FROM analytics.sessions
+    WHERE user_id IS NOT NULL
+    GROUP BY user_id
+) AS s ON u.user_id = s.user_id","SELECT u.user_id, u.name, u.plan, u.signup_date, COALESCE(session_stats.session_count, 0) AS session_count, COALESCE(event_stats.event_count, 0) AS event_count, COALESCE(event_stats.has_purchase, 0) AS has_purchased FROM analytics.users u LEFT JOIN (SELECT user_id, count() AS session_count FROM analytics.sessions WHERE user_id IS NOT NULL GROUP BY user_id) AS session_stats ON u.user_id = session_stats.user_id LEFT JOIN (SELECT user_id, count() AS event_count, max(if(event_type = 'purchase', 1, 0)) AS has_purchase FROM analytics.events WHERE user_id IS NOT NULL GROUP BY user_id) AS event_stats ON u.user_id = event_stats.user_id ORDER BY u.signup_date DESC"
+CJ-020,Complex_JOINs,hard,True,False,False,False,0,2597,15882.04,0.0,0,0,,"Build a funnel analysis: for each country, show the number of unique users at each stage -- visited the site, clicked something, signed up, and made a purchase.","SELECT
+    country,
+    uniqExactIf(user_id, event_type = 'page_view' AND isNotNull(user_id)) AS visited_users,
+    uniqExactIf(user_id, event_type = 'click' AND isNotNull(user_id)) AS clicked_users,
+    uniqExactIf(user_id, event_type = 'signup' AND isNotNull(user_id)) AS signed_up_users,
+    uniqExactIf(user_id, event_type = 'purchase' AND isNotNull(user_id)) AS purchased_users
+FROM analytics.events
+GROUP BY country
+ORDER BY country","SELECT country, visitors, clickers, signups, purchasers FROM (SELECT e.country, uniqExactIf(e.user_id, e.event_type = 'page_view') AS visitors, uniqExactIf(e.user_id, e.event_type = 'click') AS clickers, uniqExactIf(e.user_id, e.event_type = 'signup') AS signups, uniqExactIf(e.user_id, e.event_type = 'purchase') AS purchasers FROM analytics.events e WHERE e.user_id IS NOT NULL GROUP BY e.country) WHERE visitors > 0 ORDER BY visitors DESC LIMIT 20"
+SS-001,Simple-SELECT,easy,True,False,False,False,0,2560,11835.89,0.0,0,0,,Show the 20 most recent events by timestamp.,"SELECT
+    timestamp,
+    event_type
+FROM analytics.events
+ORDER BY timestamp DESC
+LIMIT 20","SELECT event_id, event_type, page_url, timestamp FROM analytics.events ORDER BY timestamp DESC LIMIT 20"
+SS-002,Simple-SELECT,easy,True,False,False,False,0,2528,7913.19,0.0,0,0,,Which distinct browsers appear in the events table?,"SELECT DISTINCT browser
+FROM analytics.events
+ORDER BY browser",SELECT DISTINCT browser FROM analytics.events ORDER BY browser
+SS-003,Simple-SELECT,easy,True,False,False,False,0,2580,10400.85,0.0,0,0,,Find all click events from mobile devices.,"SELECT
+    event_type,
+    page_url,
+    device_type,
+    timestamp
+FROM analytics.events
+WHERE event_type = 'click'
+  AND device_type = 'mobile'","SELECT event_id, page_url, user_id, timestamp FROM analytics.events WHERE event_type = 'click' AND device_type = 'mobile' ORDER BY timestamp DESC LIMIT 100"
+SS-004,Simple-SELECT,easy,True,False,False,False,0,2559,11715.62,0.0,0,0,,Show the 10 most recent page view events.,"SELECT
+    timestamp,
+    page_url
+FROM analytics.events
+WHERE event_type = 'page_view'
+ORDER BY timestamp DESC
+LIMIT 10","SELECT event_id, page_url, timestamp FROM analytics.events WHERE event_type = 'page_view' ORDER BY timestamp DESC LIMIT 10"
+SS-005,Simple-SELECT,easy,True,False,False,False,0,2582,14899.55,0.0,0,0,,List all distinct device types in the events table.,"SELECT DISTINCT device_type
+FROM analytics.events",SELECT DISTINCT device_type FROM analytics.events ORDER BY device_type
+SS-006,Simple-SELECT,easy,True,False,False,False,0,2571,16600.95,0.0,0,0,,Show me users on the enterprise plan sorted by their lifetime value.,"SELECT
+    name,
+    lifetime_value
+FROM analytics.users
+WHERE plan = 'enterprise'
+ORDER BY lifetime_value DESC","SELECT user_id, name, email, lifetime_value FROM analytics.users WHERE plan = 'enterprise' ORDER BY lifetime_value DESC"
+SS-007,Simple-SELECT,easy,True,False,False,False,0,2563,12580.47,0.0,0,0,,Show the first 15 products in the Electronics category.,"SELECT name
+FROM analytics.products
+WHERE category = 'Electronics'
+ORDER BY product_id
+LIMIT 15","SELECT product_id, name, price, rating FROM analytics.products WHERE category = 'Electronics' ORDER BY product_id LIMIT 15"
+SS-008,Simple-SELECT,easy,True,False,False,False,0,2582,8998.48,0.0,0,0,,List all distinct countries from the users table.,"SELECT DISTINCT country
+FROM analytics.users",SELECT DISTINCT country FROM analytics.users ORDER BY country
+SS-009,Simple-SELECT,easy,True,False,False,False,0,2578,9668.41,0.0,0,0,,Show the 10 cheapest active products.,"SELECT
+    name,
+    price
+FROM analytics.products
+WHERE is_active = 1
+ORDER BY price ASC
+LIMIT 10","SELECT product_id, name, category, price FROM analytics.products WHERE is_active = 1 ORDER BY price ASC LIMIT 10"
+SS-010,Simple-SELECT,medium,True,False,False,False,0,2590,13405.85,0.0,0,0,,Find sessions that came from Google Ads campaigns and resulted in a conversion.,"SELECT
+    session_id,
+    start_time,
+    utm_source,
+    utm_medium,
+    utm_campaign
+FROM analytics.sessions
+WHERE is_converted = 1
+  AND lower(ifNull(utm_source, '')) IN ('google', 'google_ads', 'googleads', 'adwords')
+  AND lower(ifNull(utm_medium, '')) IN ('cpc', 'ppc', 'paid_search', 'paid')
+  AND ifNull(utm_campaign, '') != ''","SELECT session_id, user_id, utm_source, utm_medium, utm_campaign, duration_seconds FROM analytics.sessions WHERE utm_source = 'google' AND utm_medium = 'cpc' AND is_converted = 1 ORDER BY session_id"
+SS-011,Simple-SELECT,medium,True,False,False,False,0,2575,12370.16,0.0,0,0,,Which products have a rating above 4.5 and more than 100 reviews? Sort by rating.,"SELECT
+    name,
+    rating,
+    review_count
+FROM analytics.products
+WHERE rating > 4.5
+  AND review_count > 100
+ORDER BY rating DESC","SELECT product_id, name, category, price, rating, review_count FROM analytics.products WHERE rating > 4.5 AND review_count > 100 ORDER BY rating DESC"
+SS-012,Simple-SELECT,medium,True,False,False,False,0,2595,8377.52,0.0,0,0,,Find events where the page URL contains 'checkout' and the duration exceeds 5000 milliseconds.,"SELECT
+    event_type,
+    page_url,
+    duration_ms,
+    timestamp
+FROM analytics.events
+WHERE positionCaseInsensitive(page_url, 'checkout') > 0
+  AND duration_ms > 5000","SELECT event_id, page_url, event_type, duration_ms, timestamp FROM analytics.events WHERE page_url LIKE '%checkout%' AND duration_ms > 5000 ORDER BY duration_ms DESC"
+SS-013,Simple-SELECT,medium,True,False,False,False,0,2585,11680.66,0.0,0,0,,Show users who signed up between January 2024 and March 2024.,"SELECT
+    name,
+    email,
+    signup_date
+FROM analytics.users
+WHERE signup_date >= toDate('2024-01-01')
+  AND signup_date < toDate('2024-04-01')","SELECT user_id, name, email, signup_date, plan FROM analytics.users WHERE signup_date BETWEEN '2024-01-01' AND '2024-03-31' ORDER BY signup_date"
+SS-014,Simple-SELECT,medium,True,False,False,False,0,2587,14181.44,0.0,0,0,,Find all bounce events from users in the United States using Chrome.,"SELECT
+    e.timestamp,
+    e.event_type,
+    e.page_url,
+    e.browser,
+    u.country
+FROM analytics.events AS e
+INNER JOIN analytics.users AS u ON e.user_id = u.user_id
+WHERE e.is_bounce = 1
+  AND u.country = 'US'
+  AND e.browser = 'Chrome'","SELECT event_id, user_id, page_url, device_type, timestamp FROM analytics.events WHERE is_bounce = 1 AND country = 'US' AND browser = 'Chrome' ORDER BY timestamp DESC LIMIT 100"
+SS-015,Simple-SELECT,medium,True,False,False,False,0,2594,8241.49,0.0,0,0,,Show sessions where the UTM source is not null and the session lasted more than 300 seconds.,"SELECT
+    session_id,
+    utm_source,
+    duration_seconds
+FROM analytics.sessions
+WHERE utm_source IS NOT NULL
+  AND duration_seconds > 300","SELECT session_id, user_id, utm_source, utm_medium, utm_campaign, duration_seconds FROM analytics.sessions WHERE utm_source IS NOT NULL AND duration_seconds > 300 ORDER BY duration_seconds DESC"
+SS-016,Simple-SELECT,medium,True,False,False,False,0,2594,8167.99,0.0,0,0,,List users whose plan is either 'pro' or 'enterprise' and who have a lifetime value over 500.,"SELECT
+    name,
+    email,
+    plan,
+    lifetime_value
+FROM analytics.users
+WHERE plan IN ('pro', 'enterprise')
+  AND lifetime_value > 500","SELECT user_id, name, plan, lifetime_value, country FROM analytics.users WHERE plan IN ('pro', 'enterprise') AND lifetime_value > 500 ORDER BY lifetime_value DESC"
+SS-017,Simple-SELECT,medium,True,False,False,False,0,2592,9286.97,0.0,0,0,,Find products whose name starts with 'Premium' and have a price between 50 and 200.,"SELECT name, price
+FROM analytics.products
+WHERE startsWith(name, 'Premium')
+  AND price BETWEEN 50 AND 200","SELECT product_id, name, category, price, rating FROM analytics.products WHERE name LIKE 'Premium%' AND price BETWEEN 50 AND 200 ORDER BY price"
+SS-018,Simple-SELECT,hard,True,False,False,False,0,2599,13673.23,0.0,0,0,,Find events where the referrer is not empty and the user accessed pages on a desktop device running Windows.,"SELECT
+    event_type,
+    page_url,
+    referrer,
+    device_type,
+    os,
+    timestamp
+FROM analytics.events
+WHERE referrer != ''
+  AND device_type = 'desktop'
+  AND os = 'Windows'","SELECT event_id, page_url, referrer, device_type, os, timestamp FROM analytics.events WHERE referrer != '' AND device_type = 'desktop' AND os = 'Windows' ORDER BY timestamp DESC LIMIT 100"
+SS-019,Simple-SELECT,hard,True,False,False,False,0,2578,10350.64,0.0,0,0,,Show sessions that have no end time recorded and were started by anonymous users (no user ID).,"SELECT
+    session_id,
+    start_time
+FROM analytics.sessions
+WHERE end_time IS NULL
+  AND user_id IS NULL","SELECT session_id, start_time, duration_seconds, page_count, entry_page FROM analytics.sessions WHERE end_time IS NULL AND user_id IS NULL ORDER BY start_time DESC LIMIT 50"
+SS-020,Simple-SELECT,hard,True,False,False,False,0,2588,14056.17,0.0,0,0,,Find purchase events that have a 'revenue' key in their properties map.,"SELECT
+    timestamp,
+    page_url,
+    properties['revenue'] AS revenue
+FROM analytics.events
+WHERE event_type = 'purchase'
+  AND has(mapKeys(properties), 'revenue')","SELECT event_id, user_id, page_url, properties['revenue'] AS revenue, timestamp FROM analytics.events WHERE event_type = 'purchase' AND mapContains(properties, 'revenue') ORDER BY timestamp DESC LIMIT 50"
+SS-021,Simple-SELECT,hard,True,False,False,False,0,2583,8489.28,0.0,0,0,,List users who have the tag 'vip' in their tags array.,"SELECT
+    name,
+    email
+FROM analytics.users
+WHERE has(tags, 'vip')","SELECT user_id, name, email, plan, tags FROM analytics.users WHERE has(tags, 'vip') ORDER BY user_id"
+SS-022,Simple-SELECT,hard,True,False,False,False,0,2594,11762.21,0.0,0,0,,Show me products that have more than 3 tags and are in the 'Clothing' or 'Sports' category.,"SELECT
+    name,
+    category,
+    tags
+FROM analytics.products
+WHERE length(tags) > 3
+  AND category IN ('Clothing', 'Sports')","SELECT product_id, name, category, tags, price FROM analytics.products WHERE length(tags) > 3 AND category IN ('Clothing', 'Sports') ORDER BY price DESC"
+SS-023,Simple-SELECT,hard,True,False,False,False,0,2592,12103.98,0.0,0,0,,Find sessions where the entry page and exit page are the same (single-page sessions).,"SELECT
+    session_id,
+    entry_page,
+    if(exit_page = '', entry_page, exit_page) AS exit_page
+FROM analytics.sessions
+WHERE page_count = 1
+  AND (exit_page = '' OR exit_page = entry_page)","SELECT session_id, user_id, entry_page, exit_page, duration_seconds, page_count FROM analytics.sessions WHERE entry_page = exit_page ORDER BY duration_seconds DESC"
+SS-024,Simple-SELECT,hard,True,False,False,False,0,2595,12640.06,0.0,0,0,,Show users who have a 'theme' preference set in their preferences map and are on the pro plan.,"SELECT
+    name,
+    email,
+    preferences['theme'] AS theme
+FROM analytics.users
+WHERE plan = 'pro'
+  AND has(mapKeys(preferences), 'theme')","SELECT user_id, name, plan, preferences['theme'] AS theme, lifetime_value FROM analytics.users WHERE mapContains(preferences, 'theme') AND plan = 'pro' ORDER BY lifetime_value DESC"
+SS-025,Simple-SELECT,hard,True,False,False,False,0,2582,10343.97,0.0,0,0,,Find events from the last 7 days where the event type is 'signup' and the user came from a referrer containing 'facebook'.,"SELECT
+    timestamp,
+    event_type,
+    page_url,
+    referrer
+FROM analytics.events
+WHERE timestamp >= now64(3) - INTERVAL 7 DAY
+  AND event_type = 'signup'
+  AND positionCaseInsensitive(referrer, 'facebook') > 0
+ORDER BY timestamp DESC
+LIMIT 7","SELECT event_id, user_id, referrer, country, device_type, timestamp FROM analytics.events WHERE event_type = 'signup' AND referrer LIKE '%facebook%' AND timestamp >= now() - INTERVAL 7 DAY ORDER BY timestamp DESC"
+TS-001,Time_Series,easy,True,False,False,False,0,2555,7910.49,0.0,0,0,,How many events happened each month?,"SELECT
+    toStartOfMonth(timestamp) AS month,
+    count() AS event_count
+FROM analytics.events
+GROUP BY month
+ORDER BY month","SELECT toStartOfMonth(timestamp) AS month, count() AS event_count FROM analytics.events GROUP BY month ORDER BY month"
+TS-002,Time_Series,easy,True,False,False,False,0,2570,8499.91,0.0,0,0,,What is the weekly trend of user signups?,"SELECT
+    toStartOfWeek(signup_date) AS week,
+    count() AS signups
+FROM analytics.users
+GROUP BY week
+ORDER BY week ASC","SELECT toStartOfWeek(signup_date) AS week, count() AS signups FROM analytics.users GROUP BY week ORDER BY week"
+TS-003,Time_Series,easy,True,False,False,False,0,2564,9145.62,0.0,0,0,,Show the number of sessions started per day.,"SELECT
+    toDate(start_time) AS day,
+    count() AS sessions_started
+FROM analytics.sessions
+GROUP BY day
+ORDER BY day","SELECT toDate(start_time) AS day, count() AS session_count FROM analytics.sessions GROUP BY day ORDER BY day"
+TS-004,Time_Series,easy,True,False,False,False,0,2561,12426.17,0.0,0,0,,How many events happened each hour of the day on average?,"SELECT round(avg(events_per_hour), 2) AS avg_events_per_hour
+FROM
+(
+    SELECT
+        toStartOfHour(timestamp) AS hour,
+        count() AS events_per_hour
+    FROM analytics.events
+    GROUP BY hour
+)","SELECT toHour(timestamp) AS hour_of_day, count() AS total_events, toFloat64(count()) / uniqExact(toDate(timestamp)) AS avg_events_per_day FROM analytics.events GROUP BY hour_of_day ORDER BY hour_of_day"
+TS-005,Time_Series,easy,True,False,False,False,0,2569,8323.23,0.0,0,0,,Show the number of purchases by year.,"SELECT
+    toYear(timestamp) AS year,
+    count() AS purchases
+FROM analytics.events
+WHERE event_type = 'purchase'
+GROUP BY year
+ORDER BY year","SELECT toYear(timestamp) AS year, count() AS purchase_count FROM analytics.events WHERE event_type = 'purchase' GROUP BY year ORDER BY year"
+TS-006,Time_Series,easy,True,False,False,False,0,2567,15765.55,0.0,0,0,,"How many users signed up each month of the year, aggregated across all years?","SELECT
+    countIf(toMonth(signup_date) = 1) AS january_signups,
+    countIf(toMonth(signup_date) = 2) AS february_signups,
+    countIf(toMonth(signup_date) = 3) AS march_signups,
+    countIf(toMonth(signup_date) = 4) AS april_signups,
+    countIf(toMonth(signup_date) = 5) AS may_signups,
+    countIf(toMonth(signup_date) = 6) AS june_signups,
+    countIf(toMonth(signup_date) = 7) AS july_signups,
+    countIf(toMonth(signup_date) = 8) AS august_signups,
+    countIf(toMonth(signup_date) = 9) AS september_signups,
+    countIf(toMonth(signup_date) = 10) AS october_signups,
+    countIf(toMonth(signup_date) = 11) AS november_signups,
+    countIf(toMonth(signup_date) = 12) AS december_signups
+FROM analytics.users","SELECT toMonth(signup_date) AS month_num, count() AS signups FROM analytics.users GROUP BY month_num ORDER BY month_num"
+TS-007,Time_Series,easy,True,False,False,False,0,2562,12102.54,0.0,0,0,,Show me events that happened in the last 30 days.,"SELECT
+    event_type,
+    page_url,
+    timestamp
+FROM analytics.events
+WHERE timestamp >= now64(3) - INTERVAL 30 DAY
+ORDER BY timestamp DESC
+LIMIT 30","SELECT event_id, event_type, page_url, timestamp FROM analytics.events WHERE timestamp >= now() - INTERVAL 30 DAY ORDER BY timestamp DESC LIMIT 100"
+TS-008,Time_Series,easy,True,False,False,False,0,2565,12196.24,0.0,0,0,,Show the number of events per day of the week.,"SELECT
+    toDayOfWeek(timestamp) AS day_of_week,
+    count() AS event_count
+FROM analytics.events
+GROUP BY day_of_week
+ORDER BY day_of_week","SELECT toDayOfWeek(timestamp) AS day_of_week, count() AS event_count FROM analytics.events GROUP BY day_of_week ORDER BY day_of_week"
+TS-009,Time_Series,medium,True,False,False,False,0,2530,16074.9,0.0,0,0,,What is the month-over-month growth rate of total events?,"WITH monthly_events AS (
+    SELECT
+        toStartOfMonth(timestamp) AS month,
+        count() AS total_events
+    FROM analytics.events
+    GROUP BY month
+),
+with_previous AS (
+    SELECT
+        month,
+        total_events,
+        lagInFrame(toNullable(total_events), 1) OVER (ORDER BY month) AS previous_events
+    FROM monthly_events
+)
+SELECT
+    month,
+    total_events,
+    round((total_events - previous_events) * 100.0 / previous_events, 2) AS month_over_month_growth_rate
+FROM with_previous
+ORDER BY month","SELECT month, event_count, lagInFrame(event_count) OVER (ORDER BY month) AS prev_month_count, if(lagInFrame(event_count) OVER (ORDER BY month) > 0, round((event_count - lagInFrame(event_count) OVER (ORDER BY month)) * 100.0 / lagInFrame(event_count) OVER (ORDER BY month), 2), NULL) AS mom_growth_pct FROM (SELECT toStartOfMonth(timestamp) AS month, count() AS event_count FROM analytics.events GROUP BY month) ORDER BY month"
+TS-010,Time_Series,medium,True,False,False,False,0,2573,11498.65,0.0,0,0,,Compare the average session duration for each month of the year to find seasonal patterns.,"SELECT
+    toMonth(start_time) AS month,
+    round(avg(duration_seconds), 2) AS avg_session_duration_seconds
+FROM analytics.sessions
+GROUP BY month
+ORDER BY month ASC","SELECT toMonth(start_time) AS month_num, avg(duration_seconds) AS avg_duration, count() AS session_count FROM analytics.sessions GROUP BY month_num ORDER BY month_num"
+TS-011,Time_Series,medium,True,False,False,False,0,2527,14009.65,0.0,0,0,,How does the bounce rate change week over week?,"WITH weekly_bounce AS (
+    SELECT
+        toStartOfWeek(timestamp) AS week_start,
+        round(uniqExactIf(session_id, is_bounce = 1) * 100.0 / uniqExact(session_id), 2) AS bounce_rate_percent
+    FROM analytics.events
+    GROUP BY week_start
+)
+SELECT
+    week_start,
+    bounce_rate_percent,
+    previous_week_bounce_rate_percent,
+    round(bounce_rate_percent - previous_week_bounce_rate_percent, 2) AS wow_change_percentage_points
+FROM (
+    SELECT
+        week_start,
+        bounce_rate_percent,
+        lagInFrame(bounce_rate_percent) OVER (
+            ORDER BY week_start
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS previous_week_bounce_rate_percent
+    FROM weekly_bounce
+)
+ORDER BY week_start","SELECT toStartOfWeek(timestamp) AS week, countIf(is_bounce = 1) * 100.0 / count() AS bounce_rate FROM analytics.events GROUP BY week ORDER BY week"
+TS-012,Time_Series,medium,True,False,False,False,0,2568,16184.76,0.0,0,0,,How many days elapsed between each user's signup and their most recent session?,"SELECT
+    round(avg(dateDiff('day', u.signup_date, s.most_recent_session)), 2) AS avg_days_elapsed
+FROM analytics.users AS u
+INNER JOIN
+(
+    SELECT
+        user_id,
+        max(start_time) AS most_recent_session
+    FROM analytics.sessions
+    WHERE user_id IS NOT NULL
+    GROUP BY user_id
+) AS s ON u.user_id = s.user_id","SELECT u.user_id, u.name, u.signup_date, max(toDate(s.start_time)) AS last_session_date, dateDiff('day', u.signup_date, max(toDate(s.start_time))) AS days_active FROM analytics.users u INNER JOIN analytics.sessions s ON u.user_id = s.user_id GROUP BY u.user_id, u.name, u.signup_date ORDER BY days_active DESC LIMIT 20"
+TS-013,Time_Series,medium,True,False,False,False,0,2578,13512.38,0.0,0,0,,Show the weekly event count trend along with a 4-week moving average.,"SELECT
+    week,
+    event_count,
+    round(avg(event_count) OVER (ORDER BY week ROWS BETWEEN 3 PRECEDING AND CURRENT ROW), 2) AS moving_avg_4_week
+FROM
+(
+    SELECT
+        toStartOfWeek(timestamp) AS week,
+        count() AS event_count
+    FROM analytics.events
+    GROUP BY week
+)
+ORDER BY week","SELECT week, weekly_events, avg(weekly_events) OVER (ORDER BY week ROWS BETWEEN 3 PRECEDING AND CURRENT ROW) AS moving_avg_4w FROM (SELECT toStartOfWeek(timestamp) AS week, count() AS weekly_events FROM analytics.events GROUP BY week) ORDER BY week"
+TS-014,Time_Series,medium,True,False,False,False,0,2570,13540.75,0.0,0,0,,What is the year-over-year change in conversion count by country?,"WITH yearly_conversions AS (
+    SELECT
+        country,
+        toYear(start_time) AS year,
+        countIf(is_converted = 1) AS conversion_count
+    FROM analytics.sessions
+    GROUP BY
+        country,
+        year
+)
+SELECT
+    current.country,
+    current.year,
+    current.conversion_count,
+    previous.conversion_count AS previous_year_conversion_count,
+    current.conversion_count - ifNull(previous.conversion_count, 0) AS yoy_change_count,
+    if(
+        previous.conversion_count IS NULL OR previous.conversion_count = 0,
+        NULL,
+        round((current.conversion_count - previous.conversion_count) * 100.0 / previous.conversion_count, 2)
+    ) AS yoy_change_percent
+FROM yearly_conversions AS current
+LEFT JOIN yearly_conversions AS previous
+    ON current.country = previous.country
+    AND current.year = previous.year + 1
+ORDER BY
+    current.country,
+    current.year","SELECT country, year, conversions, lagInFrame(conversions) OVER (PARTITION BY country ORDER BY year) AS prev_year_conversions, conversions - lagInFrame(conversions) OVER (PARTITION BY country ORDER BY year) AS yoy_change FROM (SELECT country, toYear(start_time) AS year, countIf(is_converted = 1) AS conversions FROM analytics.sessions GROUP BY country, year) ORDER BY country, year"
+TS-015,Time_Series,medium,True,False,False,False,0,2570,11847.43,0.0,0,0,,Compare the conversion rate in the first half of each year to the second half.,"SELECT
+    toYear(start_time) AS year,
+    round(countIf(is_converted = 1 AND toMonth(start_time) <= 6) * 100.0 / countIf(toMonth(start_time) <= 6), 2) AS first_half_conversion_rate_pct,
+    round(countIf(is_converted = 1 AND toMonth(start_time) >= 7) * 100.0 / countIf(toMonth(start_time) >= 7), 2) AS second_half_conversion_rate_pct
+FROM analytics.sessions
+GROUP BY year
+ORDER BY year ASC","SELECT toYear(start_time) AS year, countIf(is_converted = 1 AND toMonth(start_time) <= 6) * 100.0 / countIf(toMonth(start_time) <= 6) AS h1_conversion_rate, countIf(is_converted = 1 AND toMonth(start_time) > 6) * 100.0 / countIf(toMonth(start_time) > 6) AS h2_conversion_rate FROM analytics.sessions GROUP BY year ORDER BY year"
+TS-016,Time_Series,medium,True,False,False,False,0,2581,11497.79,0.0,0,0,,Show the monthly trend of the average lifetime value of newly signed-up users.,"SELECT
+    toStartOfMonth(signup_date) AS signup_month,
+    round(avg(lifetime_value), 2) AS avg_lifetime_value
+FROM analytics.users
+GROUP BY signup_month
+ORDER BY signup_month ASC","SELECT toStartOfMonth(signup_date) AS month, avg(lifetime_value) AS avg_lifetime_value FROM analytics.users GROUP BY month ORDER BY month"
+TS-017,Time_Series,medium,True,False,False,False,0,2573,12425.41,0.0,0,0,,"For each device type, show how the daily session count has trended over the last 90 days.","SELECT
+    toDate(start_time) AS session_date,
+    device_type,
+    count() AS session_count
+FROM analytics.sessions
+WHERE start_time >= now() - INTERVAL 90 DAY
+GROUP BY
+    session_date,
+    device_type
+ORDER BY
+    session_date ASC,
+    device_type ASC
+LIMIT 90","SELECT device_type, toDate(start_time) AS day, count() AS session_count FROM analytics.sessions WHERE start_time >= now() - INTERVAL 90 DAY GROUP BY device_type, day ORDER BY device_type, day"
+TS-018,Time_Series,medium,True,False,False,False,0,2569,12864.12,0.0,0,0,,What is the average time between a user's first event and their first purchase event?,"with at least one purchase are included.
+SELECT round(avg(dateDiff('second', first_event_at, first_purchase_at)), 2) AS avg_seconds_to_first_purchase
+FROM
+(
+    SELECT
+        user_id,
+        min(timestamp) AS first_event_at,
+        minIf(timestamp, event_type = 'purchase') AS first_purchase_at
+    FROM analytics.events
+    WHERE user_id IS NOT NULL
+    GROUP BY user_id
+    HAVING countIf(event_type = 'purchase') > 0
+)","SELECT avg(dateDiff('hour', first_event, first_purchase)) AS avg_hours_to_purchase FROM (SELECT user_id, min(timestamp) AS first_event, minIf(timestamp, event_type = 'purchase') AS first_purchase FROM analytics.events WHERE user_id IS NOT NULL GROUP BY user_id HAVING first_purchase IS NOT NULL)"
+TS-019,Time_Series,medium,True,False,False,False,0,2586,14832.86,0.0,0,0,,"Show the daily purchase count alongside the 7-day trailing average, excluding the current day.","SELECT
+    day,
+    purchase_count,
+    round(avg(purchase_count) OVER (ORDER BY day ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING), 2) AS trailing_7_day_average
+FROM
+(
+    SELECT
+        toDate(timestamp) AS day,
+        count() AS purchase_count
+    FROM analytics.events
+    WHERE event_type = 'purchase'
+    GROUP BY day
+)
+ORDER BY day","SELECT purchase_date, daily_purchases, avg(daily_purchases) OVER (ORDER BY purchase_date ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING) AS trailing_avg_7d FROM (SELECT toDate(timestamp) AS purchase_date, count() AS daily_purchases FROM analytics.events WHERE event_type = 'purchase' GROUP BY purchase_date) ORDER BY purchase_date"
+TS-020,Time_Series,medium,True,False,False,False,0,2586,10594.78,0.0,0,0,,Show the monthly conversion rate trend alongside the cumulative conversion rate up to each month.,"SELECT
+    month,
+    round(converted_sessions * 100.0 / total_sessions, 2) AS monthly_conversion_rate,
+    round(
+        sum(converted_sessions) OVER (ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) * 100.0
+        / sum(total_sessions) OVER (ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
+        2
+    ) AS cumulative_conversion_rate
+FROM
+(
+    SELECT
+        toStartOfMonth(start_time) AS month,
+        count() AS total_sessions,
+        countIf(is_converted = 1) AS converted_sessions
+    FROM analytics.sessions
+    GROUP BY month
+)
+ORDER BY month","SELECT month, round(monthly_conversions * 100.0 / monthly_sessions, 2) AS monthly_conv_rate, SUM(monthly_conversions) OVER (ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) * 100.0 / SUM(monthly_sessions) OVER (ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_conv_rate FROM (SELECT toStartOfMonth(start_time) AS month, count() AS monthly_sessions, countIf(is_converted = 1) AS monthly_conversions FROM analytics.sessions GROUP BY month) ORDER BY month"
+TS-021,Time_Series,medium,True,False,False,False,0,2576,14085.52,0.0,0,0,,"For each UTM source, show the monthly session count over time.","SELECT
+    toStartOfMonth(start_time) AS month,
+    utm_source,
+    count() AS session_count
+FROM analytics.sessions
+GROUP BY
+    month,
+    utm_source
+ORDER BY
+    month,
+    utm_source","SELECT utm_source, toStartOfMonth(start_time) AS month, count() AS session_count FROM analytics.sessions WHERE utm_source IS NOT NULL GROUP BY utm_source, month ORDER BY utm_source, month"
+TS-022,Time_Series,medium,True,False,False,False,0,2570,17142.31,0.0,0,0,,What is the YYYYMM format breakdown of purchase events by country?,"SELECT
+    toYYYYMM(timestamp) AS yyyymm,
+    country,
+    count() AS purchase_events
+FROM analytics.events
+WHERE event_type = 'purchase'
+GROUP BY
+    yyyymm,
+    country
+ORDER BY
+    yyyymm,
+    country","SELECT toYYYYMM(timestamp) AS year_month, country, count() AS purchases FROM analytics.events WHERE event_type = 'purchase' GROUP BY year_month, country ORDER BY year_month, country"
+TS-023,Time_Series,hard,True,False,False,False,0,2585,14406.13,0.0,0,0,,"Calculate the monthly retention rate: for each month's cohort of new users, what percentage had at least one session in the following month?","WITH cohorts AS (
+    SELECT
+        user_id,
+        toStartOfMonth(signup_date) AS cohort_month
+    FROM analytics.users
+)
+SELECT
+    cohort_month,
+    round(uniqExactIf(c.user_id, s.session_id IS NOT NULL) * 100.0 / uniqExact(c.user_id), 2) AS retention_rate
+FROM cohorts AS c
+LEFT JOIN analytics.sessions AS s
+    ON s.user_id = c.user_id
+    AND s.start_time >= addMonths(toDateTime64(c.cohort_month, 3), 1)
+    AND s.start_time < addMonths(toDateTime64(c.cohort_month, 3), 2)
+GROUP BY cohort_month
+ORDER BY cohort_month","WITH cohorts AS (SELECT user_id, toStartOfMonth(signup_date) AS cohort_month FROM analytics.users), next_month_activity AS (SELECT DISTINCT s.user_id, toStartOfMonth(s.start_time) AS activity_month FROM analytics.sessions s WHERE s.user_id IS NOT NULL) SELECT c.cohort_month, count(DISTINCT c.user_id) AS cohort_size, count(DISTINCT nma.user_id) AS retained_users, round(count(DISTINCT nma.user_id) * 100.0 / count(DISTINCT c.user_id), 2) AS retention_rate FROM cohorts c LEFT JOIN next_month_activity nma ON c.user_id = nma.user_id AND nma.activity_month = addMonths(c.cohort_month, 1) GROUP BY c.cohort_month ORDER BY c.cohort_month"
+TS-024,Time_Series,hard,True,False,False,False,0,2539,15840.51,0.0,0,0,,Detect days where the event volume spiked more than 50% above the 7-day trailing average.,"SELECT
+    day,
+    event_count,
+    round(trailing_7_day_avg, 2) AS trailing_7_day_avg,
+    round((event_count - trailing_7_day_avg) * 100.0 / trailing_7_day_avg, 2) AS percent_above_average
+FROM
+(
+    SELECT
+        day,
+        event_count,
+        avg(event_count) OVER (
+            ORDER BY day
+            ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING
+        ) AS trailing_7_day_avg
+    FROM
+    (
+        SELECT
+            toDate(timestamp) AS day,
+            count() AS event_count
+        FROM analytics.events
+        GROUP BY day
+    )
+)
+WHERE trailing_7_day_avg > 0
+  AND event_count > trailing_7_day_avg * 1.5
+ORDER BY day","SELECT event_date, daily_events, trailing_avg, round((daily_events - trailing_avg) * 100.0 / trailing_avg, 2) AS spike_pct FROM (SELECT event_date, daily_events, avg(daily_events) OVER (ORDER BY event_date ROWS BETWEEN 7 PRECEDING AND 1 PRECEDING) AS trailing_avg FROM (SELECT toDate(timestamp) AS event_date, count() AS daily_events FROM analytics.events GROUP BY event_date)) WHERE trailing_avg > 0 AND daily_events > trailing_avg * 1.5 ORDER BY spike_pct DESC"
+TS-025,Time_Series,hard,True,False,False,False,0,2599,13931.16,0.0,0,0,,Find months where the average session duration was more than 2 standard deviations above the overall average.,"WITH monthly AS (
+    SELECT
+        toStartOfMonth(start_time) AS month,
+        avg(duration_seconds) AS avg_session_duration_seconds
+    FROM analytics.sessions
+    GROUP BY month
+),
+stats AS (
+    SELECT
+        avg(avg_session_duration_seconds) AS overall_avg,
+        stddevPop(avg_session_duration_seconds) AS overall_stddev
+    FROM monthly
+)
+SELECT
+    month,
+    round(avg_session_duration_seconds, 2) AS avg_session_duration_seconds
+FROM monthly
+CROSS JOIN stats
+WHERE avg_session_duration_seconds > overall_avg + 2 * overall_stddev
+ORDER BY month","WITH stats AS (SELECT avg(duration_seconds) AS overall_avg, stddevPop(duration_seconds) AS overall_std FROM analytics.sessions), monthly AS (SELECT toStartOfMonth(start_time) AS month, avg(duration_seconds) AS monthly_avg FROM analytics.sessions GROUP BY month) SELECT m.month, m.monthly_avg, s.overall_avg, s.overall_std FROM monthly m CROSS JOIN stats s WHERE m.monthly_avg > s.overall_avg + 2 * s.overall_std ORDER BY m.month"
+TS-026,Time_Series,hard,True,False,False,False,0,2586,15119.49,0.0,0,0,,"For the top 5 countries by event volume, show their monthly event count trend and the percentage deviation from their own yearly average.","WITH
+    top_countries AS (
+        SELECT country
+        FROM analytics.events
+        GROUP BY country
+        ORDER BY count() DESC
+        LIMIT 5
+    ),
+    monthly_counts AS (
+        SELECT
+            country,
+            toStartOfMonth(timestamp) AS month,
+            toYear(timestamp) AS year,
+            count() AS event_count
+        FROM analytics.events
+        WHERE country IN (SELECT country FROM top_countries)
+        GROUP BY country, month, year
+    ),
+    monthly_with_avg AS (
+        SELECT
+            country,
+            month,
+            year,
+            event_count,
+            avg(event_count) OVER (PARTITION BY country, year) AS yearly_avg_event_count
+        FROM monthly_counts
+    )
+SELECT
+    country,
+    groupArray((month, event_count, round((event_count - yearly_avg_event_count) * 100.0 / yearly_avg_event_count, 2))) AS monthly_event_count_trend
+FROM monthly_with_avg
+GROUP BY country
+ORDER BY sum(event_count) DESC
+LIMIT 5","WITH top_countries AS (SELECT country FROM analytics.events GROUP BY country ORDER BY count() DESC LIMIT 5), monthly_data AS (SELECT country, toStartOfMonth(timestamp) AS month, count() AS monthly_events FROM analytics.events WHERE country IN (SELECT country FROM top_countries) GROUP BY country, month) SELECT country, month, monthly_events, avg(monthly_events) OVER (PARTITION BY country) AS yearly_avg, round((monthly_events - avg(monthly_events) OVER (PARTITION BY country)) * 100.0 / avg(monthly_events) OVER (PARTITION BY country), 2) AS pct_deviation FROM monthly_data ORDER BY country, month"
+TS-027,Time_Series,hard,True,False,False,False,0,2583,14296.78,0.0,0,0,,"Identify the month with the steepest increase in purchase count compared to the previous month, for each year.","WITH monthly AS (
+    SELECT
+        toStartOfMonth(timestamp) AS month_start,
+        toYear(timestamp) AS year,
+        toMonth(timestamp) AS month,
+        count() AS purchase_count
+    FROM analytics.events
+    WHERE event_type = 'purchase'
+    GROUP BY
+        month_start,
+        year,
+        month
+),
+monthly_with_previous AS (
+    SELECT
+        year,
+        month,
+        purchase_count,
+        lagInFrame(purchase_count, 1, 0) OVER (
+            ORDER BY month_start
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS previous_month_purchase_count
+    FROM monthly
+),
+ranked AS (
+    SELECT
+        year,
+        month,
+        purchase_count,
+        previous_month_purchase_count,
+        purchase_count - previous_month_purchase_count AS purchase_count_increase,
+        row_number() OVER (
+            PARTITION BY year
+            ORDER BY purchase_count - previous_month_purchase_count DESC, month ASC
+        ) AS rn
+    FROM monthly_with_previous
+)
+SELECT
+    year,
+    month,
+    purchase_count,
+    previous_month_purchase_count,
+    purchase_count_increase
+FROM ranked
+WHERE rn = 1
+ORDER BY year","SELECT year, month, purchase_increase FROM (SELECT year, month, monthly_purchases - prev_month_purchases AS purchase_increase, ROW_NUMBER() OVER (PARTITION BY year ORDER BY (monthly_purchases - prev_month_purchases) DESC) AS rn FROM (SELECT toYear(timestamp) AS year, toStartOfMonth(timestamp) AS month, count() AS monthly_purchases, lagInFrame(count()) OVER (PARTITION BY toYear(timestamp) ORDER BY toStartOfMonth(timestamp)) AS prev_month_purchases FROM analytics.events WHERE event_type = 'purchase' GROUP BY year, month)) WHERE rn = 1 AND purchase_increase IS NOT NULL ORDER BY year"
+TS-028,Time_Series,hard,True,False,False,False,0,2578,15373.45,0.0,0,0,,Calculate a 12-month rolling average of the monthly conversion rate.,"WITH monthly AS (
+    SELECT
+        toStartOfMonth(start_time) AS month,
+        sum(is_converted) * 100.0 / count() AS monthly_conversion_rate
+    FROM analytics.sessions
+    GROUP BY month
+)
+SELECT
+    month,
+    round(avg(monthly_conversion_rate) OVER (
+        ORDER BY month
+        ROWS BETWEEN 11 PRECEDING AND CURRENT ROW
+    ), 2) AS rolling_12_month_avg_conversion_rate
+FROM monthly
+ORDER BY month","SELECT month, conversion_rate, avg(conversion_rate) OVER (ORDER BY month ROWS BETWEEN 11 PRECEDING AND CURRENT ROW) AS rolling_12m_avg FROM (SELECT toStartOfMonth(start_time) AS month, countIf(is_converted = 1) * 100.0 / count() AS conversion_rate FROM analytics.sessions GROUP BY month) ORDER BY month"
+TS-029,Time_Series,hard,True,False,False,False,0,2600,14950.16,0.0,0,0,,"For each product category, calculate the number of days between the first and last product creation, and the average daily product creation rate.","SELECT
+    category,
+    dateDiff('day', min(created_at), max(created_at)) AS days_between_first_and_last_creation,
+    round(count() * 1.0 / greatest(dateDiff('day', min(created_at), max(created_at)) + 1, 1), 2) AS average_daily_product_creation_rate
+FROM analytics.products
+GROUP BY category
+ORDER BY category","SELECT category, dateDiff('day', min(created_at), max(created_at)) + 1 AS active_days, round(toFloat64(count()) / (dateDiff('day', min(created_at), max(created_at)) + 1), 2) AS avg_daily_rate FROM analytics.products GROUP BY category HAVING active_days > 1 ORDER BY avg_daily_rate DESC"
+TS-030,Time_Series,hard,True,False,False,False,0,2592,14053.62,0.0,0,0,,"Build a daily cohort analysis: for users who signed up on each day, what is the average number of sessions they had in their first 7 days versus their first 30 days?","SELECT
+    signup_date,
+    round(avg(first_7_day_sessions), 2) AS avg_sessions_first_7_days,
+    round(avg(first_30_day_sessions), 2) AS avg_sessions_first_30_days
+FROM
+(
+    SELECT
+        u.user_id,
+        u.signup_date,
+        countIf(s.start_time >= toDateTime64(u.signup_date, 3) AND s.start_time < toDateTime64(u.signup_date + INTERVAL 7 DAY, 3)) AS first_7_day_sessions,
+        countIf(s.start_time >= toDateTime64(u.signup_date, 3) AND s.start_time < toDateTime64(u.signup_date + INTERVAL 30 DAY, 3)) AS first_30_day_sessions
+    FROM analytics.users AS u
+    LEFT JOIN analytics.sessions AS s ON u.user_id = s.user_id
+    GROUP BY
+        u.user_id,
+        u.signup_date
+)
+GROUP BY signup_date
+ORDER BY signup_date","SELECT signup_day, cohort_size, round(toFloat64(total_sessions_7d) / cohort_size, 2) AS avg_sessions_7d, round(toFloat64(total_sessions_30d) / cohort_size, 2) AS avg_sessions_30d FROM (SELECT u.signup_date AS signup_day, count(DISTINCT u.user_id) AS cohort_size, countIf(dateDiff('day', u.signup_date, toDate(s.start_time)) BETWEEN 0 AND 6) AS total_sessions_7d, countIf(dateDiff('day', u.signup_date, toDate(s.start_time)) BETWEEN 0 AND 29) AS total_sessions_30d FROM analytics.users u LEFT JOIN analytics.sessions s ON u.user_id = s.user_id GROUP BY u.signup_date) ORDER BY signup_day"
+WF-001,Window_Functions,easy,True,False,False,False,0,2566,10497.49,0.0,0,0,,Rank users by their lifetime value within each plan.,"SELECT
+    plan,
+    name,
+    lifetime_value,
+    rank() OVER (PARTITION BY plan ORDER BY lifetime_value DESC) AS ltv_rank
+FROM analytics.users
+ORDER BY
+    plan,
+    ltv_rank","SELECT user_id, name, plan, lifetime_value, RANK() OVER (PARTITION BY plan ORDER BY lifetime_value DESC) AS ltv_rank FROM analytics.users ORDER BY plan, ltv_rank"
+WF-002,Window_Functions,easy,True,False,False,False,0,2569,13999.29,0.0,0,0,,Number each event sequentially by timestamp for every session.,"SELECT
+    session_id,
+    timestamp,
+    row_number() OVER (PARTITION BY session_id ORDER BY timestamp) AS event_number
+FROM analytics.events
+ORDER BY
+    session_id,
+    event_number","SELECT session_id, event_id, event_type, timestamp, ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY timestamp) AS event_seq FROM analytics.events ORDER BY session_id, event_seq"
+WF-003,Window_Functions,easy,True,False,False,False,0,2578,12251.97,0.0,0,0,,"For each product category, assign a dense rank by price from highest to lowest.","SELECT
+    category,
+    name,
+    price,
+    dense_rank() OVER (PARTITION BY category ORDER BY price DESC) AS price_rank
+FROM analytics.products
+ORDER BY
+    category,
+    price_rank,
+    price DESC","SELECT product_id, name, category, price, DENSE_RANK() OVER (PARTITION BY category ORDER BY price DESC) AS price_rank FROM analytics.products ORDER BY category, price_rank"
+WF-004,Window_Functions,easy,True,False,False,False,0,2590,15789.23,0.0,0,0,,Divide all users into 4 equal groups (quartiles) based on their lifetime value.,"SELECT
+    name,
+    lifetime_value,
+    ntile(4) OVER (ORDER BY lifetime_value DESC) AS lifetime_value_quartile
+FROM analytics.users
+ORDER BY lifetime_value DESC","SELECT user_id, name, lifetime_value, NTILE(4) OVER (ORDER BY lifetime_value) AS ltv_quartile FROM analytics.users ORDER BY ltv_quartile, user_id"
+WF-005,Window_Functions,easy,True,False,False,False,0,2575,13330.75,0.0,0,0,,Show each session with its duration and the running count of sessions per country ordered by start time.,"SELECT
+    session_id,
+    country,
+    start_time,
+    duration_seconds,
+    count() OVER (
+        PARTITION BY country
+        ORDER BY start_time, session_id
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS running_session_count
+FROM analytics.sessions
+ORDER BY country, start_time, session_id","SELECT session_id, country, duration_seconds, start_time, ROW_NUMBER() OVER (PARTITION BY country ORDER BY start_time) AS running_session_count FROM analytics.sessions ORDER BY country, start_time"
+WF-006,Window_Functions,medium,True,False,False,False,0,2586,15683.15,0.0,0,0,,"For each event, show the time difference in seconds between the current event and the previous event in the same session.","SELECT
+    event_id,
+    session_id,
+    timestamp,
+    dateDiff('second', previous_timestamp, timestamp) AS seconds_since_previous_event
+FROM
+(
+    SELECT
+        event_id,
+        session_id,
+        timestamp,
+        lagInFrame(toNullable(timestamp), 1) OVER (
+            PARTITION BY session_id
+            ORDER BY timestamp, event_id
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS previous_timestamp
+    FROM analytics.events
+)
+ORDER BY session_id, timestamp, event_id","SELECT session_id, event_id, event_type, timestamp, lagInFrame(timestamp) OVER (PARTITION BY session_id ORDER BY timestamp) AS prev_timestamp, dateDiff('second', lagInFrame(timestamp) OVER (PARTITION BY session_id ORDER BY timestamp), timestamp) AS seconds_since_prev FROM analytics.events ORDER BY session_id, timestamp"
+WF-007,Window_Functions,medium,True,False,False,False,0,2575,13950.2,0.0,0,0,,"For each user, show each session's duration alongside the next session's duration.","SELECT
+    user_id,
+    start_time,
+    duration_seconds,
+    leadInFrame(duration_seconds) OVER (
+        PARTITION BY user_id
+        ORDER BY start_time
+        ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+    ) AS next_session_duration_seconds
+FROM analytics.sessions
+WHERE user_id IS NOT NULL
+ORDER BY user_id, start_time","SELECT user_id, session_id, start_time, duration_seconds, leadInFrame(duration_seconds) OVER (PARTITION BY user_id ORDER BY start_time, session_id) AS next_session_duration FROM analytics.sessions WHERE user_id IS NOT NULL ORDER BY user_id, start_time, session_id"
+WF-008,Window_Functions,medium,True,False,False,False,0,2574,10650.51,0.0,0,0,,Calculate a running total of event durations per session ordered by timestamp.,"SELECT
+    session_id,
+    timestamp,
+    duration_ms,
+    sum(duration_ms) OVER (
+        PARTITION BY session_id
+        ORDER BY timestamp
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS running_duration_ms
+FROM analytics.events
+ORDER BY
+    session_id,
+    timestamp","SELECT session_id, event_id, timestamp, duration_ms, SUM(duration_ms) OVER (PARTITION BY session_id ORDER BY timestamp ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total_ms FROM analytics.events ORDER BY session_id, timestamp"
+WF-009,Window_Functions,medium,True,False,False,False,0,2534,12991.31,0.0,0,0,,Compute a 7-event moving average of event duration within each session.,"SELECT
+    session_id,
+    timestamp,
+    duration_ms,
+    round(avg(duration_ms) OVER (
+        PARTITION BY session_id
+        ORDER BY timestamp
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ), 2) AS moving_avg_duration_ms
+FROM analytics.events
+ORDER BY session_id, timestamp","SELECT session_id, event_id, timestamp, duration_ms, AVG(duration_ms) OVER (PARTITION BY session_id ORDER BY timestamp ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS moving_avg_duration FROM analytics.events ORDER BY session_id, timestamp"
+WF-010,Window_Functions,medium,True,False,False,False,0,2582,12393.4,0.0,0,0,,"For each event in a session, show the first page URL visited and the last page URL visited in that session.","SELECT
+    first_value(page_url) OVER session_window AS first_page_url,
+    last_value(page_url) OVER session_window AS last_page_url
+FROM analytics.events
+WINDOW session_window AS (
+    PARTITION BY session_id
+    ORDER BY timestamp
+    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+)","SELECT session_id, event_id, page_url, timestamp, first_value(page_url) OVER (PARTITION BY session_id ORDER BY timestamp ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS first_page, last_value(page_url) OVER (PARTITION BY session_id ORDER BY timestamp ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_page FROM analytics.events ORDER BY session_id, timestamp"
+WF-011,Window_Functions,medium,True,False,False,False,0,2564,15442.56,0.0,0,0,,Find the top 3 users by lifetime value within each country.,"SELECT
+    country,
+    name,
+    lifetime_value
+FROM analytics.users
+ORDER BY
+    country ASC,
+    lifetime_value DESC
+LIMIT 3 BY country","SELECT user_id, name, country, lifetime_value FROM (SELECT user_id, name, country, lifetime_value, ROW_NUMBER() OVER (PARTITION BY country ORDER BY lifetime_value DESC) AS rn FROM analytics.users) WHERE rn <= 3 ORDER BY country, lifetime_value DESC"
+WF-012,Window_Functions,medium,True,False,False,False,0,2570,15912.03,0.0,0,0,,"For each session, compare each event's duration to the session average duration.","SELECT
+    session_id,
+    event_id,
+    duration_ms,
+    round(session_avg_duration_ms, 2) AS session_avg_duration_ms,
+    round(duration_ms - session_avg_duration_ms, 2) AS difference_from_avg_ms,
+    multiIf(
+        duration_ms > session_avg_duration_ms, 'above_average',
+        duration_ms < session_avg_duration_ms, 'below_average',
+        'equal_to_average'
+    ) AS comparison
+FROM
+(
+    SELECT
+        session_id,
+        event_id,
+        duration_ms,
+        avg(duration_ms) OVER (PARTITION BY session_id) AS session_avg_duration_ms
+    FROM analytics.events
+)
+ORDER BY session_id, event_id","SELECT session_id, event_id, event_type, duration_ms, AVG(duration_ms) OVER (PARTITION BY session_id) AS session_avg_duration, duration_ms - AVG(duration_ms) OVER (PARTITION BY session_id) AS diff_from_avg FROM analytics.events ORDER BY session_id, event_id"
+WF-013,Window_Functions,medium,True,False,False,False,0,2600,13015.43,0.0,0,0,,Show each product with its price and the percentage of its price relative to the maximum price in its category.,"SELECT
+    name,
+    category,
+    price,
+    round(toFloat64(price) * 100.0 / max(toFloat64(price)) OVER (PARTITION BY category), 2) AS price_percentage_of_category_max
+FROM analytics.products","SELECT product_id, name, category, price, MAX(price) OVER (PARTITION BY category) AS max_category_price, round(price * 100.0 / MAX(price) OVER (PARTITION BY category), 2) AS pct_of_max FROM analytics.products ORDER BY category, product_id"
+WF-014,Window_Functions,medium,True,False,False,False,0,2564,13299.25,0.0,0,0,,"For daily event counts, show the cumulative sum of events over time.","SELECT
+    event_date,
+    event_count,
+    sum(event_count) OVER (ORDER BY event_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_events
+FROM
+(
+    SELECT
+        toDate(timestamp) AS event_date,
+        count() AS event_count
+    FROM analytics.events
+    GROUP BY event_date
+)
+ORDER BY event_date","SELECT event_date, daily_count, SUM(daily_count) OVER (ORDER BY event_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_events FROM (SELECT toDate(timestamp) AS event_date, count() AS daily_count FROM analytics.events GROUP BY event_date) ORDER BY event_date"
+WF-015,Window_Functions,medium,True,False,False,False,0,2581,12480.42,0.0,0,0,,"Rank sessions by page count within each device type, and also show the quintile bucket for each session.","SELECT
+    device_type,
+    session_id,
+    page_count,
+    rank() OVER (PARTITION BY device_type ORDER BY page_count DESC) AS page_count_rank,
+    ntile(5) OVER (PARTITION BY device_type ORDER BY page_count DESC, session_id) AS quintile_bucket
+FROM analytics.sessions
+ORDER BY
+    device_type,
+    page_count_rank,
+    page_count DESC","SELECT session_id, device_type, page_count, RANK() OVER (PARTITION BY device_type ORDER BY page_count DESC) AS page_rank, NTILE(5) OVER (PARTITION BY device_type ORDER BY page_count DESC) AS quintile FROM analytics.sessions ORDER BY device_type, page_rank"
+WF-016,Window_Functions,medium,True,False,False,False,0,2573,13135.59,0.0,0,0,,"For each user, compute the difference in days between consecutive sessions.","SELECT
+    user_id,
+    start_time,
+    previous_start_time,
+    dateDiff('day', previous_start_time, start_time) AS days_between_sessions
+FROM
+(
+    SELECT
+        user_id,
+        start_time,
+        lagInFrame(toNullable(start_time), 1, NULL) OVER (
+            PARTITION BY user_id
+            ORDER BY start_time
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS previous_start_time
+    FROM analytics.sessions
+    WHERE user_id IS NOT NULL
+)
+WHERE previous_start_time IS NOT NULL
+ORDER BY user_id, start_time","SELECT user_id, session_id, start_time, lagInFrame(start_time) OVER (PARTITION BY user_id ORDER BY start_time, session_id) AS prev_session_start, dateDiff('day', lagInFrame(start_time) OVER (PARTITION BY user_id ORDER BY start_time, session_id), start_time) AS days_between_sessions FROM analytics.sessions WHERE user_id IS NOT NULL ORDER BY user_id, start_time, session_id"
+WF-017,Window_Functions,medium,True,False,False,False,0,2590,13562.94,0.0,0,0,,"For each event, show how its duration compares to the minimum and maximum duration in its session as a normalized score between 0 and 1.","SELECT
+    event_id,
+    duration_ms,
+    if(
+        max_duration_ms = min_duration_ms,
+        0.0,
+        round((duration_ms - min_duration_ms) * 1.0 / (max_duration_ms - min_duration_ms), 2)
+    ) AS normalized_duration_score
+FROM
+(
+    SELECT
+        event_id,
+        duration_ms,
+        min(duration_ms) OVER (PARTITION BY session_id) AS min_duration_ms,
+        max(duration_ms) OVER (PARTITION BY session_id) AS max_duration_ms
+    FROM analytics.events
+)","SELECT session_id, event_id, duration_ms, MIN(duration_ms) OVER w AS min_dur, MAX(duration_ms) OVER w AS max_dur, CASE WHEN MAX(duration_ms) OVER w = MIN(duration_ms) OVER w THEN 0 ELSE toFloat64(duration_ms - MIN(duration_ms) OVER w) / toFloat64(MAX(duration_ms) OVER w - MIN(duration_ms) OVER w) END AS normalized_score FROM analytics.events WINDOW w AS (PARTITION BY session_id) ORDER BY session_id, event_id"
+WF-018,Window_Functions,hard,True,False,False,False,0,2593,14270.6,0.0,0,0,,"For each country, show the monthly event count alongside the previous month's count and the month-over-month growth rate.","WITH monthly_counts AS (
+    SELECT
+        country,
+        toStartOfMonth(timestamp) AS month,
+        count() AS event_count
+    FROM analytics.events
+    GROUP BY
+        country,
+        month
+),
+with_previous AS (
+    SELECT
+        country,
+        month,
+        event_count,
+        lagInFrame(event_count, 1, 0) OVER (
+            PARTITION BY country
+            ORDER BY month
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS previous_month_count
+    FROM monthly_counts
+)
+SELECT
+    country,
+    month,
+    event_count,
+    previous_month_count,
+    if(previous_month_count = 0, NULL, round((event_count - previous_month_count) * 100.0 / previous_month_count, 2)) AS mom_growth_rate
+FROM with_previous
+ORDER BY
+    country,
+    month","SELECT country, event_month, monthly_count, lagInFrame(monthly_count) OVER (PARTITION BY country ORDER BY event_month) AS prev_month_count, round((monthly_count - lagInFrame(monthly_count) OVER (PARTITION BY country ORDER BY event_month)) * 100.0 / lagInFrame(monthly_count) OVER (PARTITION BY country ORDER BY event_month), 2) AS mom_growth_pct FROM (SELECT country, toStartOfMonth(timestamp) AS event_month, count() AS monthly_count FROM analytics.events GROUP BY country, event_month) ORDER BY country, event_month"
+WF-019,Window_Functions,hard,True,False,False,False,0,2613,13493.19,0.0,0,0,,"Find sessions where the user went from a page view event directly to a purchase event. Show the session, user, and the page URL where the purchase originated.","SELECT
+    session_id,
+    user_id,
+    purchase_origin_page_url
+FROM
+(
+    SELECT
+        session_id,
+        user_id,
+        event_type,
+        lagInFrame(event_type) OVER (
+            PARTITION BY session_id
+            ORDER BY timestamp, event_id
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS previous_event_type,
+        lagInFrame(page_url) OVER (
+            PARTITION BY session_id
+            ORDER BY timestamp, event_id
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS purchase_origin_page_url
+    FROM analytics.events
+)
+WHERE event_type = 'purchase'
+  AND previous_event_type = 'page_view'","SELECT session_id, user_id, event_type, page_url, next_event_type FROM (SELECT session_id, user_id, event_type, page_url, leadInFrame(event_type) OVER (PARTITION BY session_id ORDER BY timestamp) AS next_event_type FROM analytics.events) WHERE event_type = 'page_view' AND next_event_type = 'purchase' ORDER BY session_id"
+WF-020,Window_Functions,hard,True,False,False,False,0,2600,15853.99,0.0,0,0,,"For each user plan, compute the running cumulative lifetime value ordered by signup date, and show the percentage of the plan's total lifetime value accumulated so far.","WITH daily_ltv AS (
+    SELECT
+        plan,
+        signup_date,
+        sum(lifetime_value) AS signup_lifetime_value
+    FROM analytics.users
+    GROUP BY
+        plan,
+        signup_date
+),
+running AS (
+    SELECT
+        plan,
+        signup_date,
+        sum(signup_lifetime_value) OVER (
+            PARTITION BY plan
+            ORDER BY signup_date
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS cumulative_lifetime_value,
+        sum(signup_lifetime_value) OVER (PARTITION BY plan) AS plan_total_lifetime_value
+    FROM daily_ltv
+)
+SELECT
+    plan,
+    signup_date,
+    cumulative_lifetime_value,
+    round(toFloat64(cumulative_lifetime_value) * 100.0 / nullIf(toFloat64(plan_total_lifetime_value), 0), 2) AS cumulative_lifetime_value_pct
+FROM running
+ORDER BY
+    plan,
+    signup_date","SELECT user_id, name, plan, signup_date, lifetime_value, cumulative_ltv, plan_total_ltv, round(cumulative_ltv * 100.0 / plan_total_ltv, 2) AS cumulative_pct FROM (SELECT user_id, name, plan, signup_date, lifetime_value, SUM(lifetime_value) OVER (PARTITION BY plan ORDER BY signup_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_ltv, SUM(lifetime_value) OVER (PARTITION BY plan) AS plan_total_ltv FROM analytics.users) ORDER BY plan, signup_date"
+WF-021,Window_Functions,hard,True,False,False,False,0,2614,15395.05,0.0,0,0,,Detect sessions with sudden duration spikes: find events where the duration is more than 3 times the rolling average of the previous 5 events in the same session.,"SELECT
+    session_id,
+    event_id,
+    timestamp,
+    event_type,
+    page_url,
+    duration_ms,
+    round(prev_5_avg_duration_ms, 2) AS prev_5_avg_duration_ms
+FROM
+(
+    SELECT
+        session_id,
+        event_id,
+        timestamp,
+        event_type,
+        page_url,
+        duration_ms,
+        avg(duration_ms) OVER (
+            PARTITION BY session_id
+            ORDER BY timestamp
+            ROWS BETWEEN 5 PRECEDING AND 1 PRECEDING
+        ) AS prev_5_avg_duration_ms,
+        count() OVER (
+            PARTITION BY session_id
+            ORDER BY timestamp
+            ROWS BETWEEN 5 PRECEDING AND 1 PRECEDING
+        ) AS prev_5_event_count
+    FROM analytics.events
+)
+WHERE prev_5_event_count = 5
+  AND duration_ms > 3 * prev_5_avg_duration_ms
+ORDER BY session_id, timestamp","SELECT session_id, event_id, timestamp, duration_ms, rolling_avg FROM (SELECT session_id, event_id, timestamp, duration_ms, AVG(duration_ms) OVER (PARTITION BY session_id ORDER BY timestamp ROWS BETWEEN 5 PRECEDING AND 1 PRECEDING) AS rolling_avg FROM analytics.events) WHERE rolling_avg > 0 AND duration_ms > rolling_avg * 3 ORDER BY session_id, timestamp"
+WF-022,Window_Functions,hard,True,False,False,False,0,2604,16430.91,0.0,0,0,,"For each product category, find the product with the highest rating that was created most recently, and show how it ranks against all other products in the same subcategory.","WITH ranked_products AS (
+    SELECT
+        category,
+        subcategory,
+        name AS product_name,
+        rating,
+        created_at,
+        row_number() OVER (PARTITION BY category ORDER BY rating DESC, created_at DESC) AS category_rank,
+        rank() OVER (PARTITION BY subcategory ORDER BY rating DESC, created_at DESC) AS subcategory_rank
+    FROM analytics.products
+)
+SELECT
+    category,
+    product_name,
+    subcategory,
+    rating,
+    created_at,
+    subcategory_rank
+FROM ranked_products
+WHERE category_rank = 1
+ORDER BY category ASC","SELECT product_id, name, category, subcategory, price, rating, created_at, category_rank, subcategory_rank FROM (SELECT product_id, name, category, subcategory, price, rating, created_at, ROW_NUMBER() OVER (PARTITION BY category ORDER BY rating DESC, created_at DESC) AS category_rank, RANK() OVER (PARTITION BY subcategory ORDER BY rating DESC) AS subcategory_rank FROM analytics.products) WHERE category_rank = 1 ORDER BY category"
+WF-023,Window_Functions,hard,True,False,False,False,0,2599,14797.03,0.0,0,0,,"For each session, compute the entry page, exit page, session duration, and the session's rank by duration within its country. Only show sessions that rank in the top 10 per country.","SELECT
+    session_id,
+    country,
+    entry_page,
+    exit_page,
+    duration_seconds,
+    duration_rank
+FROM
+(
+    SELECT
+        session_id,
+        country,
+        entry_page,
+        exit_page,
+        duration_seconds,
+        rank() OVER (PARTITION BY country ORDER BY duration_seconds DESC) AS duration_rank
+    FROM analytics.sessions
+)
+WHERE duration_rank <= 10
+ORDER BY
+    country ASC,
+    duration_rank ASC,
+    duration_seconds DESC","SELECT session_id, user_id, country, entry_page, exit_page, duration_seconds, duration_rank FROM (SELECT session_id, user_id, country, entry_page, exit_page, duration_seconds, DENSE_RANK() OVER (PARTITION BY country ORDER BY duration_seconds DESC) AS duration_rank FROM analytics.sessions) WHERE duration_rank <= 10 ORDER BY country, duration_rank"
+WF-024,Window_Functions,hard,True,False,False,False,0,2572,12914.6,0.0,0,0,,What percentage of total revenue does each country contribute? Rank countries by their share.,"SELECT
+    arraySort(x -> -x.2, groupArray((country, revenue_share_percent))) AS country_revenue_share_percent
+FROM
+(
+    SELECT
+        country,
+        round(sum(toFloat64(lifetime_value)) * 100.0 / sum(sum(toFloat64(lifetime_value))) OVER (), 2) AS revenue_share_percent
+    FROM analytics.users
+    GROUP BY country
+)","SELECT country, total_ltv, total_ltv * 100.0 / SUM(total_ltv) OVER () AS pct_of_total, RANK() OVER (ORDER BY total_ltv DESC) AS country_rank FROM (SELECT country, sum(lifetime_value) AS total_ltv FROM analytics.users GROUP BY country) ORDER BY country_rank"
+WF-025,Window_Functions,hard,True,False,False,False,0,2602,13663.6,0.0,0,0,,"For each day, calculate the 3-day moving average of purchase count and compare it with the 7-day moving average. Flag days where the 3-day average exceeds the 7-day average by more than 50%.","WITH
+    date_bounds AS (
+        SELECT
+            min(toDate(timestamp)) AS min_day,
+            max(toDate(timestamp)) AS max_day
+        FROM analytics.events
+    ),
+    daily_purchases AS (
+        SELECT
+            toDate(timestamp) AS day,
+            countIf(event_type = 'purchase') AS purchase_count
+        FROM analytics.events
+        GROUP BY day
+    )
+SELECT
+    day,
+    purchase_count,
+    round(avg(purchase_count) OVER (ORDER BY day ROWS BETWEEN 2 PRECEDING AND CURRENT ROW), 2) AS purchase_count_3_day_avg,
+    round(avg(purchase_count) OVER (ORDER BY day ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 2) AS purchase_count_7_day_avg,
+    purchase_count_3_day_avg > purchase_count_7_day_avg * 1.5 AS exceeds_7_day_avg_by_more_than_50_percent
+FROM
+(
+    SELECT
+        addDays(min_day, offset) AS day,
+        ifNull(daily_purchases.purchase_count, 0) AS purchase_count
+    FROM date_bounds
+    ARRAY JOIN range(toUInt32(dateDiff('day', min_day, max_day) + 1)) AS offset
+    LEFT JOIN daily_purchases
+        ON daily_purchases.day = addDays(min_day, offset)
+)
+ORDER BY day","SELECT purchase_date, daily_purchases, avg_3d, avg_7d, CASE WHEN avg_7d > 0 AND avg_3d > avg_7d * 1.5 THEN 'spike' ELSE 'normal' END AS trend_flag FROM (SELECT purchase_date, daily_purchases, AVG(daily_purchases) OVER (ORDER BY purchase_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS avg_3d, AVG(daily_purchases) OVER (ORDER BY purchase_date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS avg_7d FROM (SELECT toDate(timestamp) AS purchase_date, count() AS daily_purchases FROM analytics.events WHERE event_type = 'purchase' GROUP BY purchase_date)) ORDER BY purchase_date"

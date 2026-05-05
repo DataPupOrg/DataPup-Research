@@ -1,0 +1,377 @@
+## claude_cli/baseline/results.jsonl
+- `AG-001` exec-failed: How many total events are in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT count() AS total_events FROM analytics.events`
+- `AG-002` exec-failed: How many distinct users are there in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT uniqExact(user_id) AS distinct_users FROM analytics.events WHERE user_id IS NOT NULL`
+- `AG-003` exec-failed: What is the average event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT round(avg(duration_ms), 2) AS avg_duration_ms FROM analytics.events`
+- `AG-004` exec-failed: How many events of each type are there?
+  - Error: ``
+  - Pred SQL: `SELECT event_type, count() AS event_count FROM analytics.events GROUP BY event_type ORDER BY event_count DESC`
+- `AG-005` exec-failed: What percentage of events are bounce events?
+  - Error: ``
+  - Pred SQL: `SELECT round(countIf(is_bounce = 1) * 100.0 / count(), 2) AS bounce_percentage FROM analytics.events`
+- `AG-006` exec-failed: How many events came from each country? Show the top 20.
+  - Error: ``
+  - Pred SQL: `SELECT country, count() AS event_count FROM analytics.events GROUP BY country ORDER BY event_count DESC LIMIT 20`
+- `AG-007` exec-failed: What is the total lifetime value of all users?
+  - Error: ``
+  - Pred SQL: `SELECT sum(lifetime_value) AS total_lifetime_value FROM analytics.users`
+- `AG-008` exec-failed: How many users are on each subscription plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, count() AS user_count FROM analytics.users GROUP BY plan ORDER BY user_count DESC`
+- `AG-009` exec-failed: What is the minimum, maximum, and average product price?
+  - Error: ``
+  - Pred SQL: `SELECT     min(price) AS min_price,     max(price) AS max_price,     round(avg(price), 2) AS avg_price FROM analytics.products`
+- `AG-010` exec-failed: How many sessions are there per device type?
+  - Error: ``
+  - Pred SQL: `SELECT     device_type,     count() AS session_count FROM analytics.sessions GROUP BY device_type ORDER BY session_count DESC`
+- `AG-011` exec-failed: What is the average session duration for converted versus non-converted sessions?
+  - Error: ``
+  - Pred SQL: `SELECT     round(avgIf(duration_seconds, is_converted = 1), 2) AS avg_duration_converted,     round(avgIf(duration_seconds, is_converted = 0), 2) AS avg_duration_non_converted FROM analytics.sessions`
+- `AG-012` exec-failed: What is the total lifetime value of users broken down by plan?
+  - Error: ``
+  - Pred SQL: `SELECT     plan,     sum(lifetime_value) AS total_lifetime_value FROM analytics.users GROUP BY plan ORDER BY total_lifetime_value DESC`
+- `AG-013` exec-failed: What are the top 10 browsers by unique user count in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT     browser,     uniqExact(user_id) AS unique_users FROM analytics.events GROUP BY browser ORDER BY unique_users DESC LIMIT 10`
+- `AG-014` exec-failed: What is the 95th percentile of event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT quantile(0.95)(duration_ms) AS p95_duration_ms FROM analytics.events`
+- `AG-015` exec-failed: Which product categories have more than 50 products and what is their average rating?
+  - Error: ``
+  - Pred SQL: `SELECT     category,     count() AS product_count,     round(avg(rating), 2) AS avg_rating FROM analytics.products GROUP BY category HAVING product_count > 50 ORDER BY product_count DESC`
+- `AG-016` exec-failed: For each operating system, what is the average event duration and how many unique sessions are there?
+  - Error: ``
+  - Pred SQL: `SELECT     os,     round(avg(duration_ms), 2) AS avg_duration_ms,     uniqExact(session_id) AS unique_sessions FROM analytics.events GROUP BY os ORDER BY unique_sessions DESC`
+- `AG-017` exec-failed: What is the conversion rate (percentage of converted sessions) by UTM source?
+  - Error: ``
+  - Pred SQL: `SELECT     ifNull(utm_source, '(direct)') AS utm_source,     round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM analytics.sessions GROUP BY utm_source ORDER BY conversion_rate DESC`
+- `AG-018` exec-failed: What is the average number of pages viewed per session, broken down by device type?
+  - Error: ``
+  - Pred SQL: `SELECT     device_type,     round(avg(page_count), 2) AS avg_pages_per_session FROM analytics.sessions GROUP BY device_type ORDER BY avg_pages_per_session DESC`
+- `AG-019` exec-failed: How many events happened on each date? Show the daily count.
+  - Error: ``
+  - Pred SQL: `SELECT     toDate(timestamp) AS date,     count() AS event_count FROM analytics.events GROUP BY date ORDER BY date`
+- `AG-020` exec-failed: What is the median and 95th percentile of session duration in seconds?
+  - Error: ``
+  - Pred SQL: `SELECT     round(quantile(0.5)(duration_seconds), 2) AS median_duration_seconds,     round(quantile(0.95)(duration_seconds), 2) AS p95_duration_seconds FROM analytics.sessions`
+- ... 130 more failures omitted
+
+## claude_cli/best/results.jsonl
+- `AG-001` exec-failed: How many total events are in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT count() FROM analytics.events`
+- `AG-002` exec-failed: How many distinct users are there in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT uniqExact(user_id) AS distinct_users FROM analytics.events WHERE user_id IS NOT NULL`
+- `AG-003` exec-failed: What is the average event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT round(avg(duration_ms), 2) AS avg_duration_ms FROM analytics.events`
+- `AG-004` exec-failed: How many events of each type are there?
+  - Error: ``
+  - Pred SQL: `SELECT event_type, count() AS event_count FROM analytics.events GROUP BY event_type ORDER BY event_count DESC`
+- `AG-005` exec-failed: What percentage of events are bounce events?
+  - Error: ``
+  - Pred SQL: `SELECT round(countIf(is_bounce = 1) * 100.0 / count(), 2) AS bounce_rate FROM analytics.events`
+- `AG-006` exec-failed: How many events came from each country? Show the top 20.
+  - Error: ``
+  - Pred SQL: `SELECT country, count() AS event_count FROM analytics.events GROUP BY country ORDER BY event_count DESC LIMIT 20`
+- `AG-007` exec-failed: What is the total lifetime value of all users?
+  - Error: ``
+  - Pred SQL: `SELECT sum(lifetime_value) AS total_lifetime_value FROM analytics.users`
+- `AG-008` exec-failed: How many users are on each subscription plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, count() AS user_count FROM analytics.users GROUP BY plan ORDER BY user_count DESC`
+- `AG-009` exec-failed: What is the minimum, maximum, and average product price?
+  - Error: ``
+  - Pred SQL: `SELECT min(price) AS min_price, max(price) AS max_price, round(avg(price), 2) AS avg_price FROM analytics.products`
+- `AG-010` exec-failed: How many sessions are there per device type?
+  - Error: ``
+  - Pred SQL: `SELECT device_type, count() AS session_count FROM analytics.sessions GROUP BY device_type ORDER BY session_count DESC`
+- `AG-011` exec-failed: What is the average session duration for converted versus non-converted sessions?
+  - Error: ``
+  - Pred SQL: `SELECT     round(avgIf(duration_seconds, is_converted = 1), 2) AS avg_duration_converted,     round(avgIf(duration_seconds, is_converted = 0), 2) AS avg_duration_non_converted FROM analytics.sessions`
+- `AG-012` exec-failed: What is the total lifetime value of users broken down by plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, sum(lifetime_value) AS total_lifetime_value FROM analytics.users GROUP BY plan ORDER BY total_lifetime_value DESC`
+- `AG-013` exec-failed: What are the top 10 browsers by unique user count in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT     browser,     uniqExact(user_id) AS unique_users FROM analytics.events GROUP BY browser ORDER BY unique_users DESC LIMIT 10`
+- `AG-014` exec-failed: What is the 95th percentile of event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT quantile(0.95)(duration_ms) AS p95_duration_ms FROM analytics.events`
+- `AG-015` exec-failed: Which product categories have more than 50 products and what is their average rating?
+  - Error: ``
+  - Pred SQL: `SELECT     category,     count() AS product_count,     round(avg(rating), 2) AS avg_rating FROM analytics.products GROUP BY category HAVING product_count > 50 ORDER BY avg_rating DESC`
+- `AG-016` exec-failed: For each operating system, what is the average event duration and how many unique sessions are there?
+  - Error: ``
+  - Pred SQL: `SELECT     os,     round(avg(duration_ms), 2) AS avg_duration_ms,     uniqExact(session_id) AS unique_sessions FROM analytics.events GROUP BY os ORDER BY unique_sessions DESC`
+- `AG-017` exec-failed: What is the conversion rate (percentage of converted sessions) by UTM source?
+  - Error: ``
+  - Pred SQL: `SELECT     utm_source,     count() AS total_sessions,     countIf(is_converted = 1) AS converted_sessions,     round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM analytics.sessions WHERE utm_source IS NOT NULL GROUP BY utm_source ORDER BY conversion_rate DESC`
+- `AG-018` exec-failed: What is the average number of pages viewed per session, broken down by device type?
+  - Error: ``
+  - Pred SQL: `SELECT device_type, round(avg(page_count), 2) AS avg_pages_per_session FROM analytics.sessions GROUP BY device_type ORDER BY avg_pages_per_session DESC`
+- `AG-019` exec-failed: How many events happened on each date? Show the daily count.
+  - Error: ``
+  - Pred SQL: `SELECT toDate(timestamp) AS day, count() AS daily_events FROM analytics.events GROUP BY day ORDER BY day`
+- `AG-020` exec-failed: What is the median and 95th percentile of session duration in seconds?
+  - Error: ``
+  - Pred SQL: `SELECT     quantile(0.5)(duration_seconds) AS median_duration_seconds,     quantile(0.95)(duration_seconds) AS p95_duration_seconds FROM analytics.sessions`
+- ... 130 more failures omitted
+
+## codex_cli/baseline/results.jsonl
+- `AG-001` exec-failed: How many total events are in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT count() AS total_events FROM analytics.events`
+- `AG-002` exec-failed: How many distinct users are there in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT uniqExactIf(user_id, isNotNull(user_id)) AS distinct_users FROM analytics.events`
+- `AG-003` exec-failed: What is the average event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT round(avg(duration_ms), 2) AS average_event_duration_ms FROM analytics.events`
+- `AG-004` exec-failed: How many events of each type are there?
+  - Error: ``
+  - Pred SQL: `SELECT     event_type,     count() AS event_count FROM analytics.events GROUP BY event_type ORDER BY event_type`
+- `AG-005` exec-failed: What percentage of events are bounce events?
+  - Error: ``
+  - Pred SQL: `SELECT round(countIf(is_bounce = 1) * 100.0 / count(), 2) AS bounce_event_percentage FROM analytics.events`
+- `AG-006` exec-failed: How many events came from each country? Show the top 20.
+  - Error: ``
+  - Pred SQL: `SELECT     country,     count() AS event_count FROM analytics.events GROUP BY country ORDER BY event_count DESC LIMIT 20`
+- `AG-007` exec-failed: What is the total lifetime value of all users?
+  - Error: ``
+  - Pred SQL: `SELECT sum(lifetime_value) AS total_lifetime_value FROM analytics.users`
+- `AG-008` exec-failed: How many users are on each subscription plan?
+  - Error: ``
+  - Pred SQL: `SELECT     plan,     count() AS user_count FROM analytics.users GROUP BY plan ORDER BY plan`
+- `AG-009` exec-failed: What is the minimum, maximum, and average product price?
+  - Error: ``
+  - Pred SQL: `SELECT     min(price) AS minimum_price,     max(price) AS maximum_price,     round(avg(price), 2) AS average_price FROM analytics.products`
+- `AG-010` exec-failed: How many sessions are there per device type?
+  - Error: ``
+  - Pred SQL: `SELECT     mapFromArrays(groupArray(device_type), groupArray(session_count)) AS sessions_per_device_type FROM (     SELECT         device_type,         count() AS session_count     FROM analytics.sessions     GROUP BY device_type )`
+- `AG-011` exec-failed: What is the average session duration for converted versus non-converted sessions?
+  - Error: ``
+  - Pred SQL: `SELECT     round(avgIf(duration_seconds, is_converted = 1), 2) AS avg_converted_session_duration_seconds,     round(avgIf(duration_seconds, is_converted = 0), 2) AS avg_non_converted_session_duration_seconds FROM analytics.sessions`
+- `AG-012` exec-failed: What is the total lifetime value of users broken down by plan?
+  - Error: ``
+  - Pred SQL: `SELECT     plan,     sum(lifetime_value) AS total_lifetime_value FROM analytics.users GROUP BY plan ORDER BY plan`
+- `AG-013` exec-failed: What are the top 10 browsers by unique user count in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT     browser,     uniqExact(user_id) AS unique_user_count FROM analytics.events WHERE user_id IS NOT NULL GROUP BY browser ORDER BY unique_user_count DESC LIMIT 10`
+- `AG-014` exec-failed: What is the 95th percentile of event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT quantile(0.95)(duration_ms) AS p95_duration_ms FROM analytics.events`
+- `AG-015` exec-failed: Which product categories have more than 50 products and what is their average rating?
+  - Error: ``
+  - Pred SQL: `SELECT     category,     round(avg(rating), 2) AS average_rating FROM analytics.products GROUP BY category HAVING count() > 50`
+- `AG-016` exec-failed: For each operating system, what is the average event duration and how many unique sessions are there?
+  - Error: ``
+  - Pred SQL: `SELECT     os,     round(avg(duration_ms), 2) AS average_event_duration_ms,     uniqExact(session_id) AS unique_sessions FROM analytics.events GROUP BY os ORDER BY os`
+- `AG-017` exec-failed: What is the conversion rate (percentage of converted sessions) by UTM source?
+  - Error: ``
+  - Pred SQL: `SELECT     ifNull(utm_source, 'unknown') AS utm_source,     round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM analytics.sessions GROUP BY ifNull(utm_source, 'unknown') ORDER BY conversion_rate DESC`
+- `AG-018` exec-failed: What is the average number of pages viewed per session, broken down by device type?
+  - Error: ``
+  - Pred SQL: `SELECT     mapFromArrays(groupArray(device_type), groupArray(avg_pages_per_session)) AS avg_pages_per_session_by_device_type FROM (     SELECT         device_type,         round(avg(page_count), 2) AS avg_pages_per_session     FROM analytics.sessions     GROUP BY device_type )`
+- `AG-019` exec-failed: How many events happened on each date? Show the daily count.
+  - Error: ``
+  - Pred SQL: `SELECT     toDate(timestamp) AS event_date,     count() AS daily_count FROM analytics.events GROUP BY event_date ORDER BY event_date`
+- `AG-020` exec-failed: What is the median and 95th percentile of session duration in seconds?
+  - Error: ``
+  - Pred SQL: `SELECT     quantile(0.5)(duration_seconds) AS median_duration_seconds,     quantile(0.95)(duration_seconds) AS p95_duration_seconds FROM analytics.sessions`
+- ... 130 more failures omitted
+
+## codex_cli/best/results.jsonl
+- `AG-001` exec-failed: How many total events are in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT count() AS total_events FROM analytics.events`
+- `AG-002` exec-failed: How many distinct users are there in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT uniqExactIf(user_id, user_id IS NOT NULL) AS distinct_users FROM analytics.events`
+- `AG-003` exec-failed: What is the average event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT round(avg(duration_ms), 2) AS avg_event_duration_ms FROM analytics.events`
+- `AG-004` exec-failed: How many events of each type are there?
+  - Error: ``
+  - Pred SQL: `SELECT event_type, count() AS event_count FROM analytics.events GROUP BY event_type ORDER BY event_count DESC`
+- `AG-005` exec-failed: What percentage of events are bounce events?
+  - Error: ``
+  - Pred SQL: `SELECT round(countIf(is_bounce = 1) * 100.0 / count(), 2) AS bounce_event_percentage FROM analytics.events`
+- `AG-006` exec-failed: How many events came from each country? Show the top 20.
+  - Error: ``
+  - Pred SQL: `SELECT country, count() AS event_count FROM analytics.events GROUP BY country ORDER BY event_count DESC LIMIT 20`
+- `AG-007` exec-failed: What is the total lifetime value of all users?
+  - Error: ``
+  - Pred SQL: `SELECT sum(lifetime_value) AS total_lifetime_value FROM analytics.users`
+- `AG-008` exec-failed: How many users are on each subscription plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, count() AS user_count FROM analytics.users GROUP BY plan ORDER BY user_count DESC`
+- `AG-009` exec-failed: What is the minimum, maximum, and average product price?
+  - Error: ``
+  - Pred SQL: `SELECT min(price) AS min_price, max(price) AS max_price, round(avg(price), 2) AS avg_price FROM analytics.products`
+- `AG-010` exec-failed: How many sessions are there per device type?
+  - Error: ``
+  - Pred SQL: `SELECT device_type, count() AS session_count FROM analytics.sessions GROUP BY device_type ORDER BY session_count DESC`
+- `AG-011` exec-failed: What is the average session duration for converted versus non-converted sessions?
+  - Error: ``
+  - Pred SQL: `SELECT round(avgIf(duration_seconds, is_converted = 1), 2) AS avg_converted_session_duration, round(avgIf(duration_seconds, is_converted = 0), 2) AS avg_non_converted_session_duration FROM analytics.sessions`
+- `AG-012` exec-failed: What is the total lifetime value of users broken down by plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, sum(lifetime_value) AS total_lifetime_value FROM analytics.users GROUP BY plan ORDER BY total_lifetime_value DESC`
+- `AG-013` exec-failed: What are the top 10 browsers by unique user count in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT browser, uniqExactIf(user_id, user_id IS NOT NULL) AS unique_user_count FROM analytics.events GROUP BY browser ORDER BY unique_user_count DESC LIMIT 10`
+- `AG-014` exec-failed: What is the 95th percentile of event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT quantile(0.95)(duration_ms) AS p95_duration_ms FROM analytics.events`
+- `AG-015` exec-failed: Which product categories have more than 50 products and what is their average rating?
+  - Error: ``
+  - Pred SQL: `SELECT category, round(avg(rating), 2) AS avg_rating FROM analytics.products GROUP BY category HAVING count() > 50 ORDER BY avg_rating DESC`
+- `AG-016` exec-failed: For each operating system, what is the average event duration and how many unique sessions are there?
+  - Error: ``
+  - Pred SQL: `SELECT os, round(avg(duration_ms), 2) AS avg_event_duration_ms, uniqExact(session_id) AS unique_sessions FROM analytics.events GROUP BY os ORDER BY os`
+- `AG-017` exec-failed: What is the conversion rate (percentage of converted sessions) by UTM source?
+  - Error: ``
+  - Pred SQL: `SELECT     utm_source,     round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM analytics.sessions WHERE utm_source IS NOT NULL GROUP BY utm_source ORDER BY conversion_rate DESC`
+- `AG-018` exec-failed: What is the average number of pages viewed per session, broken down by device type?
+  - Error: ``
+  - Pred SQL: `SELECT device_type, round(avg(page_count), 2) AS avg_pages_viewed_per_session FROM analytics.sessions GROUP BY device_type ORDER BY avg_pages_viewed_per_session DESC`
+- `AG-019` exec-failed: How many events happened on each date? Show the daily count.
+  - Error: ``
+  - Pred SQL: `SELECT toDate(timestamp) AS date, count() AS daily_count FROM analytics.events GROUP BY date ORDER BY date`
+- `AG-020` exec-failed: What is the median and 95th percentile of session duration in seconds?
+  - Error: ``
+  - Pred SQL: `SELECT quantile(0.5)(duration_seconds) AS median_duration_seconds, quantile(0.95)(duration_seconds) AS p95_duration_seconds FROM analytics.sessions`
+- ... 130 more failures omitted
+
+## gemini_cli/baseline/results.jsonl
+- `AG-001` exec-failed: How many total events are in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT count() FROM analytics.events`
+- `AG-002` exec-failed: How many distinct users are there in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT     uniqExact(user_id) FROM analytics.events WHERE user_id IS NOT NULL`
+- `AG-003` exec-failed: What is the average event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT round(avg(duration_ms), 2) FROM analytics.events`
+- `AG-004` exec-failed: How many events of each type are there?
+  - Error: ``
+  - Pred SQL: `SELECT     event_type,     count() AS count FROM analytics.events GROUP BY event_type ORDER BY count DESC`
+- `AG-005` exec-failed: What percentage of events are bounce events?
+  - Error: ``
+  - Pred SQL: `SELECT round(countIf(is_bounce = 1) * 100.0 / count(), 2) FROM analytics.events`
+- `AG-006` exec-failed: How many events came from each country? Show the top 20.
+  - Error: ``
+  - Pred SQL: `SELECT     country,     count() FROM analytics.events GROUP BY country ORDER BY count() DESC LIMIT 20`
+- `AG-007` exec-failed: What is the total lifetime value of all users?
+  - Error: ``
+  - Pred SQL: ``
+- `AG-008` exec-failed: How many users are on each subscription plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, count() FROM analytics.users GROUP BY plan`
+- `AG-009` exec-failed: What is the minimum, maximum, and average product price?
+  - Error: ``
+  - Pred SQL: `SELECT     min(price),     max(price),     round(avg(price), 2) FROM analytics.products`
+- `AG-010` exec-failed: How many sessions are there per device type?
+  - Error: ``
+  - Pred SQL: `SELECT device_type, count() FROM analytics.sessions GROUP BY device_type`
+- `AG-011` exec-failed: What is the average session duration for converted versus non-converted sessions?
+  - Error: ``
+  - Pred SQL: `SELECT      round(avgIf(duration_seconds, is_converted = 1), 2) AS avg_duration_converted,     round(avgIf(duration_seconds, is_converted = 0), 2) AS avg_duration_non_converted FROM analytics.sessions`
+- `AG-012` exec-failed: What is the total lifetime value of users broken down by plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, sum(lifetime_value) FROM analytics.users GROUP BY plan`
+- `AG-013` exec-failed: What are the top 10 browsers by unique user count in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT     browser,     uniqExact(user_id) AS unique_user_count FROM analytics.events GROUP BY browser ORDER BY unique_user_count DESC LIMIT 10`
+- `AG-014` exec-failed: What is the 95th percentile of event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT quantile(0.95)(duration_ms) FROM analytics.events`
+- `AG-015` exec-failed: Which product categories have more than 50 products and what is their average rating?
+  - Error: ``
+  - Pred SQL: `SELECT     category,     round(avg(rating), 2) FROM analytics.products GROUP BY category HAVING count() > 50`
+- `AG-016` exec-failed: For each operating system, what is the average event duration and how many unique sessions are there?
+  - Error: ``
+  - Pred SQL: `SELECT     os,     round(avg(duration_ms), 2) AS avg_event_duration,     uniqExact(session_id) AS unique_sessions FROM analytics.events GROUP BY os`
+- `AG-017` exec-failed: What is the conversion rate (percentage of converted sessions) by UTM source?
+  - Error: ``
+  - Pred SQL: ``
+- `AG-018` exec-failed: What is the average number of pages viewed per session, broken down by device type?
+  - Error: ``
+  - Pred SQL: `SELECT     device_type,     round(avg(page_count), 2) FROM analytics.sessions GROUP BY device_type`
+- `AG-019` exec-failed: How many events happened on each date? Show the daily count.
+  - Error: ``
+  - Pred SQL: `SELECT     toDate(timestamp) AS event_date,     count() AS daily_count FROM analytics.events GROUP BY event_date ORDER BY event_date`
+- `AG-020` exec-failed: What is the median and 95th percentile of session duration in seconds?
+  - Error: ``
+  - Pred SQL: `SELECT     round(quantile(0.5)(duration_seconds), 2) AS median_duration,     round(quantile(0.95)(duration_seconds), 2) AS p95_duration FROM analytics.sessions`
+- ... 130 more failures omitted
+
+## gemini_cli/best/results.jsonl
+- `AG-001` exec-failed: How many total events are in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT count() FROM analytics.events`
+- `AG-002` exec-failed: How many distinct users are there in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT uniqExact(user_id) FROM analytics.events WHERE user_id IS NOT NULL`
+- `AG-003` exec-failed: What is the average event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT round(avg(duration_ms), 2) FROM analytics.events`
+- `AG-004` exec-failed: How many events of each type are there?
+  - Error: ``
+  - Pred SQL: `SELECT event_type, count() FROM analytics.events GROUP BY event_type`
+- `AG-005` exec-failed: What percentage of events are bounce events?
+  - Error: ``
+  - Pred SQL: `SELECT round(countIf(is_bounce = 1) * 100.0 / count(), 2) FROM analytics.events`
+- `AG-006` exec-failed: How many events came from each country? Show the top 20.
+  - Error: ``
+  - Pred SQL: `SELECT country, count() AS event_count FROM analytics.events GROUP BY country ORDER BY event_count DESC LIMIT 20`
+- `AG-007` exec-failed: What is the total lifetime value of all users?
+  - Error: ``
+  - Pred SQL: `SELECT sum(lifetime_value) FROM analytics.users`
+- `AG-008` exec-failed: How many users are on each subscription plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, count() AS user_count FROM analytics.users GROUP BY plan ORDER BY user_count DESC`
+- `AG-009` exec-failed: What is the minimum, maximum, and average product price?
+  - Error: ``
+  - Pred SQL: `SELECT     min(price) AS min_price,     max(price) AS max_price,     round(avg(price), 2) AS avg_price FROM analytics.products`
+- `AG-010` exec-failed: How many sessions are there per device type?
+  - Error: ``
+  - Pred SQL: `SELECT device_type, count() FROM analytics.sessions GROUP BY device_type`
+- `AG-011` exec-failed: What is the average session duration for converted versus non-converted sessions?
+  - Error: ``
+  - Pred SQL: `SELECT     round(avgIf(duration_seconds, is_converted = 1), 2) AS avg_duration_converted,     round(avgIf(duration_seconds, is_converted = 0), 2) AS avg_duration_non_converted FROM analytics.sessions`
+- `AG-012` exec-failed: What is the total lifetime value of users broken down by plan?
+  - Error: ``
+  - Pred SQL: `SELECT plan, sum(lifetime_value) AS total_ltv FROM analytics.users GROUP BY plan`
+- `AG-013` exec-failed: What are the top 10 browsers by unique user count in the events table?
+  - Error: ``
+  - Pred SQL: `SELECT     browser,     uniqExact(user_id) AS user_count FROM analytics.events WHERE user_id IS NOT NULL GROUP BY browser ORDER BY user_count DESC LIMIT 10`
+- `AG-014` exec-failed: What is the 95th percentile of event duration in milliseconds?
+  - Error: ``
+  - Pred SQL: `SELECT quantile(0.95)(duration_ms) FROM analytics.events`
+- `AG-015` exec-failed: Which product categories have more than 50 products and what is their average rating?
+  - Error: ``
+  - Pred SQL: `SELECT     category,     round(avg(rating), 2) AS avg_rating FROM analytics.products GROUP BY category HAVING count() > 50`
+- `AG-016` exec-failed: For each operating system, what is the average event duration and how many unique sessions are there?
+  - Error: ``
+  - Pred SQL: `SELECT os, round(avg(duration_ms), 2) AS avg_event_duration, uniqExact(session_id) AS unique_session_count FROM analytics.events GROUP BY os`
+- `AG-017` exec-failed: What is the conversion rate (percentage of converted sessions) by UTM source?
+  - Error: ``
+  - Pred SQL: `SELECT     utm_source,     round(countIf(is_converted = 1) * 100.0 / count(), 2) AS conversion_rate FROM analytics.sessions WHERE utm_source IS NOT NULL GROUP BY utm_source ORDER BY conversion_rate DESC`
+- `AG-018` exec-failed: What is the average number of pages viewed per session, broken down by device type?
+  - Error: ``
+  - Pred SQL: `SELECT device_type, round(avg(page_count), 2) AS avg_pages_per_session FROM analytics.sessions GROUP BY device_type ORDER BY avg_pages_per_session DESC`
+- `AG-019` exec-failed: How many events happened on each date? Show the daily count.
+  - Error: ``
+  - Pred SQL: `SELECT toDate(timestamp) AS event_date, count() AS event_count FROM analytics.events GROUP BY event_date ORDER BY event_date`
+- `AG-020` exec-failed: What is the median and 95th percentile of session duration in seconds?
+  - Error: ``
+  - Pred SQL: `SELECT     quantile(0.5)(duration_seconds) AS median_duration_seconds,     quantile(0.95)(duration_seconds) AS p95_duration_seconds FROM analytics.sessions`
+- ... 130 more failures omitted

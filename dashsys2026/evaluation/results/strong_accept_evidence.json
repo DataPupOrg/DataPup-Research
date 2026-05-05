@@ -1,0 +1,214 @@
+{
+  "system_upgrade": {
+    "current_datapup_style": {
+      "label": "Full-schema JSON zero-shot",
+      "execution_accuracy": 0.4867,
+      "result_correctness": 0.1733,
+      "successful_queries": 73,
+      "correct_queries": 26,
+      "total_queries": 150
+    },
+    "revised_datapup_style": {
+      "label": "Markdown relevant-subset descriptions dynamic few-shot",
+      "execution_accuracy": 0.9733,
+      "result_correctness": 0.66,
+      "successful_queries": 146,
+      "correct_queries": 99,
+      "total_queries": 150
+    },
+    "delta_execution_accuracy_pp": 48.7,
+    "delta_result_correctness_pp": 48.7,
+    "mcnemar_current_only": 3,
+    "mcnemar_revised_only": 76,
+    "mcnemar_exact_p": 2.72109334305444e-19
+  },
+  "semantic_assumptions": {
+    "total_best_cli_queries": 450,
+    "correct": 240,
+    "wrong_executed": 198,
+    "failure_counts": {
+      "Correct": 240,
+      "Wrong granularity or filter": 66,
+      "Grouping-key mismatch": 26,
+      "Projection mismatch": 48,
+      "Missing filter assumption": 23,
+      "Other wrong result": 3,
+      "Residual execution error": 2,
+      "Wrong values or ranking": 32,
+      "Timeout / empty output": 10
+    },
+    "assumption_tag_counts": {
+      "metric definition": 127,
+      "ranking / tie-break": 192,
+      "grouping key": 94,
+      "time window / bucket": 97,
+      "filter / predicate": 120,
+      "JSON property": 11,
+      "join path": 46,
+      "window frame": 56
+    },
+    "assumption_tag_counts_by_model": {
+      "claude_cli": {
+        "metric definition": 40,
+        "ranking / tie-break": 63,
+        "grouping key": 29,
+        "time window / bucket": 31,
+        "filter / predicate": 40,
+        "JSON property": 4,
+        "join path": 14,
+        "window frame": 19
+      },
+      "codex_cli": {
+        "metric definition": 50,
+        "ranking / tie-break": 71,
+        "grouping key": 38,
+        "time window / bucket": 35,
+        "filter / predicate": 44,
+        "JSON property": 4,
+        "join path": 18,
+        "window frame": 22
+      },
+      "gemini_cli": {
+        "metric definition": 37,
+        "ranking / tie-break": 58,
+        "grouping key": 27,
+        "time window / bucket": 31,
+        "filter / predicate": 36,
+        "join path": 14,
+        "JSON property": 3,
+        "window frame": 15
+      }
+    },
+    "examples": [
+      {
+        "model": "claude_cli",
+        "query_id": "AG-011",
+        "category": "Aggregation",
+        "natural_language": "What is the average session duration for converted versus non-converted sessions?",
+        "assumption_tags": [
+          "grouping key",
+          "metric definition",
+          "ranking / tie-break"
+        ],
+        "comparison_details": "Row-count mismatch: predicted=1, gold=2."
+      },
+      {
+        "model": "claude_cli",
+        "query_id": "AG-022",
+        "category": "Aggregation",
+        "natural_language": "For each date, find the page URL that received the most page view events.",
+        "assumption_tags": [
+          "filter / predicate",
+          "grouping key",
+          "metric definition",
+          "ranking / tie-break",
+          "time window / bucket"
+        ],
+        "comparison_details": "SEMANTIC match failed. Unmatched gold row: ('2023-01-01', 'https://example.com/contact', 24). Unmatched gold row: ('2023-01-09', 'https://example.com/account', 34). Unmatched gold row: ('2023-01-19', 'https://example.com/account', 28). ... and 58 more unmatched gold row(s)."
+      },
+      {
+        "model": "claude_cli",
+        "query_id": "AG-024",
+        "category": "Aggregation",
+        "natural_language": "For each product category, what is the average rating weighted by review count, and collect the top 3 product names by rating into an array?",
+        "assumption_tags": [
+          "grouping key",
+          "metric definition",
+          "ranking / tie-break"
+        ],
+        "comparison_details": "Column alignment applied (projected gold from 4 cols to 3 cols matching predicted). SEMANTIC match failed. Unmatched gold row: ('Beauty', 3.1556051944169847, ['Automated explicit customer loyalty', 'Focused executive strategy', 'Progressive responsive success']). Unmatched gold row: ('Clothing', 3.098624564446258, ['Front-line impactful capability', 'Progressive background project', 'Profit-focused human-resource Local Area Network']). Unmatched gold row: ('Home & Garden', 3.06740110019616, ['Streamlined zero administration neural-net', 'Visionary clear-thinking productivity', 'Innovative methodical adapter']). ... and 4 more unmatched gold row(s)."
+      },
+      {
+        "model": "claude_cli",
+        "query_id": "AG-026",
+        "category": "Aggregation",
+        "natural_language": "Collect all distinct UTM campaigns per UTM source into an array, but only for sources that have at least 3 distinct campaigns.",
+        "assumption_tags": [
+          "filter / predicate",
+          "grouping key",
+          "ranking / tie-break"
+        ],
+        "comparison_details": "SEMANTIC match failed. Unmatched gold row: ('linkedin', ['webinar_series', 'spring_sale', 'newsletter_mar', 'newsletter_feb', 'black_friday', 'new_year_2024', 'holiday_2023', 'product_launch', 'summer_launch', 'retargeting_q1', 'newsletter_jan', 'brand_awareness']). Unmatched gold row: ('tiktok', ['newsletter_mar', 'spring_sale', 'black_friday', 'product_launch', 'newsletter_jan', 'holiday_2023', 'webinar_series', 'brand_awareness', 'summer_launch', 'retargeting_q1', 'new_year_2024', 'newsletter_feb']). Unmatched gold row: ('twitter', ['holiday_2023', 'webinar_series', 'brand_awareness', 'spring_sale', 'newsletter_feb', 'new_year_2024', 'summer_launch', 'newsletter_jan', 'product_launch', 'black_friday', 'retargeting_q1', 'newsletter_mar']). ... and 5 more unmatched gold row(s)."
+      },
+      {
+        "model": "claude_cli",
+        "query_id": "AG-028",
+        "category": "Aggregation",
+        "natural_language": "Which product subcategory-country combinations have the highest total purchase revenue? Show the top 10, using the events and products tables.",
+        "assumption_tags": [
+          "JSON property",
+          "filter / predicate",
+          "grouping key",
+          "join path",
+          "metric definition",
+          "ranking / tie-break"
+        ],
+        "comparison_details": "SEMANTIC match failed. Unmatched gold row: ('T-Shirts', 'ES', 0)."
+      },
+      {
+        "model": "claude_cli",
+        "query_id": "AG-029",
+        "category": "Aggregation",
+        "natural_language": "For each hour of the day, compute the average number of events and the average session duration, using both the events and sessions tables.",
+        "assumption_tags": [
+          "grouping key",
+          "join path",
+          "metric definition",
+          "ranking / tie-break",
+          "time window / bucket"
+        ],
+        "comparison_details": "SEMANTIC match failed. Unmatched gold row: (0, 20904, 295.55130057803467). Unmatched gold row: (1, 20923, 307.2815833135814). Unmatched gold row: (2, 21106, 295.3498216409037). ... and 21 more unmatched gold row(s)."
+      },
+      {
+        "model": "claude_cli",
+        "query_id": "CS-002",
+        "category": "ClickHouse_Specific",
+        "natural_language": "Find users who have the tag 'power_user' in their tags array.",
+        "assumption_tags": [
+          "filter / predicate",
+          "ranking / tie-break"
+        ],
+        "comparison_details": "SEMANTIC match failed. Unmatched gold row: (8, 'Amy Shannon', 'williamsmelvin@example.org', ['multi_device', 'power_user', 'influencer', 'trial_user']). Unmatched gold row: (12, 'Kim Morrow', 'goodsteven@example.net', ['mobile_only', 'influencer', 'power_user', 'vip']). Unmatched gold row: (14, 'Kyle Warner', 'allencarlos@example.net', ['influencer', 'power_user']). ... and 1328 more unmatched gold row(s)."
+      },
+      {
+        "model": "claude_cli",
+        "query_id": "CS-003",
+        "category": "ClickHouse_Specific",
+        "natural_language": "Show the numeric value of each plan tier for all users.",
+        "assumption_tags": [
+          "ranking / tie-break"
+        ],
+        "comparison_details": "Row-count mismatch: predicted=10000, gold=20."
+      }
+    ]
+  },
+  "duckdb_validation": {
+    "portable_gold_queries": 130,
+    "baseline": {
+      "model_name": "claude_cli",
+      "config": "baseline",
+      "db_path": "evaluation/duckdb/datapup.duckdb",
+      "total": 130,
+      "portable_gold_queries": 130,
+      "model_success_rate": 1.0,
+      "execution_rate": 0.9769230769230769,
+      "result_correctness": 0.6076923076923076,
+      "avg_partial_score": 0.6216370379056837,
+      "avg_prompt_chars": 1075.2769230769231
+    },
+    "best": {
+      "model_name": "claude_cli",
+      "config": "best",
+      "db_path": "evaluation/duckdb/datapup.duckdb",
+      "total": 130,
+      "portable_gold_queries": 130,
+      "model_success_rate": 1.0,
+      "execution_rate": 1.0,
+      "result_correctness": 0.6076923076923076,
+      "avg_partial_score": 0.6352581002085711,
+      "avg_prompt_chars": 2892.276923076923
+    },
+    "delta_result_correctness_pp": 0.0,
+    "delta_execution_rate_pp": 2.3
+  }
+}

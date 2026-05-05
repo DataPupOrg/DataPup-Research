@@ -1,0 +1,51 @@
+{
+  "model_name": "gemini_cli",
+  "config": "best",
+  "path": "evaluation/results/cli_runs_full_generation/gemini_cli/best/results.jsonl",
+  "total": 150,
+  "final_execution_rate": 0.9333333333333333,
+  "gold_execution_rate": 1.0,
+  "result_correctness": 0.5333333333333333,
+  "avg_partial_score": 0.5395987731078504,
+  "repair_attempts": 1,
+  "repair_successes": 1,
+  "avg_repair_latency_ms": 935.4948,
+  "per_category": {
+    "Aggregation": {
+      "total": 30,
+      "executed": 30,
+      "correct": 25,
+      "repair_successes": 0
+    },
+    "ClickHouse_Specific": {
+      "total": 20,
+      "executed": 20,
+      "correct": 11,
+      "repair_successes": 1
+    },
+    "Complex_JOINs": {
+      "total": 20,
+      "executed": 20,
+      "correct": 8,
+      "repair_successes": 0
+    },
+    "Simple-SELECT": {
+      "total": 25,
+      "executed": 25,
+      "correct": 14,
+      "repair_successes": 0
+    },
+    "Time_Series": {
+      "total": 30,
+      "executed": 28,
+      "correct": 18,
+      "repair_successes": 0
+    },
+    "Window_Functions": {
+      "total": 25,
+      "executed": 17,
+      "correct": 4,
+      "repair_successes": 0
+    }
+  }
+}

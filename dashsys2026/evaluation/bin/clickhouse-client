@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+CLICKHOUSE_BIN="${DATAPUP_CLICKHOUSE_BIN:-$(cd "$ROOT_DIR/.." && pwd)/clickhouse}"
+
+if [[ ! -x "$CLICKHOUSE_BIN" ]]; then
+  echo "ClickHouse binary not found or not executable: $CLICKHOUSE_BIN" >&2
+  exit 127
+fi
+
+exec "$CLICKHOUSE_BIN" client "$@"

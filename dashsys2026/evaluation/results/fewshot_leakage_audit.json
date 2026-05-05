@@ -1,0 +1,53 @@
+{
+  "n_eval_queries": 150,
+  "n_example_pool": 44,
+  "exact_natural_language_overlaps": [],
+  "exact_gold_sql_overlaps": [
+    "AG-008"
+  ],
+  "near_duplicate_question_threshold_jaccard": 0.8,
+  "near_duplicate_question_overlaps": [
+    [
+      "AG-008",
+      "How many users are on each subscription plan?",
+      0.875
+    ],
+    [
+      "CS-002",
+      "Find users who have the tag 'power_user' in their tags array.",
+      0.8333333333333334
+    ],
+    [
+      "TS-009",
+      "What is the month-over-month growth rate of total events?",
+      0.8181818181818182
+    ]
+  ],
+  "selected_exact_sql_overlaps": [
+    [
+      "AG-008",
+      "How many users are on each subscription plan?",
+      "How many users are on each plan?"
+    ]
+  ],
+  "selected_high_question_similarity": [
+    [
+      "AG-008",
+      "How many users are on each subscription plan?",
+      "How many users are on each plan?",
+      0.875
+    ],
+    [
+      "CS-002",
+      "Find users who have the tag 'power_user' in their tags array.",
+      "Find users who have the tag 'beta_tester' in their tags array.",
+      0.833
+    ],
+    [
+      "TS-009",
+      "What is the month-over-month growth rate of total events?",
+      "What is the month-over-month growth rate of purchase events?",
+      0.818
+    ]
+  ]
+}

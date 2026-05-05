@@ -1,0 +1,56 @@
+{
+  "model_name": "gemini_cli",
+  "config": "baseline",
+  "dataset": "custom_analytics",
+  "execute": false,
+  "repair_on_error": false,
+  "total_queries": 150,
+  "model_success_rate": 0.8866666666666667,
+  "execution_accuracy": 0.0,
+  "gold_execution_accuracy": 0.0,
+  "result_correctness": 0.0,
+  "repair_successes": 0,
+  "repair_attempts": 0,
+  "avg_prompt_tokens_estimate": 2577.9333333333334,
+  "avg_model_latency_ms": 108975.0346,
+  "avg_sql_latency_ms": 0.0,
+  "avg_trace_steps": 2.0,
+  "per_category": {
+    "Aggregation": {
+      "total": 30,
+      "model_success": 30,
+      "pred_executed": 0,
+      "correct": 0
+    },
+    "ClickHouse_Specific": {
+      "total": 20,
+      "model_success": 20,
+      "pred_executed": 0,
+      "correct": 0
+    },
+    "Complex_JOINs": {
+      "total": 20,
+      "model_success": 20,
+      "pred_executed": 0,
+      "correct": 0
+    },
+    "Simple-SELECT": {
+      "total": 25,
+      "model_success": 17,
+      "pred_executed": 0,
+      "correct": 0
+    },
+    "Time_Series": {
+      "total": 30,
+      "model_success": 21,
+      "pred_executed": 0,
+      "correct": 0
+    },
+    "Window_Functions": {
+      "total": 25,
+      "model_success": 25,
+      "pred_executed": 0,
+      "correct": 0
+    }
+  }
+}

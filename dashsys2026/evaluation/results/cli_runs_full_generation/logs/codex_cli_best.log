@@ -1,0 +1,305 @@
+[1/150] codex_cli/best: AG-001
+  SQL | tok~3554 | model 11218ms | repairs=0
+[2/150] codex_cli/best: AG-002
+  SQL | tok~3590 | model 12013ms | repairs=0
+[3/150] codex_cli/best: AG-003
+  SQL | tok~3429 | model 9560ms | repairs=0
+[4/150] codex_cli/best: AG-004
+  SQL | tok~3002 | model 10513ms | repairs=0
+[5/150] codex_cli/best: AG-005
+  SQL | tok~2657 | model 7178ms | repairs=0
+[6/150] codex_cli/best: AG-006
+  SQL | tok~3441 | model 9780ms | repairs=0
+[7/150] codex_cli/best: AG-007
+  SQL | tok~3690 | model 7336ms | repairs=0
+[8/150] codex_cli/best: AG-008
+  SQL | tok~2436 | model 8501ms | repairs=0
+[9/150] codex_cli/best: AG-009
+  SQL | tok~3416 | model 9069ms | repairs=0
+[10/150] codex_cli/best: AG-010
+  SQL | tok~3004 | model 7033ms | repairs=0
+[11/150] codex_cli/best: AG-011
+  SQL | tok~3461 | model 10055ms | repairs=0
+[12/150] codex_cli/best: AG-012
+  SQL | tok~3648 | model 10297ms | repairs=0
+[13/150] codex_cli/best: AG-013
+  SQL | tok~3642 | model 11990ms | repairs=0
+[14/150] codex_cli/best: AG-014
+  SQL | tok~3395 | model 8013ms | repairs=0
+[15/150] codex_cli/best: AG-015
+  SQL | tok~3412 | model 10960ms | repairs=0
+[16/150] codex_cli/best: AG-016
+  SQL | tok~3462 | model 8394ms | repairs=0
+[17/150] codex_cli/best: AG-017
+  SQL | tok~3520 | model 11858ms | repairs=0
+[18/150] codex_cli/best: AG-018
+  SQL | tok~3471 | model 11580ms | repairs=0
+[19/150] codex_cli/best: AG-019
+  SQL | tok~3124 | model 10181ms | repairs=0
+[20/150] codex_cli/best: AG-020
+  SQL | tok~3381 | model 8594ms | repairs=0
+[21/150] codex_cli/best: AG-021
+  SQL | tok~3552 | model 12079ms | repairs=0
+[22/150] codex_cli/best: AG-022
+  SQL | tok~3553 | model 13761ms | repairs=0
+[23/150] codex_cli/best: AG-023
+  SQL | tok~3432 | model 11743ms | repairs=0
+[24/150] codex_cli/best: AG-024
+  SQL | tok~3740 | model 15636ms | repairs=0
+[25/150] codex_cli/best: AG-025
+  SQL | tok~3664 | model 15368ms | repairs=0
+[26/150] codex_cli/best: AG-026
+  SQL | tok~3026 | model 13631ms | repairs=0
+[27/150] codex_cli/best: AG-027
+  SQL | tok~3367 | model 11104ms | repairs=0
+[28/150] codex_cli/best: AG-028
+  SQL | tok~3838 | model 9080ms | repairs=0
+[29/150] codex_cli/best: AG-029
+  SQL | tok~3311 | model 11638ms | repairs=0
+[30/150] codex_cli/best: AG-030
+  SQL | tok~3779 | model 14064ms | repairs=0
+[31/150] codex_cli/best: CS-001
+  SQL | tok~3126 | model 8805ms | repairs=0
+[32/150] codex_cli/best: CS-002
+  SQL | tok~2821 | model 10925ms | repairs=0
+[33/150] codex_cli/best: CS-003
+  SQL | tok~2554 | model 13957ms | repairs=0
+[34/150] codex_cli/best: CS-004
+  SQL | tok~3561 | model 10825ms | repairs=0
+[35/150] codex_cli/best: CS-005
+  SQL | tok~3792 | model 9075ms | repairs=0
+[36/150] codex_cli/best: CS-006
+  SQL | tok~2843 | model 8690ms | repairs=0
+[37/150] codex_cli/best: CS-007
+  SQL | tok~3808 | model 7269ms | repairs=0
+[38/150] codex_cli/best: CS-008
+  SQL | tok~3411 | model 10406ms | repairs=0
+[39/150] codex_cli/best: CS-009
+  SQL | tok~3703 | model 11326ms | repairs=0
+[40/150] codex_cli/best: CS-010
+  SQL | tok~3221 | model 13227ms | repairs=0
+[41/150] codex_cli/best: CS-011
+  SQL | tok~3522 | model 17037ms | repairs=0
+[42/150] codex_cli/best: CS-012
+  SQL | tok~3662 | model 8640ms | repairs=0
+[43/150] codex_cli/best: CS-013
+  SQL | tok~3495 | model 14455ms | repairs=0
+[44/150] codex_cli/best: CS-014
+  SQL | tok~3136 | model 19703ms | repairs=0
+[45/150] codex_cli/best: CS-015
+  SQL | tok~3700 | model 11832ms | repairs=0
+[46/150] codex_cli/best: CS-016
+  SQL | tok~3788 | model 15404ms | repairs=0
+[47/150] codex_cli/best: CS-017
+  SQL | tok~3407 | model 15692ms | repairs=0
+[48/150] codex_cli/best: CS-018
+  SQL | tok~2887 | model 14846ms | repairs=0
+[49/150] codex_cli/best: CS-019
+  SQL | tok~3432 | model 15448ms | repairs=0
+[50/150] codex_cli/best: CS-020
+  SQL | tok~3771 | model 13382ms | repairs=0
+[51/150] codex_cli/best: CJ-001
+  SQL | tok~3814 | model 13293ms | repairs=0
+[52/150] codex_cli/best: CJ-002
+  SQL | tok~3006 | model 13905ms | repairs=0
+[53/150] codex_cli/best: CJ-003
+  SQL | tok~3738 | model 20337ms | repairs=0
+[54/150] codex_cli/best: CJ-004
+  SQL | tok~3200 | model 16791ms | repairs=0
+[55/150] codex_cli/best: CJ-005
+  SQL | tok~3842 | model 14740ms | repairs=0
+[56/150] codex_cli/best: CJ-006
+  SQL | tok~3513 | model 11706ms | repairs=0
+[57/150] codex_cli/best: CJ-007
+  SQL | tok~3839 | model 13838ms | repairs=0
+[58/150] codex_cli/best: CJ-008
+  SQL | tok~3699 | model 15694ms | repairs=0
+[59/150] codex_cli/best: CJ-009
+  SQL | tok~2619 | model 13835ms | repairs=0
+[60/150] codex_cli/best: CJ-010
+  SQL | tok~3456 | model 13637ms | repairs=0
+[61/150] codex_cli/best: CJ-011
+  SQL | tok~3458 | model 15766ms | repairs=0
+[62/150] codex_cli/best: CJ-012
+  SQL | tok~3424 | model 14610ms | repairs=0
+[63/150] codex_cli/best: CJ-013
+  SQL | tok~3455 | model 13754ms | repairs=0
+[64/150] codex_cli/best: CJ-014
+  SQL | tok~3532 | model 13490ms | repairs=0
+[65/150] codex_cli/best: CJ-015
+  SQL | tok~3510 | model 12875ms | repairs=0
+[66/150] codex_cli/best: CJ-016
+  SQL | tok~3816 | model 13567ms | repairs=0
+[67/150] codex_cli/best: CJ-017
+  SQL | tok~3742 | model 15677ms | repairs=0
+[68/150] codex_cli/best: CJ-018
+  SQL | tok~3512 | model 16181ms | repairs=0
+[69/150] codex_cli/best: CJ-019
+  SQL | tok~3563 | model 15496ms | repairs=0
+[70/150] codex_cli/best: CJ-020
+  SQL | tok~3694 | model 15270ms | repairs=0
+[71/150] codex_cli/best: SS-001
+  SQL | tok~3088 | model 13149ms | repairs=0
+[72/150] codex_cli/best: SS-002
+  SQL | tok~3017 | model 9288ms | repairs=0
+[73/150] codex_cli/best: SS-003
+  SQL | tok~3599 | model 13519ms | repairs=0
+[74/150] codex_cli/best: SS-004
+  SQL | tok~3149 | model 12096ms | repairs=0
+[75/150] codex_cli/best: SS-005
+  SQL | tok~3089 | model 7573ms | repairs=0
+[76/150] codex_cli/best: SS-006
+  SQL | tok~2513 | model 12248ms | repairs=0
+[77/150] codex_cli/best: SS-007
+  SQL | tok~2531 | model 12520ms | repairs=0
+[78/150] codex_cli/best: SS-008
+  SQL | tok~3642 | model 7355ms | repairs=0
+[79/150] codex_cli/best: SS-009
+  SQL | tok~2805 | model 11422ms | repairs=0
+[80/150] codex_cli/best: SS-010
+  SQL | tok~3804 | model 12127ms | repairs=0
+[81/150] codex_cli/best: SS-011
+  SQL | tok~2552 | model 15076ms | repairs=0
+[82/150] codex_cli/best: SS-012
+  SQL | tok~3164 | model 12575ms | repairs=0
+[83/150] codex_cli/best: SS-013
+  SQL | tok~3762 | model 12026ms | repairs=0
+[84/150] codex_cli/best: SS-014
+  SQL | tok~2855 | model 13652ms | repairs=0
+[85/150] codex_cli/best: SS-015
+  SQL | tok~3407 | model 9274ms | repairs=0
+[86/150] codex_cli/best: SS-016
+  SQL | tok~3772 | model 10954ms | repairs=0
+[87/150] codex_cli/best: SS-017
+  SQL | tok~3748 | model 9372ms | repairs=0
+[88/150] codex_cli/best: SS-018
+  SQL | tok~3696 | model 9655ms | repairs=0
+[89/150] codex_cli/best: SS-019
+  SQL | tok~3855 | model 10215ms | repairs=0
+[90/150] codex_cli/best: SS-020
+  SQL | tok~2806 | model 14269ms | repairs=0
+[91/150] codex_cli/best: SS-021
+  SQL | tok~2819 | model 8263ms | repairs=0
+[92/150] codex_cli/best: SS-022
+  SQL | tok~2842 | model 10981ms | repairs=0
+[93/150] codex_cli/best: SS-023
+  SQL | tok~3252 | model 11248ms | repairs=0
+[94/150] codex_cli/best: SS-024
+  SQL | tok~2532 | model 14866ms | repairs=0
+[95/150] codex_cli/best: SS-025
+  SQL | tok~3708 | model 13356ms | repairs=0
+[96/150] codex_cli/best: TS-001
+  SQL | tok~3551 | model 7633ms | repairs=0
+[97/150] codex_cli/best: TS-002
+  SQL | tok~3731 | model 7439ms | repairs=0
+[98/150] codex_cli/best: TS-003
+  SQL | tok~3643 | model 9922ms | repairs=0
+[99/150] codex_cli/best: TS-004
+  SQL | tok~3629 | model 12664ms | repairs=0
+[100/150] codex_cli/best: TS-005
+  SQL | tok~3705 | model 6955ms | repairs=0
+[101/150] codex_cli/best: TS-006
+  SQL | tok~3180 | model 13931ms | repairs=0
+[102/150] codex_cli/best: TS-007
+  SQL | tok~2551 | model 15455ms | repairs=0
+[103/150] codex_cli/best: TS-008
+  SQL | tok~3648 | model 11707ms | repairs=0
+[104/150] codex_cli/best: TS-009
+  SQL | tok~3427 | model 12099ms | repairs=0
+[105/150] codex_cli/best: TS-010
+  SQL | tok~3194 | model 12878ms | repairs=0
+[106/150] codex_cli/best: TS-011
+  SQL | tok~2685 | model 18202ms | repairs=0
+[107/150] codex_cli/best: TS-012
+  SQL | tok~3314 | model 15436ms | repairs=0
+[108/150] codex_cli/best: TS-013
+  SQL | tok~3504 | model 14728ms | repairs=0
+[109/150] codex_cli/best: TS-014
+  SQL | tok~3753 | model 14626ms | repairs=0
+[110/150] codex_cli/best: TS-015
+  SQL | tok~3731 | model 16161ms | repairs=0
+[111/150] codex_cli/best: TS-016
+  SQL | tok~2545 | model 7890ms | repairs=0
+[112/150] codex_cli/best: TS-017
+  SQL | tok~3730 | model 12786ms | repairs=0
+[113/150] codex_cli/best: TS-018
+  SQL | tok~3710 | model 13735ms | repairs=0
+[114/150] codex_cli/best: TS-019
+  SQL | tok~3078 | model 15306ms | repairs=0
+[115/150] codex_cli/best: TS-020
+  SQL | tok~3718 | model 13016ms | repairs=0
+[116/150] codex_cli/best: TS-021
+  SQL | tok~3386 | model 9712ms | repairs=0
+[117/150] codex_cli/best: TS-022
+  SQL | tok~3701 | model 10113ms | repairs=0
+[118/150] codex_cli/best: TS-023
+  SQL | tok~3407 | model 12918ms | repairs=0
+[119/150] codex_cli/best: TS-024
+  SQL | tok~2738 | model 14813ms | repairs=0
+[120/150] codex_cli/best: TS-025
+  SQL | tok~3234 | model 13337ms | repairs=0
+[121/150] codex_cli/best: TS-026
+  SQL | tok~3429 | model 15912ms | repairs=0
+[122/150] codex_cli/best: TS-027
+  SQL | tok~3107 | model 14504ms | repairs=0
+[123/150] codex_cli/best: TS-028
+  SQL | tok~3682 | model 13020ms | repairs=0
+[124/150] codex_cli/best: TS-029
+  SQL | tok~2889 | model 13425ms | repairs=0
+[125/150] codex_cli/best: TS-030
+  SQL | tok~3538 | model 14345ms | repairs=0
+[126/150] codex_cli/best: WF-001
+  SQL | tok~2550 | model 12306ms | repairs=0
+[127/150] codex_cli/best: WF-002
+  SQL | tok~3142 | model 14111ms | repairs=0
+[128/150] codex_cli/best: WF-003
+  SQL | tok~2571 | model 9352ms | repairs=0
+[129/150] codex_cli/best: WF-004
+  SQL | tok~2537 | model 13372ms | repairs=0
+[130/150] codex_cli/best: WF-005
+  SQL | tok~3720 | model 13418ms | repairs=0
+[131/150] codex_cli/best: WF-006
+  SQL | tok~3186 | model 14738ms | repairs=0
+[132/150] codex_cli/best: WF-007
+  SQL | tok~3428 | model 15076ms | repairs=0
+[133/150] codex_cli/best: WF-008
+  SQL | tok~3166 | model 9839ms | repairs=0
+[134/150] codex_cli/best: WF-009
+  SQL | tok~3126 | model 13583ms | repairs=0
+[135/150] codex_cli/best: WF-010
+  SQL | tok~3423 | model 13726ms | repairs=0
+[136/150] codex_cli/best: WF-011
+  SQL | tok~3359 | model 13057ms | repairs=0
+[137/150] codex_cli/best: WF-012
+  SQL | tok~3147 | model 12291ms | repairs=0
+[138/150] codex_cli/best: WF-013
+  SQL | tok~2628 | model 11115ms | repairs=0
+[139/150] codex_cli/best: WF-014
+  SQL | tok~3150 | model 8239ms | repairs=0
+[140/150] codex_cli/best: WF-015
+  SQL | tok~3431 | model 9407ms | repairs=0
+[141/150] codex_cli/best: WF-016
+  SQL | tok~3479 | model 16675ms | repairs=0
+[142/150] codex_cli/best: WF-017
+  SQL | tok~3156 | model 13874ms | repairs=0
+[143/150] codex_cli/best: WF-018
+  SQL | tok~3759 | model 13017ms | repairs=0
+[144/150] codex_cli/best: WF-019
+  SQL | tok~3438 | model 12363ms | repairs=0
+[145/150] codex_cli/best: WF-020
+  SQL | tok~3472 | model 13221ms | repairs=0
+[146/150] codex_cli/best: WF-021
+  SQL | tok~3537 | model 13994ms | repairs=0
+[147/150] codex_cli/best: WF-022
+  SQL | tok~3489 | model 13149ms | repairs=0
+[148/150] codex_cli/best: WF-023
+  SQL | tok~3463 | model 12426ms | repairs=0
+[149/150] codex_cli/best: WF-024
+  SQL | tok~3422 | model 17440ms | repairs=0
+[150/150] codex_cli/best: WF-025
+  SQL | tok~3122 | model 14937ms | repairs=0
+
+Wrote:
+  evaluation/results/cli_runs_full_generation/codex_cli/best/results.jsonl
+  evaluation/results/cli_runs_full_generation/codex_cli/best/summary.json
+  evaluation/results/cli_runs_full_generation/codex_cli/best/results.csv

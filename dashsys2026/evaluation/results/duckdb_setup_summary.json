@@ -1,0 +1,11 @@
+{
+  "db_path": "evaluation/duckdb/datapup.duckdb",
+  "scale": 0.1,
+  "seed": 42,
+  "row_counts": {
+    "analytics.products": 100,
+    "analytics.users": 1000,
+    "analytics.sessions": 10000,
+    "analytics.events": 50000
+  }
+}

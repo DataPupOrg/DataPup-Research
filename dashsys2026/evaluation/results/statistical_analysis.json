@@ -1,0 +1,1384 @@
+{
+  "metadata": {
+    "alpha": 0.05,
+    "bootstrap_n": 10000,
+    "bootstrap_ci_level": 0.95,
+    "n_queries": 150,
+    "correction_method": "Holm-Bonferroni",
+    "test_method": "McNemar's exact test (binomial when discordant < 25, chi-squared otherwise)"
+  },
+  "research_questions": {
+    "RQ1_Schema_Format": {
+      "configs": {
+        "DDL (CREATE TABLE)": {
+          "n_queries": 150,
+          "EX_rate": 0.9067,
+          "RC_rate": 0.2933,
+          "EX_count": 136,
+          "RC_count": 44,
+          "avg_input_tokens": 1402.8,
+          "avg_output_tokens": 100.7,
+          "avg_latency_ms": 2530.5,
+          "avg_schema_f1": 0.8076
+        },
+        "Markdown": {
+          "n_queries": 150,
+          "EX_rate": 0.9267,
+          "RC_rate": 0.3067,
+          "EX_count": 139,
+          "RC_count": 46,
+          "avg_input_tokens": 1828.8,
+          "avg_output_tokens": 105.1,
+          "avg_latency_ms": 2614.4,
+          "avg_schema_f1": 0.836
+        },
+        "JSON": {
+          "n_queries": 150,
+          "EX_rate": 0.4867,
+          "RC_rate": 0.1733,
+          "EX_count": 73,
+          "RC_count": 26,
+          "avg_input_tokens": 3565.8,
+          "avg_output_tokens": 101.4,
+          "avg_latency_ms": 2767.2,
+          "avg_schema_f1": 0.8251
+        },
+        "Natural Language": {
+          "n_queries": 150,
+          "EX_rate": 0.0,
+          "RC_rate": 0.0,
+          "EX_count": 0,
+          "RC_count": 0,
+          "avg_input_tokens": 1283.8,
+          "avg_output_tokens": 103.1,
+          "avg_latency_ms": 2742.1,
+          "avg_schema_f1": 0.81
+        }
+      },
+      "pairwise_tests": {
+        "EX": [
+          {
+            "config_a": "DDL (CREATE TABLE)",
+            "config_b": "Natural Language",
+            "value_a": 0.9067,
+            "value_b": 0.0,
+            "difference": 0.9067,
+            "p_value_raw": 0.0,
+            "p_value_corrected": 0.0,
+            "significant": true,
+            "effect_size_cohens_h": 2.5207,
+            "effect_interpretation": "large",
+            "n_discordant": 136,
+            "n_total": 150
+          },
+          {
+            "config_a": "Markdown",
+            "config_b": "Natural Language",
+            "value_a": 0.9267,
+            "value_b": 0.0,
+            "difference": 0.9267,
+            "p_value_raw": 0.0,
+            "p_value_corrected": 0.0,
+            "significant": true,
+            "effect_size_cohens_h": 2.5931,
+            "effect_interpretation": "large",
+            "n_discordant": 139,
+            "n_total": 150
+          },
+          {
+            "config_a": "JSON",
+            "config_b": "Natural Language",
+            "value_a": 0.4867,
+            "value_b": 0.0,
+            "difference": 0.4867,
+            "p_value_raw": 0.0,
+            "p_value_corrected": 0.0,
+            "significant": true,
+            "effect_size_cohens_h": 1.5441,
+            "effect_interpretation": "large",
+            "n_discordant": 73,
+            "n_total": 150
+          },
+          {
+            "config_a": "Markdown",
+            "config_b": "JSON",
+            "value_a": 0.9267,
+            "value_b": 0.4867,
+            "difference": 0.44,
+            "p_value_raw": 0.0,
+            "p_value_corrected": 0.0,
+            "significant": true,
+            "effect_size_cohens_h": 1.049,
+            "effect_interpretation": "large",
+            "n_discordant": 76,
+            "n_total": 150
+          },
+          {
+            "config_a": "DDL (CREATE TABLE)",
+            "config_b": "JSON",
+            "value_a": 0.9067,
+            "value_b": 0.4867,
+            "difference": 0.42,
+            "p_value_raw": 0.0,
+            "p_value_corrected": 0.0,
+            "significant": true,
+            "effect_size_cohens_h": 0.9765,
+            "effect_interpretation": "large",
+            "n_discordant": 73,
+            "n_total": 150
+          },
+          {
+            "config_a": "DDL (CREATE TABLE)",
+            "config_b": "Markdown",
+            "value_a": 0.9067,
+            "value_b": 0.9267,
+            "difference": -0.02,
+            "p_value_raw": 0.581055,
+            "p_value_corrected": 0.581055,
+            "significant": false,
+            "effect_size_cohens_h": -0.0725,
+            "effect_interpretation": "negligible",
+            "n_discordant": 13,
+            "n_total": 150
+          }
+        ],
+        "RC": [
+          {
+            "config_a": "Markdown",
+            "config_b": "Natural Language",
+            "value_a": 0.3067,
+            "value_b": 0.0,
+            "difference": 0.3067,
+            "p_value_raw": 0.0,
+            "p_value_corrected": 0.0,
+            "significant": true,
+            "effect_size_cohens_h": 1.1738,
+            "effect_interpretation": "large",
+            "n_discordant": 46,
+            "n_total": 150
+          },
+          {
+            "config_a": "DDL (CREATE TABLE)",
+            "config_b": "Natural Language",
+            "value_a": 0.2933,
+            "value_b": 0.0,
+            "difference": 0.2933,
+            "p_value_raw": 0.0,
+            "p_value_corrected": 0.0,
+            "significant": true,
+            "effect_size_cohens_h": 1.1447,
+            "effect_interpretation": "large",
+            "n_discordant": 44,
+            "n_total": 150
+          },
+          {
+            "config_a": "JSON",
+            "config_b": "Natural Language",
+            "value_a": 0.1733,
+            "value_b": 0.0,
+            "difference": 0.1733,
+            "p_value_raw": 1e-06,
+            "p_value_corrected": 4e-06,
+            "significant": true,
+            "effect_size_cohens_h": 0.8588,
+            "effect_interpretation": "large",
+            "n_discordant": 26,
+            "n_total": 150
+          },
+          {
+            "config_a": "DDL (CREATE TABLE)",
+            "config_b": "JSON",
+            "value_a": 0.2933,
+            "value_b": 0.1733,
+            "difference": 0.12,
+            "p_value_raw": 0.000121,
+            "p_value_corrected": 0.000363,
+            "significant": true,
+            "effect_size_cohens_h": 0.2859,
+            "effect_interpretation": "small",
+            "n_discordant": 22,
+            "n_total": 150
+          },
+          {
+            "config_a": "Markdown",
+            "config_b": "JSON",
+            "value_a": 0.3067,
+            "value_b": 0.1733,
+            "difference": 0.1333,
+            "p_value_raw": 0.000194,
+            "p_value_corrected": 0.000389,
+            "significant": true,
+            "effect_size_cohens_h": 0.315,
+            "effect_interpretation": "small",
+            "n_discordant": 26,
+            "n_total": 150
+          },
+          {
+            "config_a": "DDL (CREATE TABLE)",
+            "config_b": "Markdown",
+            "value_a": 0.2933,
+            "value_b": 0.3067,
+            "difference": -0.0133,
+            "p_value_raw": 0.726562,
+            "p_value_corrected": 0.726562,
+            "significant": false,
+            "effect_size_cohens_h": -0.0291,
+            "effect_interpretation": "negligible",
+            "n_discordant": 8,
+            "n_total": 150
+          }
+        ]
+      },
+      "bootstrap_cis": {
+        "EX": [
+          {
+            "config": "DDL (CREATE TABLE)",
+            "observed": 0.9067,
+            "ci_lower": 0.86,
+            "ci_upper": 0.9533,
+            "ci_level": 0.95,
+            "se": 0.0238,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Markdown",
+            "observed": 0.9267,
+            "ci_lower": 0.88,
+            "ci_upper": 0.9667,
+            "ci_level": 0.95,
+            "se": 0.0215,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "JSON",
+            "observed": 0.4867,
+            "ci_lower": 0.4067,
+            "ci_upper": 0.5667,
+            "ci_level": 0.95,
+            "se": 0.0409,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Natural Language",
+            "observed": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0,
+            "ci_level": 0.95,
+            "se": 0.0,
+            "n_bootstrap": 10000
+          }
+        ],
+        "RC": [
+          {
+            "config": "DDL (CREATE TABLE)",
+            "observed": 0.2933,
+            "ci_lower": 0.22,
+            "ci_upper": 0.3667,
+            "ci_level": 0.95,
+            "se": 0.0376,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Markdown",
+            "observed": 0.3067,
+            "ci_lower": 0.2333,
+            "ci_upper": 0.38,
+            "ci_level": 0.95,
+            "se": 0.0374,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "JSON",
+            "observed": 0.1733,
+            "ci_lower": 0.1133,
+            "ci_upper": 0.2333,
+            "ci_level": 0.95,
+            "se": 0.0308,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Natural Language",
+            "observed": 0.0,
+            "ci_lower": 0.0,
+            "ci_upper": 0.0,
+            "ci_level": 0.95,
+            "se": 0.0,
+            "n_bootstrap": 10000
+          }
+        ]
+      },
+      "significant_findings": [
+        "EX: DDL (CREATE TABLE) vs Natural Language (diff=+0.9067, p_adj=0.000000, |h|=2.5207 [large])",
+        "EX: Markdown vs Natural Language (diff=+0.9267, p_adj=0.000000, |h|=2.5931 [large])",
+        "EX: JSON vs Natural Language (diff=+0.4867, p_adj=0.000000, |h|=1.5441 [large])",
+        "EX: Markdown vs JSON (diff=+0.4400, p_adj=0.000000, |h|=1.0490 [large])",
+        "EX: DDL (CREATE TABLE) vs JSON (diff=+0.4200, p_adj=0.000000, |h|=0.9765 [large])",
+        "RC: Markdown vs Natural Language (diff=+0.3067, p_adj=0.000000, |h|=1.1738 [large])",
+        "RC: DDL (CREATE TABLE) vs Natural Language (diff=+0.2933, p_adj=0.000000, |h|=1.1447 [large])",
+        "RC: JSON vs Natural Language (diff=+0.1733, p_adj=0.000004, |h|=0.8588 [large])",
+        "RC: DDL (CREATE TABLE) vs JSON (diff=+0.1200, p_adj=0.000363, |h|=0.2859 [small])",
+        "RC: Markdown vs JSON (diff=+0.1333, p_adj=0.000389, |h|=0.3150 [small])"
+      ],
+      "n_significant": 10
+    },
+    "RQ2_Schema_Scope": {
+      "configs": {
+        "Full Schema": {
+          "n_queries": 150,
+          "EX_rate": 0.9933,
+          "RC_rate": 0.5733,
+          "EX_count": 149,
+          "RC_count": 86,
+          "avg_input_tokens": 2900.9,
+          "avg_output_tokens": 113.1,
+          "avg_latency_ms": 2911.1,
+          "avg_schema_f1": 0.8646
+        },
+        "Relevant Subset": {
+          "n_queries": 150,
+          "EX_rate": 0.9933,
+          "RC_rate": 0.5667,
+          "EX_count": 149,
+          "RC_count": 85,
+          "avg_input_tokens": 1460.2,
+          "avg_output_tokens": 114.5,
+          "avg_latency_ms": 2765.3,
+          "avg_schema_f1": 0.9046
+        },
+        "Progressive": {
+          "n_queries": 150,
+          "EX_rate": 0.96,
+          "RC_rate": 0.4,
+          "EX_count": 144,
+          "RC_count": 60,
+          "avg_input_tokens": 1884.0,
+          "avg_output_tokens": 147.2,
+          "avg_latency_ms": 3422.8,
+          "avg_schema_f1": 0.5937
+        },
+        "User-Guided": {
+          "n_queries": 150,
+          "EX_rate": 0.9933,
+          "RC_rate": 0.58,
+          "EX_count": 149,
+          "RC_count": 87,
+          "avg_input_tokens": 1568.2,
+          "avg_output_tokens": 124.5,
+          "avg_latency_ms": 2786.6,
+          "avg_schema_f1": 0.8547
+        }
+      },
+      "pairwise_tests": {
+        "EX": [
+          {
+            "config_a": "Relevant Subset",
+            "config_b": "Progressive",
+            "value_a": 0.9933,
+            "value_b": 0.96,
+            "difference": 0.0333,
+            "p_value_raw": 0.0625,
+            "p_value_corrected": 0.375,
+            "significant": false,
+            "effect_size_cohens_h": 0.2392,
+            "effect_interpretation": "small",
+            "n_discordant": 5,
+            "n_total": 150
+          },
+          {
+            "config_a": "Progressive",
+            "config_b": "User-Guided",
+            "value_a": 0.96,
+            "value_b": 0.9933,
+            "difference": -0.0333,
+            "p_value_raw": 0.0625,
+            "p_value_corrected": 0.375,
+            "significant": false,
+            "effect_size_cohens_h": -0.2392,
+            "effect_interpretation": "small",
+            "n_discordant": 5,
+            "n_total": 150
+          },
+          {
+            "config_a": "Full Schema",
+            "config_b": "Progressive",
+            "value_a": 0.9933,
+            "value_b": 0.96,
+            "difference": 0.0333,
+            "p_value_raw": 0.125,
+            "p_value_corrected": 0.5,
+            "significant": false,
+            "effect_size_cohens_h": 0.2392,
+            "effect_interpretation": "small",
+            "n_discordant": 7,
+            "n_total": 150
+          },
+          {
+            "config_a": "Full Schema",
+            "config_b": "Relevant Subset",
+            "value_a": 0.9933,
+            "value_b": 0.9933,
+            "difference": 0.0,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0,
+            "effect_interpretation": "negligible",
+            "n_discordant": 2,
+            "n_total": 150
+          },
+          {
+            "config_a": "Full Schema",
+            "config_b": "User-Guided",
+            "value_a": 0.9933,
+            "value_b": 0.9933,
+            "difference": 0.0,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0,
+            "effect_interpretation": "negligible",
+            "n_discordant": 2,
+            "n_total": 150
+          },
+          {
+            "config_a": "Relevant Subset",
+            "config_b": "User-Guided",
+            "value_a": 0.9933,
+            "value_b": 0.9933,
+            "difference": 0.0,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0,
+            "effect_interpretation": "negligible",
+            "n_discordant": 2,
+            "n_total": 150
+          }
+        ],
+        "RC": [
+          {
+            "config_a": "Progressive",
+            "config_b": "User-Guided",
+            "value_a": 0.4,
+            "value_b": 0.58,
+            "difference": -0.18,
+            "p_value_raw": 3e-06,
+            "p_value_corrected": 1.8e-05,
+            "significant": true,
+            "effect_size_cohens_h": -0.362,
+            "effect_interpretation": "small",
+            "n_discordant": 31,
+            "n_total": 150
+          },
+          {
+            "config_a": "Full Schema",
+            "config_b": "Progressive",
+            "value_a": 0.5733,
+            "value_b": 0.4,
+            "difference": 0.1733,
+            "p_value_raw": 1.8e-05,
+            "p_value_corrected": 9e-05,
+            "significant": true,
+            "effect_size_cohens_h": 0.3486,
+            "effect_interpretation": "small",
+            "n_discordant": 34,
+            "n_total": 150
+          },
+          {
+            "config_a": "Relevant Subset",
+            "config_b": "Progressive",
+            "value_a": 0.5667,
+            "value_b": 0.4,
+            "difference": 0.1667,
+            "p_value_raw": 2.9e-05,
+            "p_value_corrected": 0.000118,
+            "significant": true,
+            "effect_size_cohens_h": 0.3351,
+            "effect_interpretation": "small",
+            "n_discordant": 33,
+            "n_total": 150
+          },
+          {
+            "config_a": "Relevant Subset",
+            "config_b": "User-Guided",
+            "value_a": 0.5667,
+            "value_b": 0.58,
+            "difference": -0.0133,
+            "p_value_raw": 0.803619,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": -0.027,
+            "effect_interpretation": "negligible",
+            "n_discordant": 16,
+            "n_total": 150
+          },
+          {
+            "config_a": "Full Schema",
+            "config_b": "Relevant Subset",
+            "value_a": 0.5733,
+            "value_b": 0.5667,
+            "difference": 0.0067,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0135,
+            "effect_interpretation": "negligible",
+            "n_discordant": 17,
+            "n_total": 150
+          },
+          {
+            "config_a": "Full Schema",
+            "config_b": "User-Guided",
+            "value_a": 0.5733,
+            "value_b": 0.58,
+            "difference": -0.0067,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": -0.0135,
+            "effect_interpretation": "negligible",
+            "n_discordant": 15,
+            "n_total": 150
+          }
+        ]
+      },
+      "bootstrap_cis": {
+        "EX": [
+          {
+            "config": "Full Schema",
+            "observed": 0.9933,
+            "ci_lower": 0.98,
+            "ci_upper": 1.0,
+            "ci_level": 0.95,
+            "se": 0.0067,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Relevant Subset",
+            "observed": 0.9933,
+            "ci_lower": 0.98,
+            "ci_upper": 1.0,
+            "ci_level": 0.95,
+            "se": 0.0067,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Progressive",
+            "observed": 0.96,
+            "ci_lower": 0.9267,
+            "ci_upper": 0.9867,
+            "ci_level": 0.95,
+            "se": 0.0158,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "User-Guided",
+            "observed": 0.9933,
+            "ci_lower": 0.98,
+            "ci_upper": 1.0,
+            "ci_level": 0.95,
+            "se": 0.0067,
+            "n_bootstrap": 10000
+          }
+        ],
+        "RC": [
+          {
+            "config": "Full Schema",
+            "observed": 0.5733,
+            "ci_lower": 0.4933,
+            "ci_upper": 0.6533,
+            "ci_level": 0.95,
+            "se": 0.0403,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Relevant Subset",
+            "observed": 0.5667,
+            "ci_lower": 0.4867,
+            "ci_upper": 0.6467,
+            "ci_level": 0.95,
+            "se": 0.0405,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Progressive",
+            "observed": 0.4,
+            "ci_lower": 0.32,
+            "ci_upper": 0.48,
+            "ci_level": 0.95,
+            "se": 0.0398,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "User-Guided",
+            "observed": 0.58,
+            "ci_lower": 0.5,
+            "ci_upper": 0.66,
+            "ci_level": 0.95,
+            "se": 0.0403,
+            "n_bootstrap": 10000
+          }
+        ]
+      },
+      "significant_findings": [
+        "RC: Progressive vs User-Guided (diff=-0.1800, p_adj=0.000018, |h|=0.3620 [small])",
+        "RC: Full Schema vs Progressive (diff=+0.1733, p_adj=0.000090, |h|=0.3486 [small])",
+        "RC: Relevant Subset vs Progressive (diff=+0.1667, p_adj=0.000118, |h|=0.3351 [small])"
+      ],
+      "n_significant": 3
+    },
+    "RQ3_Metadata_Enrichment": {
+      "configs": {
+        "No Metadata": {
+          "n_queries": 150,
+          "EX_rate": 0.9933,
+          "RC_rate": 0.58,
+          "EX_count": 149,
+          "RC_count": 87,
+          "avg_input_tokens": 1568.2,
+          "avg_output_tokens": 124.5,
+          "avg_latency_ms": 2786.6,
+          "avg_schema_f1": 0.8547
+        },
+        "Descriptions": {
+          "n_queries": 150,
+          "EX_rate": 0.9933,
+          "RC_rate": 0.54,
+          "EX_count": 149,
+          "RC_count": 81,
+          "avg_input_tokens": 1787.3,
+          "avg_output_tokens": 114.4,
+          "avg_latency_ms": 2780.1,
+          "avg_schema_f1": 0.8579
+        },
+        "Sample Values": {
+          "n_queries": 150,
+          "EX_rate": 0.9733,
+          "RC_rate": 0.56,
+          "EX_count": 146,
+          "RC_count": 84,
+          "avg_input_tokens": 1641.4,
+          "avg_output_tokens": 120.0,
+          "avg_latency_ms": 2797.2,
+          "avg_schema_f1": 0.8621
+        },
+        "Statistics": {
+          "n_queries": 150,
+          "EX_rate": 0.9733,
+          "RC_rate": 0.5267,
+          "EX_count": 146,
+          "RC_count": 79,
+          "avg_input_tokens": 1670.6,
+          "avg_output_tokens": 121.7,
+          "avg_latency_ms": 2845.7,
+          "avg_schema_f1": 0.8654
+        },
+        "All Metadata": {
+          "n_queries": 150,
+          "EX_rate": 0.9667,
+          "RC_rate": 0.5133,
+          "EX_count": 145,
+          "RC_count": 77,
+          "avg_input_tokens": 1807.4,
+          "avg_output_tokens": 116.7,
+          "avg_latency_ms": 2789.9,
+          "avg_schema_f1": 0.8405
+        }
+      },
+      "pairwise_tests": {
+        "EX": [
+          {
+            "config_a": "Descriptions",
+            "config_b": "All Metadata",
+            "value_a": 0.9933,
+            "value_b": 0.9667,
+            "difference": 0.0267,
+            "p_value_raw": 0.125,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.2037,
+            "effect_interpretation": "small",
+            "n_discordant": 4,
+            "n_total": 150
+          },
+          {
+            "config_a": "No Metadata",
+            "config_b": "All Metadata",
+            "value_a": 0.9933,
+            "value_b": 0.9667,
+            "difference": 0.0267,
+            "p_value_raw": 0.21875,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.2037,
+            "effect_interpretation": "small",
+            "n_discordant": 6,
+            "n_total": 150
+          },
+          {
+            "config_a": "No Metadata",
+            "config_b": "Sample Values",
+            "value_a": 0.9933,
+            "value_b": 0.9733,
+            "difference": 0.02,
+            "p_value_raw": 0.25,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.1646,
+            "effect_interpretation": "negligible",
+            "n_discordant": 3,
+            "n_total": 150
+          },
+          {
+            "config_a": "No Metadata",
+            "config_b": "Statistics",
+            "value_a": 0.9933,
+            "value_b": 0.9733,
+            "difference": 0.02,
+            "p_value_raw": 0.25,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.1646,
+            "effect_interpretation": "negligible",
+            "n_discordant": 3,
+            "n_total": 150
+          },
+          {
+            "config_a": "Descriptions",
+            "config_b": "Sample Values",
+            "value_a": 0.9933,
+            "value_b": 0.9733,
+            "difference": 0.02,
+            "p_value_raw": 0.25,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.1646,
+            "effect_interpretation": "negligible",
+            "n_discordant": 3,
+            "n_total": 150
+          },
+          {
+            "config_a": "Descriptions",
+            "config_b": "Statistics",
+            "value_a": 0.9933,
+            "value_b": 0.9733,
+            "difference": 0.02,
+            "p_value_raw": 0.25,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.1646,
+            "effect_interpretation": "negligible",
+            "n_discordant": 3,
+            "n_total": 150
+          },
+          {
+            "config_a": "No Metadata",
+            "config_b": "Descriptions",
+            "value_a": 0.9933,
+            "value_b": 0.9933,
+            "difference": 0.0,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0,
+            "effect_interpretation": "negligible",
+            "n_discordant": 2,
+            "n_total": 150
+          },
+          {
+            "config_a": "Sample Values",
+            "config_b": "Statistics",
+            "value_a": 0.9733,
+            "value_b": 0.9733,
+            "difference": 0.0,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0,
+            "effect_interpretation": "negligible",
+            "n_discordant": 2,
+            "n_total": 150
+          },
+          {
+            "config_a": "Sample Values",
+            "config_b": "All Metadata",
+            "value_a": 0.9733,
+            "value_b": 0.9667,
+            "difference": 0.0067,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0391,
+            "effect_interpretation": "negligible",
+            "n_discordant": 7,
+            "n_total": 150
+          },
+          {
+            "config_a": "Statistics",
+            "config_b": "All Metadata",
+            "value_a": 0.9733,
+            "value_b": 0.9667,
+            "difference": 0.0067,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0391,
+            "effect_interpretation": "negligible",
+            "n_discordant": 7,
+            "n_total": 150
+          }
+        ],
+        "RC": [
+          {
+            "config_a": "No Metadata",
+            "config_b": "All Metadata",
+            "value_a": 0.58,
+            "value_b": 0.5133,
+            "difference": 0.0667,
+            "p_value_raw": 0.021271,
+            "p_value_corrected": 0.212708,
+            "significant": false,
+            "effect_size_cohens_h": 0.134,
+            "effect_interpretation": "negligible",
+            "n_discordant": 16,
+            "n_total": 150
+          },
+          {
+            "config_a": "No Metadata",
+            "config_b": "Statistics",
+            "value_a": 0.58,
+            "value_b": 0.5267,
+            "difference": 0.0533,
+            "p_value_raw": 0.057373,
+            "p_value_corrected": 0.516357,
+            "significant": false,
+            "effect_size_cohens_h": 0.1073,
+            "effect_interpretation": "negligible",
+            "n_discordant": 14,
+            "n_total": 150
+          },
+          {
+            "config_a": "Sample Values",
+            "config_b": "All Metadata",
+            "value_a": 0.56,
+            "value_b": 0.5133,
+            "difference": 0.0467,
+            "p_value_raw": 0.092285,
+            "p_value_corrected": 0.738281,
+            "significant": false,
+            "effect_size_cohens_h": 0.0936,
+            "effect_interpretation": "negligible",
+            "n_discordant": 13,
+            "n_total": 150
+          },
+          {
+            "config_a": "No Metadata",
+            "config_b": "Descriptions",
+            "value_a": 0.58,
+            "value_b": 0.54,
+            "difference": 0.04,
+            "p_value_raw": 0.109375,
+            "p_value_corrected": 0.765625,
+            "significant": false,
+            "effect_size_cohens_h": 0.0806,
+            "effect_interpretation": "negligible",
+            "n_discordant": 10,
+            "n_total": 150
+          },
+          {
+            "config_a": "Sample Values",
+            "config_b": "Statistics",
+            "value_a": 0.56,
+            "value_b": 0.5267,
+            "difference": 0.0333,
+            "p_value_raw": 0.266846,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0669,
+            "effect_interpretation": "negligible",
+            "n_discordant": 13,
+            "n_total": 150
+          },
+          {
+            "config_a": "Descriptions",
+            "config_b": "All Metadata",
+            "value_a": 0.54,
+            "value_b": 0.5133,
+            "difference": 0.0267,
+            "p_value_raw": 0.34375,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0534,
+            "effect_interpretation": "negligible",
+            "n_discordant": 10,
+            "n_total": 150
+          },
+          {
+            "config_a": "No Metadata",
+            "config_b": "Sample Values",
+            "value_a": 0.58,
+            "value_b": 0.56,
+            "difference": 0.02,
+            "p_value_raw": 0.507812,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0404,
+            "effect_interpretation": "negligible",
+            "n_discordant": 9,
+            "n_total": 150
+          },
+          {
+            "config_a": "Descriptions",
+            "config_b": "Sample Values",
+            "value_a": 0.54,
+            "value_b": 0.56,
+            "difference": -0.02,
+            "p_value_raw": 0.548828,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": -0.0402,
+            "effect_interpretation": "negligible",
+            "n_discordant": 11,
+            "n_total": 150
+          },
+          {
+            "config_a": "Descriptions",
+            "config_b": "Statistics",
+            "value_a": 0.54,
+            "value_b": 0.5267,
+            "difference": 0.0133,
+            "p_value_raw": 0.6875,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0267,
+            "effect_interpretation": "negligible",
+            "n_discordant": 6,
+            "n_total": 150
+          },
+          {
+            "config_a": "Statistics",
+            "config_b": "All Metadata",
+            "value_a": 0.5267,
+            "value_b": 0.5133,
+            "difference": 0.0133,
+            "p_value_raw": 0.774414,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0267,
+            "effect_interpretation": "negligible",
+            "n_discordant": 12,
+            "n_total": 150
+          }
+        ]
+      },
+      "bootstrap_cis": {
+        "EX": [
+          {
+            "config": "No Metadata",
+            "observed": 0.9933,
+            "ci_lower": 0.98,
+            "ci_upper": 1.0,
+            "ci_level": 0.95,
+            "se": 0.0067,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Descriptions",
+            "observed": 0.9933,
+            "ci_lower": 0.98,
+            "ci_upper": 1.0,
+            "ci_level": 0.95,
+            "se": 0.0066,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Sample Values",
+            "observed": 0.9733,
+            "ci_lower": 0.9467,
+            "ci_upper": 0.9933,
+            "ci_level": 0.95,
+            "se": 0.0131,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Statistics",
+            "observed": 0.9733,
+            "ci_lower": 0.9467,
+            "ci_upper": 0.9933,
+            "ci_level": 0.95,
+            "se": 0.0131,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "All Metadata",
+            "observed": 0.9667,
+            "ci_lower": 0.9333,
+            "ci_upper": 0.9933,
+            "ci_level": 0.95,
+            "se": 0.0148,
+            "n_bootstrap": 10000
+          }
+        ],
+        "RC": [
+          {
+            "config": "No Metadata",
+            "observed": 0.58,
+            "ci_lower": 0.5,
+            "ci_upper": 0.66,
+            "ci_level": 0.95,
+            "se": 0.0412,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Descriptions",
+            "observed": 0.54,
+            "ci_lower": 0.46,
+            "ci_upper": 0.62,
+            "ci_level": 0.95,
+            "se": 0.0409,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Sample Values",
+            "observed": 0.56,
+            "ci_lower": 0.48,
+            "ci_upper": 0.64,
+            "ci_level": 0.95,
+            "se": 0.0402,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Statistics",
+            "observed": 0.5267,
+            "ci_lower": 0.4467,
+            "ci_upper": 0.6067,
+            "ci_level": 0.95,
+            "se": 0.041,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "All Metadata",
+            "observed": 0.5133,
+            "ci_lower": 0.4333,
+            "ci_upper": 0.5933,
+            "ci_level": 0.95,
+            "se": 0.0408,
+            "n_bootstrap": 10000
+          }
+        ]
+      },
+      "significant_findings": [],
+      "n_significant": 0
+    },
+    "RQ4_Example_Selection": {
+      "configs": {
+        "Zero-Shot": {
+          "n_queries": 150,
+          "EX_rate": 0.9933,
+          "RC_rate": 0.58,
+          "EX_count": 149,
+          "RC_count": 87,
+          "avg_input_tokens": 1568.2,
+          "avg_output_tokens": 124.5,
+          "avg_latency_ms": 2786.6,
+          "avg_schema_f1": 0.8547
+        },
+        "Static Few-Shot": {
+          "n_queries": 150,
+          "EX_rate": 0.9733,
+          "RC_rate": 0.54,
+          "EX_count": 146,
+          "RC_count": 81,
+          "avg_input_tokens": 1747.0,
+          "avg_output_tokens": 109.5,
+          "avg_latency_ms": 2800.5,
+          "avg_schema_f1": 0.8376
+        },
+        "Dynamic Few-Shot": {
+          "n_queries": 150,
+          "EX_rate": 0.9533,
+          "RC_rate": 0.5867,
+          "EX_count": 143,
+          "RC_count": 88,
+          "avg_input_tokens": 1996.1,
+          "avg_output_tokens": 123.9,
+          "avg_latency_ms": 2937.4,
+          "avg_schema_f1": 0.8352
+        },
+        "Schema-Matched": {
+          "n_queries": 150,
+          "EX_rate": 0.9733,
+          "RC_rate": 0.5467,
+          "EX_count": 146,
+          "RC_count": 82,
+          "avg_input_tokens": 1777.2,
+          "avg_output_tokens": 113.9,
+          "avg_latency_ms": 2790.0,
+          "avg_schema_f1": 0.863
+        }
+      },
+      "pairwise_tests": {
+        "EX": [
+          {
+            "config_a": "Zero-Shot",
+            "config_b": "Dynamic Few-Shot",
+            "value_a": 0.9933,
+            "value_b": 0.9533,
+            "difference": 0.04,
+            "p_value_raw": 0.03125,
+            "p_value_corrected": 0.1875,
+            "significant": false,
+            "effect_size_cohens_h": 0.272,
+            "effect_interpretation": "small",
+            "n_discordant": 6,
+            "n_total": 150
+          },
+          {
+            "config_a": "Zero-Shot",
+            "config_b": "Static Few-Shot",
+            "value_a": 0.9933,
+            "value_b": 0.9733,
+            "difference": 0.02,
+            "p_value_raw": 0.25,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.1646,
+            "effect_interpretation": "negligible",
+            "n_discordant": 3,
+            "n_total": 150
+          },
+          {
+            "config_a": "Zero-Shot",
+            "config_b": "Schema-Matched",
+            "value_a": 0.9933,
+            "value_b": 0.9733,
+            "difference": 0.02,
+            "p_value_raw": 0.25,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.1646,
+            "effect_interpretation": "negligible",
+            "n_discordant": 3,
+            "n_total": 150
+          },
+          {
+            "config_a": "Static Few-Shot",
+            "config_b": "Dynamic Few-Shot",
+            "value_a": 0.9733,
+            "value_b": 0.9533,
+            "difference": 0.02,
+            "p_value_raw": 0.507812,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.1074,
+            "effect_interpretation": "negligible",
+            "n_discordant": 9,
+            "n_total": 150
+          },
+          {
+            "config_a": "Dynamic Few-Shot",
+            "config_b": "Schema-Matched",
+            "value_a": 0.9533,
+            "value_b": 0.9733,
+            "difference": -0.02,
+            "p_value_raw": 0.507812,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": -0.1074,
+            "effect_interpretation": "negligible",
+            "n_discordant": 9,
+            "n_total": 150
+          },
+          {
+            "config_a": "Static Few-Shot",
+            "config_b": "Schema-Matched",
+            "value_a": 0.9733,
+            "value_b": 0.9733,
+            "difference": 0.0,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0,
+            "effect_interpretation": "negligible",
+            "n_discordant": 4,
+            "n_total": 150
+          }
+        ],
+        "RC": [
+          {
+            "config_a": "Zero-Shot",
+            "config_b": "Static Few-Shot",
+            "value_a": 0.58,
+            "value_b": 0.54,
+            "difference": 0.04,
+            "p_value_raw": 0.210114,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0806,
+            "effect_interpretation": "negligible",
+            "n_discordant": 16,
+            "n_total": 150
+          },
+          {
+            "config_a": "Static Few-Shot",
+            "config_b": "Dynamic Few-Shot",
+            "value_a": 0.54,
+            "value_b": 0.5867,
+            "difference": -0.0467,
+            "p_value_raw": 0.281198,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": -0.0941,
+            "effect_interpretation": "negligible",
+            "n_discordant": 31,
+            "n_total": 150
+          },
+          {
+            "config_a": "Zero-Shot",
+            "config_b": "Schema-Matched",
+            "value_a": 0.58,
+            "value_b": 0.5467,
+            "difference": 0.0333,
+            "p_value_raw": 0.332306,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0672,
+            "effect_interpretation": "negligible",
+            "n_discordant": 17,
+            "n_total": 150
+          },
+          {
+            "config_a": "Dynamic Few-Shot",
+            "config_b": "Schema-Matched",
+            "value_a": 0.5867,
+            "value_b": 0.5467,
+            "difference": 0.04,
+            "p_value_raw": 0.376759,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": 0.0807,
+            "effect_interpretation": "negligible",
+            "n_discordant": 32,
+            "n_total": 150
+          },
+          {
+            "config_a": "Zero-Shot",
+            "config_b": "Dynamic Few-Shot",
+            "value_a": 0.58,
+            "value_b": 0.5867,
+            "difference": -0.0067,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": -0.0135,
+            "effect_interpretation": "negligible",
+            "n_discordant": 25,
+            "n_total": 150
+          },
+          {
+            "config_a": "Static Few-Shot",
+            "config_b": "Schema-Matched",
+            "value_a": 0.54,
+            "value_b": 0.5467,
+            "difference": -0.0067,
+            "p_value_raw": 1.0,
+            "p_value_corrected": 1.0,
+            "significant": false,
+            "effect_size_cohens_h": -0.0134,
+            "effect_interpretation": "negligible",
+            "n_discordant": 13,
+            "n_total": 150
+          }
+        ]
+      },
+      "bootstrap_cis": {
+        "EX": [
+          {
+            "config": "Zero-Shot",
+            "observed": 0.9933,
+            "ci_lower": 0.98,
+            "ci_upper": 1.0,
+            "ci_level": 0.95,
+            "se": 0.0066,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Static Few-Shot",
+            "observed": 0.9733,
+            "ci_lower": 0.9467,
+            "ci_upper": 0.9933,
+            "ci_level": 0.95,
+            "se": 0.0132,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Dynamic Few-Shot",
+            "observed": 0.9533,
+            "ci_lower": 0.92,
+            "ci_upper": 0.9867,
+            "ci_level": 0.95,
+            "se": 0.0173,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Schema-Matched",
+            "observed": 0.9733,
+            "ci_lower": 0.9467,
+            "ci_upper": 0.9933,
+            "ci_level": 0.95,
+            "se": 0.013,
+            "n_bootstrap": 10000
+          }
+        ],
+        "RC": [
+          {
+            "config": "Zero-Shot",
+            "observed": 0.58,
+            "ci_lower": 0.5,
+            "ci_upper": 0.66,
+            "ci_level": 0.95,
+            "se": 0.0406,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Static Few-Shot",
+            "observed": 0.54,
+            "ci_lower": 0.46,
+            "ci_upper": 0.62,
+            "ci_level": 0.95,
+            "se": 0.0405,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Dynamic Few-Shot",
+            "observed": 0.5867,
+            "ci_lower": 0.5067,
+            "ci_upper": 0.6667,
+            "ci_level": 0.95,
+            "se": 0.0401,
+            "n_bootstrap": 10000
+          },
+          {
+            "config": "Schema-Matched",
+            "observed": 0.5467,
+            "ci_lower": 0.4667,
+            "ci_upper": 0.6267,
+            "ci_level": 0.95,
+            "se": 0.0403,
+            "n_bootstrap": 10000
+          }
+        ]
+      },
+      "significant_findings": [],
+      "n_significant": 0
+    }
+  },
+  "global_summary": {
+    "total_pairwise_tests": 56,
+    "total_significant": 13,
+    "research_questions_with_significant_results": [
+      "RQ1_Schema_Format",
+      "RQ2_Schema_Scope"
+    ]
+  }
+}

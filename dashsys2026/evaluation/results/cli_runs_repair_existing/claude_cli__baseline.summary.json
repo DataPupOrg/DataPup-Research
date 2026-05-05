@@ -1,0 +1,51 @@
+{
+  "model_name": "claude_cli",
+  "config": "baseline",
+  "path": "evaluation/results/cli_runs_full_generation/claude_cli/baseline/results.jsonl",
+  "total": 150,
+  "final_execution_rate": 1.0,
+  "gold_execution_rate": 1.0,
+  "result_correctness": 0.5066666666666667,
+  "avg_partial_score": 0.5201565656565657,
+  "repair_attempts": 9,
+  "repair_successes": 9,
+  "avg_repair_latency_ms": 984.0603333333335,
+  "per_category": {
+    "Aggregation": {
+      "total": 30,
+      "executed": 30,
+      "correct": 23,
+      "repair_successes": 1
+    },
+    "ClickHouse_Specific": {
+      "total": 20,
+      "executed": 20,
+      "correct": 11,
+      "repair_successes": 2
+    },
+    "Complex_JOINs": {
+      "total": 20,
+      "executed": 20,
+      "correct": 8,
+      "repair_successes": 6
+    },
+    "Simple-SELECT": {
+      "total": 25,
+      "executed": 25,
+      "correct": 14,
+      "repair_successes": 0
+    },
+    "Time_Series": {
+      "total": 30,
+      "executed": 30,
+      "correct": 16,
+      "repair_successes": 0
+    },
+    "Window_Functions": {
+      "total": 25,
+      "executed": 25,
+      "correct": 4,
+      "repair_successes": 0
+    }
+  }
+}

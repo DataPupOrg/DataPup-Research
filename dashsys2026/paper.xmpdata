@@ -1,0 +1,4 @@
+\Title{DataPup: Schema-Aware Prompt Engineering for Text-to-SQL in an AI-Assisted Analytical Database Client [Application & Experience]}
+\Author{Sahith Vibudhi\sep Krishna Chaitanya Balusu}
+\Subject{Design and evaluation of schema-aware prompt engineering for DataPup, an open-source AI-assisted database client for analytical databases}
+\Keywords{Text-to-SQL\sep Large Language Models\sep Prompt Engineering\sep Schema Linking\sep ClickHouse\sep OLAP\sep AI-Assisted Database Client}

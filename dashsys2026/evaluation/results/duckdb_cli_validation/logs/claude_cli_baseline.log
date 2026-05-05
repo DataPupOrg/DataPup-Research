@@ -1,0 +1,26 @@
+claude_cli/baseline: 1/130 AG-001
+claude_cli/baseline: 10/130 AG-010
+claude_cli/baseline: 20/130 AG-021
+claude_cli/baseline: 30/130 CS-010
+claude_cli/baseline: 40/130 CJ-007
+claude_cli/baseline: 50/130 CJ-017
+claude_cli/baseline: 60/130 SS-007
+claude_cli/baseline: 70/130 SS-017
+claude_cli/baseline: 80/130 TS-002
+claude_cli/baseline: 90/130 TS-012
+claude_cli/baseline: 100/130 TS-025
+claude_cli/baseline: 110/130 WF-005
+claude_cli/baseline: 120/130 WF-015
+claude_cli/baseline: 130/130 WF-025
+{
+  "model_name": "claude_cli",
+  "config": "baseline",
+  "db_path": "evaluation/duckdb/datapup.duckdb",
+  "total": 130,
+  "portable_gold_queries": 130,
+  "model_success_rate": 1.0,
+  "execution_rate": 0.9769230769230769,
+  "result_correctness": 0.6076923076923076,
+  "avg_partial_score": 0.6216370379056837,
+  "avg_prompt_chars": 1075.2769230769231
+}

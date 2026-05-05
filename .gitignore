@@ -7,3 +7,10 @@ __pycache__/
 results/smoke/
 results/cross_provider/
 .claude/local/research/
+dashsys2026/evaluation/.venv_cli/
+dashsys2026/evaluation/clickhouse_runtime/
+dashsys2026/evaluation/duckdb/
+dashsys2026/evaluation/results/*.nohup.log
+dashsys2026/evaluation/results/**/*.nohup.log
+dashsys2026/**/*.pid
+dashsys2026/.watchman-cookie-*

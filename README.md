@@ -1,164 +1,84 @@
-# DataPup Research: Schema-Aware Prompt Engineering for Text-to-SQL
+# DataPup Research Artifacts
 
-Supplementary material for the VLDB 2026 Industrial Track paper:
+This repository contains the public research artifacts for DataPup, an open-source AI-assisted analytical database client.
 
-> **DataPup: Schema-Aware Prompt Engineering for Text-to-SQL in an AI-Assisted Analytical Database Client [Application & Experience]**
+The current submission artifact is in:
+
+```bash
+dashsys2026/
+```
+
+## DASHSys 2026 Paper
+
+> DataPup: Schema-Aware and Execution-Aware Text-to-SQL for Human-in-the-Loop Analytical Database Clients
 >
 > Sahith Vibudhi and Krishna Chaitanya Balusu
 
-## Overview
+DataPup project repository: <https://github.com/DataPupOrg/DataPup>
 
-This repository contains the benchmark datasets, evaluation framework, experimental results, and analysis code for our systematic ablation study of schema-aware prompt engineering for Text-to-SQL generation targeting analytical databases (ClickHouse).
+## Artifact Map
 
-**DataPup** is an open-source, AI-assisted database client: [https://github.com/DataPupOrg/DataPup](https://github.com/DataPupOrg/DataPup)
+| Path | Contents |
+|---|---|
+| `dashsys2026/paper.pdf` | Compiled DASHSys 2026 submission PDF. |
+| `dashsys2026/paper.tex` | LaTeX source for the submission. |
+| `dashsys2026/evaluation/benchmark/` | Query sets, schemas, and few-shot examples. |
+| `dashsys2026/evaluation/framework/` | Prompt construction, SQL execution, metrics, and result comparison code. |
+| `dashsys2026/evaluation/steps/` | Fire-and-forget scripts used for the CLI and DuckDB experiments. |
+| `dashsys2026/evaluation/results/headline_contrasts.*` | Planned paired contrasts reported in the paper. |
+| `dashsys2026/evaluation/results/fewshot_leakage_audit.json` | Few-shot leakage audit. |
+| `dashsys2026/evaluation/results/cli_runs_full_generation/` | Raw CLI generation outputs for Claude, Codex, and Gemini. |
+| `dashsys2026/evaluation/results/cli_runs_full_generation_validation/` | Execution-scored CLI outputs before repair. |
+| `dashsys2026/evaluation/results/cli_runs_repair_existing/` | Scored outputs after one execution-repair attempt. |
+| `dashsys2026/evaluation/results/duckdb_cli_validation/` | Focused DuckDB second-engine validation. |
+| `dashsys2026/evaluation/results/strong_accept_evidence.*` | Consolidated evidence used by the DASHSys revision. |
 
-## Repository Structure
+The root-level `benchmark/`, `framework/`, `results/`, and `scripts/` directories are retained for the earlier VLDB 2026 artifact and cross-provider scaffolding. The DASHSys paper should be evaluated against `dashsys2026/`.
 
-```
-.
-├── benchmark/                    # Benchmark datasets
-│   ├── queries/                  # Query sets (JSON)
-│   │   ├── aggregation.json      # 30 aggregation queries
-│   │   ├── simple_select.json    # 25 simple SELECT queries
-│   │   ├── window_functions.json # 25 window function queries
-│   │   ├── time_series.json      # 30 time-series queries
-│   │   ├── complex_joins.json    # 20 complex JOIN queries
-│   │   ├── clickhouse_specific.json  # 20 ClickHouse-specific queries
-│   │   ├── clickbench.json       # 43 ClickBench queries
-│   │   └── ssb.json              # 13 Star Schema Benchmark queries
-│   ├── schemas/                  # Database schemas
-│   │   ├── custom_analytics/     # 4-table analytics schema
-│   │   ├── clickbench/           # 1-table wide schema (105 columns)
-│   │   └── ssb/                  # 5-table star schema
-│   └── examples/
-│       └── examples.json         # Few-shot example pool
-│
-├── framework/                    # Evaluation framework
-│   ├── experiment_runner.py      # Main experiment orchestrator
-│   ├── prompt_builder.py         # Prompt assembly (format, scope, metadata, examples)
-│   ├── llm_caller.py             # LLM API interface
-│   ├── sql_executor.py           # ClickHouse query execution
-│   ├── result_comparator.py      # Semantic result comparison
-│   ├── metrics.py                # EX, RC, SL, TE metric computation
-│   ├── schema_linker.py          # Schema linking evaluation
-│   ├── chain_of_thought.py       # CoT prompting variant
-│   ├── self_consistency.py       # Self-consistency voting
-│   └── self_corrector.py         # SQL self-correction
-│
-├── analysis/                     # Statistical analysis
-│   ├── statistical_tests.py      # McNemar's test, Cochran's Q, bootstrap CIs
-│   ├── visualizations.py         # Figure generation
-│   ├── latex_tables.py           # LaTeX table generation
-│   └── run_statistical_analysis.py  # Full analysis driver
-│
-├── results/                      # All experimental results
-│   ├── phase1/                   # RQ1: Schema format comparison (JSONL + JSON summaries)
-│   ├── phase2/                   # RQ2-RQ4: Scope, metadata, examples (JSONL + JSON summaries)
-│   ├── ablation/                 # RQ5: System prompt ablation
-│   ├── cross_model/              # RQ6: Claude 3.5 Sonnet vs Sonnet 4
-│   ├── cross_dataset/            # RQ7: ClickBench and SSB generalization
-│   ├── dail_sql/                 # RQ8: DAIL-SQL baseline comparison
-│   ├── repeated_trials/          # Reproducibility trials
-│   └── figures/                  # All figures (PDF + PNG)
-│
-├── config/                       # Experiment configuration
-│   ├── experiment_config.yaml    # Ablation dimension definitions
-│   └── model_config.yaml         # Model and inference settings
-│
-├── run_phase1.py                 # Phase 1 experiment runner
-├── run_phase2.py                 # Phase 2 experiment runner
-├── run_all_experiments.py        # Full experiment suite
-├── run_single_config.py          # Single configuration runner
-├── reevaluate.py                 # Re-evaluation with updated pipeline
-└── generate_publication_outputs.py  # Generate figures and tables
-```
+## Key DASHSys Results
 
-## Benchmarks
+| Result | Evidence |
+|---|---|
+| Current DataPup full-schema JSON zero-shot: 17.3% RC. | `dashsys2026/evaluation/results/strong_accept_evidence.md` |
+| Revised prompt: 66.0% RC on the 150-query custom analytics benchmark. | `dashsys2026/evaluation/results/headline_contrasts.md` |
+| Current-to-revised paired comparison: McNemar exact p=2.7e-19. | `dashsys2026/evaluation/results/strong_accept_evidence.json` |
+| Best configuration remains strongest across Claude, Codex, and Gemini CLI runs after one repair attempt. | `dashsys2026/evaluation/results/cli_runs_repair_existing/summary.json` |
+| Focused DuckDB validation: revised prompt reaches 60.8% RC with 100.0% execution success on 130 portable queries. | `dashsys2026/evaluation/results/duckdb_cli_validation/` |
 
-| Dataset | Queries | Tables | Description |
-|---------|---------|--------|-------------|
-| Custom Analytics | 150 | 4 | Primary benchmark: events, users, sessions, products |
-| ClickBench | 43 | 1 (105 cols) | Wide single-table web analytics |
-| Star Schema Benchmark | 13 | 5 | Classical star schema (lineorder + dimensions) |
-
-## Results Format
-
-Per-query results are stored as JSONL files. Each line contains:
-
-```json
-{
-  "query_id": "AG-001",
-  "category": "Aggregation",
-  "natural_language": "How many total events are in the events table?",
-  "gold_sql": "SELECT count() FROM analytics.events",
-  "predicted_sql": "SELECT count() AS total_events FROM analytics.events",
-  "pred_executed": true,
-  "result_match": true,
-  "table_f1": 1.0,
-  "column_f1": 1.0,
-  "input_tokens": 1393,
-  "latency_ms": 2394.68
-}
-```
-
-## Key Results
-
-| Configuration | RC | 95% CI |
-|--------------|-----|--------|
-| Baseline (DDL, Full, None, Zero-shot) | 29.3% | (22%–37%) |
-| + Markdown format | 30.7% | (23%–38%) |
-| + Relevant-subset scope | 59.3% | (51%–67%) |
-| + Column descriptions | 60.7% | (53%–69%) |
-| + Dynamic few-shot examples | 66.0% | (59%–74%) |
-| + System prompt tuning (optimal) | **68.7%** | — |
-
-## Reproducing Results
-
-### Prerequisites
-
-- Python 3.10+
-- ClickHouse server with benchmark data loaded
-- Anthropic API key (for Claude models)
-
-### Setup
+## Quick Reproduction
 
 ```bash
-pip install -r requirements.txt
+cd dashsys2026
+python3 -m venv evaluation/.venv_cli
+evaluation/.venv_cli/bin/python -m pip install -r requirements.txt
+evaluation/.venv_cli/bin/python evaluation/setup_duckdb.py --scale 0.1 --overwrite
+bash evaluation/steps/08_duckdb_claude_validation_parallel.sh
+bash evaluation/steps/09_strong_accept_evidence.sh
 ```
 
-### Load benchmark data
+The ClickHouse plus multi-CLI experiment can be rerun from `dashsys2026/` after installing/authenticating the Claude, Codex, and Gemini CLIs and providing a local ClickHouse binary:
 
 ```bash
-./load_clickbench.sh   # Load ClickBench dataset
-./load_ssb.sh          # Load Star Schema Benchmark
+export DATAPUP_CLICKHOUSE_BIN=/path/to/clickhouse
+bash evaluation/steps/00_preflight.sh
+bash evaluation/steps/01_prepare_clickhouse.sh
+nohup bash evaluation/steps/04_full_generation_parallel.sh \
+  > evaluation/results/cli_runs_full_generation.nohup.log 2>&1 &
 ```
 
-### Run experiments
+Then score and repair:
 
 ```bash
-# Full ablation study
-python run_all_experiments.py
-
-# Single configuration
-python run_single_config.py --format markdown --scope relevant_subset \
-    --metadata descriptions --examples dynamic_few_shot
-
-# Statistical analysis
-python analysis/run_statistical_analysis.py
+bash evaluation/steps/05_full_execute_parallel.sh
+bash evaluation/steps/07_repair_existing_failed_sql.sh
+bash evaluation/steps/09_strong_accept_evidence.sh
 ```
 
-## Citation
+## Notes
 
-```bibtex
-@article{vibudhi2026datapup,
-  title={DataPup: Schema-Aware Prompt Engineering for Text-to-SQL
-         in an AI-Assisted Analytical Database Client},
-  author={Vibudhi, Sahith and Balusu, Krishna Chaitanya},
-  journal={Proceedings of the VLDB Endowment},
-  volume={19},
-  year={2026}
-}
-```
+- The CLI experiments intentionally use each provider CLI in noninteractive permissive mode, as encoded in `dashsys2026/evaluation/steps/04_full_generation_parallel.sh`.
+- No API keys are stored in this repository.
+- Local runtime directories, virtual environments, generated DuckDB databases, ClickHouse data directories, and nohup logs are ignored.
 
 ## License
 

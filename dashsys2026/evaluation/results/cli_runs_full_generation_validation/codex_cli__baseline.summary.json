@@ -1,0 +1,40 @@
+{
+  "path": "evaluation/results/cli_runs_full_generation/codex_cli/baseline/results.jsonl",
+  "total": 150,
+  "pred_execution_rate": 0.98,
+  "gold_execution_rate": 1.0,
+  "result_correctness": 0.44666666666666666,
+  "avg_partial_score": 0.4539446265938069,
+  "per_category": {
+    "Aggregation": {
+      "total": 30,
+      "executed": 29,
+      "correct": 18
+    },
+    "ClickHouse_Specific": {
+      "total": 20,
+      "executed": 19,
+      "correct": 7
+    },
+    "Complex_JOINs": {
+      "total": 20,
+      "executed": 20,
+      "correct": 6
+    },
+    "Simple-SELECT": {
+      "total": 25,
+      "executed": 25,
+      "correct": 16
+    },
+    "Time_Series": {
+      "total": 30,
+      "executed": 29,
+      "correct": 15
+    },
+    "Window_Functions": {
+      "total": 25,
+      "executed": 25,
+      "correct": 5
+    }
+  }
+}

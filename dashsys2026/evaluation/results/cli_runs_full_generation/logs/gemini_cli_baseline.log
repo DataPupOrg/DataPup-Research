@@ -1,0 +1,106 @@
+Resume mode: loaded 100 existing row(s); 50 query(ies) remaining.
+[101/150] gemini_cli/baseline: TS-006
+  FAIL | tok~2567 | model 300006ms | repairs=0
+[102/150] gemini_cli/baseline: TS-007
+  FAIL | tok~2562 | model 300004ms | repairs=0
+[103/150] gemini_cli/baseline: TS-008
+  FAIL | tok~2565 | model 300004ms | repairs=0
+[104/150] gemini_cli/baseline: TS-009
+  FAIL | tok~2530 | model 300008ms | repairs=0
+[105/150] gemini_cli/baseline: TS-010
+  SQL | tok~2573 | model 42541ms | repairs=0
+[106/150] gemini_cli/baseline: TS-011
+  SQL | tok~2527 | model 149033ms | repairs=0
+[107/150] gemini_cli/baseline: TS-012
+  SQL | tok~2568 | model 138980ms | repairs=0
+[108/150] gemini_cli/baseline: TS-013
+  SQL | tok~2578 | model 20551ms | repairs=0
+[109/150] gemini_cli/baseline: TS-014
+  SQL | tok~2570 | model 144493ms | repairs=0
+[110/150] gemini_cli/baseline: TS-015
+  SQL | tok~2570 | model 127067ms | repairs=0
+[111/150] gemini_cli/baseline: TS-016
+  SQL | tok~2581 | model 122187ms | repairs=0
+[112/150] gemini_cli/baseline: TS-017
+  SQL | tok~2573 | model 154266ms | repairs=0
+[113/150] gemini_cli/baseline: TS-018
+  SQL | tok~2569 | model 37474ms | repairs=0
+[114/150] gemini_cli/baseline: TS-019
+  SQL | tok~2586 | model 158203ms | repairs=0
+[115/150] gemini_cli/baseline: TS-020
+  SQL | tok~2586 | model 24532ms | repairs=0
+[116/150] gemini_cli/baseline: TS-021
+  SQL | tok~2576 | model 143126ms | repairs=0
+[117/150] gemini_cli/baseline: TS-022
+  SQL | tok~2570 | model 18790ms | repairs=0
+[118/150] gemini_cli/baseline: TS-023
+  SQL | tok~2585 | model 189708ms | repairs=0
+[119/150] gemini_cli/baseline: TS-024
+  SQL | tok~2539 | model 109739ms | repairs=0
+[120/150] gemini_cli/baseline: TS-025
+  SQL | tok~2599 | model 38544ms | repairs=0
+[121/150] gemini_cli/baseline: TS-026
+  SQL | tok~2586 | model 33700ms | repairs=0
+[122/150] gemini_cli/baseline: TS-027
+  SQL | tok~2583 | model 173707ms | repairs=0
+[123/150] gemini_cli/baseline: TS-028
+  SQL | tok~2578 | model 25436ms | repairs=0
+[124/150] gemini_cli/baseline: TS-029
+  SQL | tok~2600 | model 33807ms | repairs=0
+[125/150] gemini_cli/baseline: TS-030
+  SQL | tok~2592 | model 57641ms | repairs=0
+[126/150] gemini_cli/baseline: WF-001
+  SQL | tok~2566 | model 102801ms | repairs=0
+[127/150] gemini_cli/baseline: WF-002
+  SQL | tok~2569 | model 118489ms | repairs=0
+[128/150] gemini_cli/baseline: WF-003
+  SQL | tok~2578 | model 22418ms | repairs=0
+[129/150] gemini_cli/baseline: WF-004
+  SQL | tok~2590 | model 61129ms | repairs=0
+[130/150] gemini_cli/baseline: WF-005
+  SQL | tok~2575 | model 140361ms | repairs=0
+[131/150] gemini_cli/baseline: WF-006
+  SQL | tok~2586 | model 149813ms | repairs=0
+[132/150] gemini_cli/baseline: WF-007
+  SQL | tok~2575 | model 145061ms | repairs=0
+[133/150] gemini_cli/baseline: WF-008
+  SQL | tok~2574 | model 123534ms | repairs=0
+[134/150] gemini_cli/baseline: WF-009
+  SQL | tok~2534 | model 96842ms | repairs=0
+[135/150] gemini_cli/baseline: WF-010
+  SQL | tok~2582 | model 150338ms | repairs=0
+[136/150] gemini_cli/baseline: WF-011
+  SQL | tok~2564 | model 119026ms | repairs=0
+[137/150] gemini_cli/baseline: WF-012
+  SQL | tok~2570 | model 31525ms | repairs=0
+[138/150] gemini_cli/baseline: WF-013
+  SQL | tok~2600 | model 129193ms | repairs=0
+[139/150] gemini_cli/baseline: WF-014
+  SQL | tok~2564 | model 129027ms | repairs=0
+[140/150] gemini_cli/baseline: WF-015
+  SQL | tok~2581 | model 123247ms | repairs=0
+[141/150] gemini_cli/baseline: WF-016
+  SQL | tok~2573 | model 109405ms | repairs=0
+[142/150] gemini_cli/baseline: WF-017
+  SQL | tok~2590 | model 27280ms | repairs=0
+[143/150] gemini_cli/baseline: WF-018
+  SQL | tok~2593 | model 26897ms | repairs=0
+[144/150] gemini_cli/baseline: WF-019
+  SQL | tok~2613 | model 137015ms | repairs=0
+[145/150] gemini_cli/baseline: WF-020
+  SQL | tok~2600 | model 28933ms | repairs=0
+[146/150] gemini_cli/baseline: WF-021
+  SQL | tok~2614 | model 138950ms | repairs=0
+[147/150] gemini_cli/baseline: WF-022
+  SQL | tok~2604 | model 139640ms | repairs=0
+[148/150] gemini_cli/baseline: WF-023
+  SQL | tok~2599 | model 145852ms | repairs=0
+[149/150] gemini_cli/baseline: WF-024
+  SQL | tok~2572 | model 126527ms | repairs=0
+[150/150] gemini_cli/baseline: WF-025
+  SQL | tok~2602 | model 139408ms | repairs=0
+
+Wrote:
+  evaluation/results/cli_runs_full_generation/gemini_cli/baseline/results.jsonl
+  evaluation/results/cli_runs_full_generation/gemini_cli/baseline/summary.json
+  evaluation/results/cli_runs_full_generation/gemini_cli/baseline/results.csv

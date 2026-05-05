@@ -1,0 +1,12 @@
+{
+  "model_name": "claude_cli",
+  "config": "baseline",
+  "db_path": "evaluation/duckdb/datapup.duckdb",
+  "total": 130,
+  "portable_gold_queries": 130,
+  "model_success_rate": 1.0,
+  "execution_rate": 0.9769230769230769,
+  "result_correctness": 0.6076923076923076,
+  "avg_partial_score": 0.6216370379056837,
+  "avg_prompt_chars": 1075.2769230769231
+}

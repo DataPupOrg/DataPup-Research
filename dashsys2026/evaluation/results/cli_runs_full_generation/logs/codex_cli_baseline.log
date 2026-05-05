@@ -1,0 +1,305 @@
+[1/150] codex_cli/baseline: AG-001
+  SQL | tok~2558 | model 10123ms | repairs=0
+[2/150] codex_cli/baseline: AG-002
+  SQL | tok~2560 | model 10778ms | repairs=0
+[3/150] codex_cli/baseline: AG-003
+  SQL | tok~2560 | model 10658ms | repairs=0
+[4/150] codex_cli/baseline: AG-004
+  SQL | tok~2556 | model 13524ms | repairs=0
+[5/150] codex_cli/baseline: AG-005
+  SQL | tok~2558 | model 10995ms | repairs=0
+[6/150] codex_cli/baseline: AG-006
+  SQL | tok~2561 | model 8832ms | repairs=0
+[7/150] codex_cli/baseline: AG-007
+  SQL | tok~2558 | model 8091ms | repairs=0
+[8/150] codex_cli/baseline: AG-008
+  SQL | tok~2558 | model 14247ms | repairs=0
+[9/150] codex_cli/baseline: AG-009
+  SQL | tok~2530 | model 8507ms | repairs=0
+[10/150] codex_cli/baseline: AG-010
+  SQL | tok~2558 | model 15578ms | repairs=0
+[11/150] codex_cli/baseline: AG-011
+  SQL | tok~2568 | model 10225ms | repairs=0
+[12/150] codex_cli/baseline: AG-012
+  SQL | tok~2563 | model 14068ms | repairs=0
+[13/150] codex_cli/baseline: AG-013
+  SQL | tok~2568 | model 11439ms | repairs=0
+[14/150] codex_cli/baseline: AG-014
+  SQL | tok~2532 | model 7503ms | repairs=0
+[15/150] codex_cli/baseline: AG-015
+  SQL | tok~2538 | model 9801ms | repairs=0
+[16/150] codex_cli/baseline: AG-016
+  SQL | tok~2574 | model 13148ms | repairs=0
+[17/150] codex_cli/baseline: AG-017
+  SQL | tok~2574 | model 12739ms | repairs=0
+[18/150] codex_cli/baseline: AG-018
+  SQL | tok~2569 | model 12747ms | repairs=0
+[19/150] codex_cli/baseline: AG-019
+  SQL | tok~2562 | model 8666ms | repairs=0
+[20/150] codex_cli/baseline: AG-020
+  SQL | tok~2534 | model 8817ms | repairs=0
+[21/150] codex_cli/baseline: AG-021
+  SQL | tok~2594 | model 12810ms | repairs=0
+[22/150] codex_cli/baseline: AG-022
+  SQL | tok~2576 | model 15834ms | repairs=0
+[23/150] codex_cli/baseline: AG-023
+  SQL | tok~2572 | model 14472ms | repairs=0
+[24/150] codex_cli/baseline: AG-024
+  SQL | tok~2585 | model 13800ms | repairs=0
+[25/150] codex_cli/baseline: AG-025
+  SQL | tok~2590 | model 14582ms | repairs=0
+[26/150] codex_cli/baseline: AG-026
+  SQL | tok~2591 | model 15061ms | repairs=0
+[27/150] codex_cli/baseline: AG-027
+  SQL | tok~2571 | model 16305ms | repairs=0
+[28/150] codex_cli/baseline: AG-028
+  SQL | tok~2588 | model 10830ms | repairs=0
+[29/150] codex_cli/baseline: AG-029
+  SQL | tok~2591 | model 12854ms | repairs=0
+[30/150] codex_cli/baseline: AG-030
+  SQL | tok~2606 | model 15183ms | repairs=0
+[31/150] codex_cli/baseline: CS-001
+  SQL | tok~2536 | model 8611ms | repairs=0
+[32/150] codex_cli/baseline: CS-002
+  SQL | tok~2585 | model 15020ms | repairs=0
+[33/150] codex_cli/baseline: CS-003
+  SQL | tok~2584 | model 15516ms | repairs=0
+[34/150] codex_cli/baseline: CS-004
+  SQL | tok~2579 | model 15099ms | repairs=0
+[35/150] codex_cli/baseline: CS-005
+  SQL | tok~2600 | model 20828ms | repairs=0
+[36/150] codex_cli/baseline: CS-006
+  SQL | tok~2575 | model 8753ms | repairs=0
+[37/150] codex_cli/baseline: CS-007
+  SQL | tok~2599 | model 8449ms | repairs=0
+[38/150] codex_cli/baseline: CS-008
+  SQL | tok~2597 | model 10830ms | repairs=0
+[39/150] codex_cli/baseline: CS-009
+  SQL | tok~2578 | model 13339ms | repairs=0
+[40/150] codex_cli/baseline: CS-010
+  SQL | tok~2600 | model 13910ms | repairs=0
+[41/150] codex_cli/baseline: CS-011
+  SQL | tok~2588 | model 13445ms | repairs=0
+[42/150] codex_cli/baseline: CS-012
+  SQL | tok~2576 | model 9066ms | repairs=0
+[43/150] codex_cli/baseline: CS-013
+  SQL | tok~2618 | model 14423ms | repairs=0
+[44/150] codex_cli/baseline: CS-014
+  SQL | tok~2572 | model 15049ms | repairs=0
+[45/150] codex_cli/baseline: CS-015
+  SQL | tok~2602 | model 15390ms | repairs=0
+[46/150] codex_cli/baseline: CS-016
+  SQL | tok~2548 | model 14276ms | repairs=0
+[47/150] codex_cli/baseline: CS-017
+  SQL | tok~2591 | model 14538ms | repairs=0
+[48/150] codex_cli/baseline: CS-018
+  SQL | tok~2602 | model 15119ms | repairs=0
+[49/150] codex_cli/baseline: CS-019
+  SQL | tok~2583 | model 20699ms | repairs=0
+[50/150] codex_cli/baseline: CS-020
+  SQL | tok~2590 | model 16837ms | repairs=0
+[51/150] codex_cli/baseline: CJ-001
+  SQL | tok~2588 | model 13539ms | repairs=0
+[52/150] codex_cli/baseline: CJ-002
+  SQL | tok~2589 | model 13545ms | repairs=0
+[53/150] codex_cli/baseline: CJ-003
+  SQL | tok~2590 | model 12409ms | repairs=0
+[54/150] codex_cli/baseline: CJ-004
+  SQL | tok~2587 | model 11649ms | repairs=0
+[55/150] codex_cli/baseline: CJ-005
+  SQL | tok~2574 | model 12012ms | repairs=0
+[56/150] codex_cli/baseline: CJ-006
+  SQL | tok~2578 | model 12315ms | repairs=0
+[57/150] codex_cli/baseline: CJ-007
+  SQL | tok~2597 | model 13286ms | repairs=0
+[58/150] codex_cli/baseline: CJ-008
+  SQL | tok~2584 | model 13617ms | repairs=0
+[59/150] codex_cli/baseline: CJ-009
+  SQL | tok~2576 | model 13323ms | repairs=0
+[60/150] codex_cli/baseline: CJ-010
+  SQL | tok~2583 | model 12407ms | repairs=0
+[61/150] codex_cli/baseline: CJ-011
+  SQL | tok~2595 | model 11445ms | repairs=0
+[62/150] codex_cli/baseline: CJ-012
+  SQL | tok~2573 | model 11926ms | repairs=0
+[63/150] codex_cli/baseline: CJ-013
+  SQL | tok~2586 | model 14596ms | repairs=0
+[64/150] codex_cli/baseline: CJ-014
+  SQL | tok~2574 | model 13352ms | repairs=0
+[65/150] codex_cli/baseline: CJ-015
+  SQL | tok~2593 | model 13843ms | repairs=0
+[66/150] codex_cli/baseline: CJ-016
+  SQL | tok~2595 | model 14280ms | repairs=0
+[67/150] codex_cli/baseline: CJ-017
+  SQL | tok~2591 | model 13607ms | repairs=0
+[68/150] codex_cli/baseline: CJ-018
+  SQL | tok~2613 | model 20057ms | repairs=0
+[69/150] codex_cli/baseline: CJ-019
+  SQL | tok~2595 | model 15152ms | repairs=0
+[70/150] codex_cli/baseline: CJ-020
+  SQL | tok~2597 | model 15882ms | repairs=0
+[71/150] codex_cli/baseline: SS-001
+  SQL | tok~2560 | model 11836ms | repairs=0
+[72/150] codex_cli/baseline: SS-002
+  SQL | tok~2528 | model 7913ms | repairs=0
+[73/150] codex_cli/baseline: SS-003
+  SQL | tok~2580 | model 10401ms | repairs=0
+[74/150] codex_cli/baseline: SS-004
+  SQL | tok~2559 | model 11716ms | repairs=0
+[75/150] codex_cli/baseline: SS-005
+  SQL | tok~2582 | model 14900ms | repairs=0
+[76/150] codex_cli/baseline: SS-006
+  SQL | tok~2571 | model 16601ms | repairs=0
+[77/150] codex_cli/baseline: SS-007
+  SQL | tok~2563 | model 12580ms | repairs=0
+[78/150] codex_cli/baseline: SS-008
+  SQL | tok~2582 | model 8998ms | repairs=0
+[79/150] codex_cli/baseline: SS-009
+  SQL | tok~2578 | model 9668ms | repairs=0
+[80/150] codex_cli/baseline: SS-010
+  SQL | tok~2590 | model 13406ms | repairs=0
+[81/150] codex_cli/baseline: SS-011
+  SQL | tok~2575 | model 12370ms | repairs=0
+[82/150] codex_cli/baseline: SS-012
+  SQL | tok~2595 | model 8378ms | repairs=0
+[83/150] codex_cli/baseline: SS-013
+  SQL | tok~2585 | model 11681ms | repairs=0
+[84/150] codex_cli/baseline: SS-014
+  SQL | tok~2587 | model 14181ms | repairs=0
+[85/150] codex_cli/baseline: SS-015
+  SQL | tok~2594 | model 8241ms | repairs=0
+[86/150] codex_cli/baseline: SS-016
+  SQL | tok~2594 | model 8168ms | repairs=0
+[87/150] codex_cli/baseline: SS-017
+  SQL | tok~2592 | model 9287ms | repairs=0
+[88/150] codex_cli/baseline: SS-018
+  SQL | tok~2599 | model 13673ms | repairs=0
+[89/150] codex_cli/baseline: SS-019
+  SQL | tok~2578 | model 10351ms | repairs=0
+[90/150] codex_cli/baseline: SS-020
+  SQL | tok~2588 | model 14056ms | repairs=0
+[91/150] codex_cli/baseline: SS-021
+  SQL | tok~2583 | model 8489ms | repairs=0
+[92/150] codex_cli/baseline: SS-022
+  SQL | tok~2594 | model 11762ms | repairs=0
+[93/150] codex_cli/baseline: SS-023
+  SQL | tok~2592 | model 12104ms | repairs=0
+[94/150] codex_cli/baseline: SS-024
+  SQL | tok~2595 | model 12640ms | repairs=0
+[95/150] codex_cli/baseline: SS-025
+  SQL | tok~2582 | model 10344ms | repairs=0
+[96/150] codex_cli/baseline: TS-001
+  SQL | tok~2555 | model 7910ms | repairs=0
+[97/150] codex_cli/baseline: TS-002
+  SQL | tok~2570 | model 8500ms | repairs=0
+[98/150] codex_cli/baseline: TS-003
+  SQL | tok~2564 | model 9146ms | repairs=0
+[99/150] codex_cli/baseline: TS-004
+  SQL | tok~2561 | model 12426ms | repairs=0
+[100/150] codex_cli/baseline: TS-005
+  SQL | tok~2569 | model 8323ms | repairs=0
+[101/150] codex_cli/baseline: TS-006
+  SQL | tok~2567 | model 15766ms | repairs=0
+[102/150] codex_cli/baseline: TS-007
+  SQL | tok~2562 | model 12103ms | repairs=0
+[103/150] codex_cli/baseline: TS-008
+  SQL | tok~2565 | model 12196ms | repairs=0
+[104/150] codex_cli/baseline: TS-009
+  SQL | tok~2530 | model 16075ms | repairs=0
+[105/150] codex_cli/baseline: TS-010
+  SQL | tok~2573 | model 11499ms | repairs=0
+[106/150] codex_cli/baseline: TS-011
+  SQL | tok~2527 | model 14010ms | repairs=0
+[107/150] codex_cli/baseline: TS-012
+  SQL | tok~2568 | model 16185ms | repairs=0
+[108/150] codex_cli/baseline: TS-013
+  SQL | tok~2578 | model 13512ms | repairs=0
+[109/150] codex_cli/baseline: TS-014
+  SQL | tok~2570 | model 13541ms | repairs=0
+[110/150] codex_cli/baseline: TS-015
+  SQL | tok~2570 | model 11847ms | repairs=0
+[111/150] codex_cli/baseline: TS-016
+  SQL | tok~2581 | model 11498ms | repairs=0
+[112/150] codex_cli/baseline: TS-017
+  SQL | tok~2573 | model 12425ms | repairs=0
+[113/150] codex_cli/baseline: TS-018
+  SQL | tok~2569 | model 12864ms | repairs=0
+[114/150] codex_cli/baseline: TS-019
+  SQL | tok~2586 | model 14833ms | repairs=0
+[115/150] codex_cli/baseline: TS-020
+  SQL | tok~2586 | model 10595ms | repairs=0
+[116/150] codex_cli/baseline: TS-021
+  SQL | tok~2576 | model 14086ms | repairs=0
+[117/150] codex_cli/baseline: TS-022
+  SQL | tok~2570 | model 17142ms | repairs=0
+[118/150] codex_cli/baseline: TS-023
+  SQL | tok~2585 | model 14406ms | repairs=0
+[119/150] codex_cli/baseline: TS-024
+  SQL | tok~2539 | model 15841ms | repairs=0
+[120/150] codex_cli/baseline: TS-025
+  SQL | tok~2599 | model 13931ms | repairs=0
+[121/150] codex_cli/baseline: TS-026
+  SQL | tok~2586 | model 15119ms | repairs=0
+[122/150] codex_cli/baseline: TS-027
+  SQL | tok~2583 | model 14297ms | repairs=0
+[123/150] codex_cli/baseline: TS-028
+  SQL | tok~2578 | model 15373ms | repairs=0
+[124/150] codex_cli/baseline: TS-029
+  SQL | tok~2600 | model 14950ms | repairs=0
+[125/150] codex_cli/baseline: TS-030
+  SQL | tok~2592 | model 14054ms | repairs=0
+[126/150] codex_cli/baseline: WF-001
+  SQL | tok~2566 | model 10497ms | repairs=0
+[127/150] codex_cli/baseline: WF-002
+  SQL | tok~2569 | model 13999ms | repairs=0
+[128/150] codex_cli/baseline: WF-003
+  SQL | tok~2578 | model 12252ms | repairs=0
+[129/150] codex_cli/baseline: WF-004
+  SQL | tok~2590 | model 15789ms | repairs=0
+[130/150] codex_cli/baseline: WF-005
+  SQL | tok~2575 | model 13331ms | repairs=0
+[131/150] codex_cli/baseline: WF-006
+  SQL | tok~2586 | model 15683ms | repairs=0
+[132/150] codex_cli/baseline: WF-007
+  SQL | tok~2575 | model 13950ms | repairs=0
+[133/150] codex_cli/baseline: WF-008
+  SQL | tok~2574 | model 10651ms | repairs=0
+[134/150] codex_cli/baseline: WF-009
+  SQL | tok~2534 | model 12991ms | repairs=0
+[135/150] codex_cli/baseline: WF-010
+  SQL | tok~2582 | model 12393ms | repairs=0
+[136/150] codex_cli/baseline: WF-011
+  SQL | tok~2564 | model 15443ms | repairs=0
+[137/150] codex_cli/baseline: WF-012
+  SQL | tok~2570 | model 15912ms | repairs=0
+[138/150] codex_cli/baseline: WF-013
+  SQL | tok~2600 | model 13015ms | repairs=0
+[139/150] codex_cli/baseline: WF-014
+  SQL | tok~2564 | model 13299ms | repairs=0
+[140/150] codex_cli/baseline: WF-015
+  SQL | tok~2581 | model 12480ms | repairs=0
+[141/150] codex_cli/baseline: WF-016
+  SQL | tok~2573 | model 13136ms | repairs=0
+[142/150] codex_cli/baseline: WF-017
+  SQL | tok~2590 | model 13563ms | repairs=0
+[143/150] codex_cli/baseline: WF-018
+  SQL | tok~2593 | model 14271ms | repairs=0
+[144/150] codex_cli/baseline: WF-019
+  SQL | tok~2613 | model 13493ms | repairs=0
+[145/150] codex_cli/baseline: WF-020
+  SQL | tok~2600 | model 15854ms | repairs=0
+[146/150] codex_cli/baseline: WF-021
+  SQL | tok~2614 | model 15395ms | repairs=0
+[147/150] codex_cli/baseline: WF-022
+  SQL | tok~2604 | model 16431ms | repairs=0
+[148/150] codex_cli/baseline: WF-023
+  SQL | tok~2599 | model 14797ms | repairs=0
+[149/150] codex_cli/baseline: WF-024
+  SQL | tok~2572 | model 12915ms | repairs=0
+[150/150] codex_cli/baseline: WF-025
+  SQL | tok~2602 | model 13664ms | repairs=0
+
+Wrote:
+  evaluation/results/cli_runs_full_generation/codex_cli/baseline/results.jsonl
+  evaluation/results/cli_runs_full_generation/codex_cli/baseline/summary.json
+  evaluation/results/cli_runs_full_generation/codex_cli/baseline/results.csv
